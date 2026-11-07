@@ -86,11 +86,11 @@ const quiz=[
  {q:'¿Qué color representan la relacion?',a:['morado y verde','rojo y verde','azul y rosa'],correct:1,why:'rojo y verde, por supuesto. 💚'},
  {q:'¿Qué sería perfecto para una tarde juntos?',a:['pintar cuadritos','hacer galletas','ver tele'],correct:0,why:'Cualquier plan puede ser bonito si lo compartimos.'},
  {q:'Animal que tendríamos',a:['perro','gato','conejo'],correct:0,why:'¡Un perrito! 🐶'},
- {q:'¿Cuándo empezamos a hablar?',a:['2 de julio','2 de febrero','10 de febrero'],correct:1,why:'El 2 de febrero comenzó nuestra historia. ♡'},
+ {q:'¿Cuándo empezamos a hablar?',a:['2 de julio','2 de febrero','10 de febrero'],correct:1,why:'¡El 2 de febrero empezamos a hablar! ♡'},
  {q:'¿Cuándo nos vimos por primera vez?',a:['10 de febrero','5 de febrero','8 de febrero'],correct:0,why:'¡El 10 de febrero! Ese fue nuestro primer encuentro.'},
  {q:'¿Quién dio el primer beso?',a:['asli','tomi'],correct:0,why:'¡Asli dio el primer beso! 💚'},
- {q:'¿Qué cosa nos representa más?',a:['snoopy y su novia','pucva y garu','la manzana verde y roja'],correct:2,why:'¡La manzana verde y roja! 🍏❤️'},
- {q:'¿Quién dijo te amo primero?',a:['asli','tomi','nose'],correct:2,why:'nose, pero capz asli 💚'}
+ {q:'¿Qué cosa nos representa más?',a:['snoopy y su novia','pucca y garu','la manzana verde y roja'],correct:2,why:'¡La manzana verde y roja! 🍏❤️'},
+ {q:'¿Quién dijo te amo primero?',a:['asli','tomi','nose'],correct:2,why:'nose, pero capaz asli 💚'}
 ];
 const qbox=document.getElementById('questions');let quizIndex=0,quizScore=0;
 function renderQuiz(){const item=quiz[quizIndex];qbox.innerHTML=`<div class="quiz-progress">Pregunta ${quizIndex+1} de ${quiz.length}</div><h3>${item.q}</h3><div class="quiz-options">${item.a.map((a,i)=>`<button type="button" class="quiz-option" data-choice="${i}">${a}</button>`).join('')}</div><p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p><button type="button" class="primary" id="quizNext" disabled>${quizIndex===quiz.length-1?'Ver resultado':'Siguiente ♡'}</button>`;
