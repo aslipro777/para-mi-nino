@@ -461,6 +461,11 @@ try{
  const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(-.025,-.035,-.19),new THREE.Vector3(.015,-.10,-.40),new THREE.Vector3(.055,-.16,-.61)]);
  wPart(tailPivot,new THREE.TubeGeometry(tailCurve,18,.105,10,false),fur);
  const tailTip=wPart(tailPivot,new THREE.SphereGeometry(1,20,14),furLight,[.055,-.16,-.60]);tailTip.scale.set(.12,.13,.18);
+ // Segundo lobo: despierta al cruzar el puente y conserva el modelo original.
+ const secondWolf=wolf.clone(true);secondWolf.position.set(-3,0,-34.2);secondWolf.visible=false;scene.add(secondWolf);
+ const secondWolfLegs=wolfLegs.map(leg=>secondWolf.children[wolf.children.indexOf(leg)]);
+ const secondTailPivot=secondWolf.children[wolf.children.indexOf(tailPivot)];
+ let secondWolfHP=3,secondWolfAlive=true,secondWolfAwake=false;
 
  let wolfHP=3,wolfAlive=true,attackCooldown=0;
  let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
@@ -543,21 +548,33 @@ try{
    legPivots[0].rotation.x=swing*.62;legPivots[1].rotation.x=-swing*.62;
    armPivots[0].rotation.x=-swing*.42;armPivots[1].rotation.x=swing*.42;
    armPivots[0].rotation.z=.08;armPivots[1].rotation.z=-.08;
-   const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
-   let wolfMoving=false;
-   if(wolfAlive&&dist>1.65&&!gameOver&&!skyEnding){
-     const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
-     const wx=wolf.position.x+vx*1.35*dt,wz=wolf.position.z+vz*1.35*dt;const wolfAtLake=wz>-27.45&&wz<-18.55&&Math.abs(wx)>1.48;if(!wolfAtLake){wolf.position.x=wx;wolf.position.z=wz;}
+   if(!secondWolfAwake&&avatar.position.z<-28){secondWolfAwake=true;secondWolf.visible=true;showCombatText('¡OTRO LOBO! 🐺',true);}
+   const firstDist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
+   const secondDist=secondWolfAlive&&secondWolfAwake?Math.hypot(avatar.position.x-secondWolf.position.x,avatar.position.z-secondWolf.position.z):999;
+   let wolfMoving=false,secondMoving=false;
+   if(wolfAlive&&firstDist>1.65&&!gameOver&&!skyEnding){
+     const vx=(avatar.position.x-wolf.position.x)/firstDist,vz=(avatar.position.z-wolf.position.z)/firstDist;
+     const wx=wolf.position.x+vx*1.35*dt,wz=wolf.position.z+vz*1.35*dt;const blocked=wz>-27.45&&wz<-18.55&&Math.abs(wx)>1.48;if(!blocked){wolf.position.x=wx;wolf.position.z=wz;}
      wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
-   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
+   }
+   if(secondWolfAlive&&secondWolfAwake&&secondDist>1.65&&!gameOver&&!skyEnding){
+     const vx=(avatar.position.x-secondWolf.position.x)/secondDist,vz=(avatar.position.z-secondWolf.position.z)/secondDist;
+     const wx=secondWolf.position.x+vx*1.35*dt,wz=secondWolf.position.z+vz*1.35*dt;const blocked=wz>-27.45&&wz<-18.55&&Math.abs(wx)>1.48;if(!blocked){secondWolf.position.x=wx;secondWolf.position.z=wz;}
+     secondWolf.rotation.y=Math.atan2(vx,vz);secondMoving=true;
+   }
+   if((wolfAlive&&firstDist<=1.65||secondWolfAlive&&secondWolfAwake&&secondDist<=1.65)&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
      energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
      host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
      if(energy<=0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';}
    }
    const wolfStride=wolfMoving?Math.sin(t*10):Math.sin(t*2)*.08;
    wolfLegs.forEach((leg,i)=>leg.rotation.x=wolfStride*(i%2===0?1:-1)*.55);
+   const secondStride=secondMoving?Math.sin(t*10):Math.sin(t*2)*.08;
+   secondWolfLegs.forEach((leg,i)=>leg.rotation.x=secondStride*(i%2===0?1:-1)*.55);
    tailPivot.rotation.x=Math.sin(t*3)*.18;tailPivot.rotation.z=Math.sin(t*2.2)*.22;
+   secondTailPivot.rotation.x=Math.sin(t*3+1)*.18;secondTailPivot.rotation.z=Math.sin(t*2.2+1)*.22;
    if(wolfAlive&&keys.shift)wolf.position.x+=(wolf.position.x-avatar.position.x)*.008;
+   if(secondWolfAlive&&secondWolfAwake&&keys.shift)secondWolf.position.x+=(secondWolf.position.x-avatar.position.x)*.008;
 
    if(attackFlash>0&&!gameOver){
      attackFlash-=dt;const progress=1-Math.max(0,attackFlash)/.48;
@@ -566,10 +583,14 @@ try{
      armPivots[1].rotation.x=-1.1+Math.sin(progress*Math.PI)*.4;
      if(!attackHitDone&&progress>.32){
        attackHitDone=true;
-       if(wolfAlive&&dist<3.2){
-         wolfHP--;showCombatText('¡LOBO -1! ✨');wolf.position.x+=(wolf.position.x-avatar.position.x)*.2;wolf.position.z+=(wolf.position.z-avatar.position.z)*.2;
-         wolf.scale.setScalar(.9);setTimeout(()=>{if(wolfAlive)wolf.scale.setScalar(1)},140);
-         if(wolfHP<=0){wolfAlive=false;scene.remove(wolf);note.textContent='🐺 ¡Lobo vencido! Puedes seguir buscando los recuerdos.';}
+       if(Math.min(firstDist,secondDist)<3.2){
+         const hitSecond=secondDist<firstDist,target=hitSecond?secondWolf:wolf;
+         if(hitSecond)secondWolfHP--;else wolfHP--;
+         showCombatText(hitSecond?'¡LOBO 2 -1! ✨':'¡LOBO -1! ✨');
+         target.position.x+=(target.position.x-avatar.position.x)*.2;target.position.z+=(target.position.z-avatar.position.z)*.2;
+         target.scale.setScalar(.9);setTimeout(()=>{if(hitSecond?secondWolfAlive:wolfAlive)target.scale.setScalar(1)},140);
+         if(!hitSecond&&wolfHP<=0){wolfAlive=false;scene.remove(wolf);note.textContent='🐺 ¡Primer lobo vencido! Sigue avanzando.';}
+         if(hitSecond&&secondWolfHP<=0){secondWolfAlive=false;scene.remove(secondWolf);note.textContent='🐺 ¡Segundo lobo vencido! Sigue buscando los recuerdos.';}
        }else showCombatText('¡MÁS CERCA!',true);
      }
    }else{swordRig.rotation.z+=(-.35-swordRig.rotation.z)*.22;swordRig.rotation.x*=.75;}
@@ -593,10 +614,10 @@ try{
    camera.position.lerp(target,.16);camera.lookAt(avatar.position.x,.55,avatar.position.z);
   }
    renderer.render(scene,camera);if(fallback&&fallback.style.display!=='none')fallback.style.display='none';
-   if(!gameOver&&wolfAlive){
+   if(!gameOver&&(wolfAlive||secondWolfAlive&&secondWolfAwake)){
      const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
      note.textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · Arrastra para girar cámara · E: recuerdo · Espacio: espada · Shift: defenderse';
-   }else if(!gameOver&&wolfAlive===false&&found.size<10)note.textContent='🐺 Lobo vencido · Sigue explorando y encuentra los diez recuerdos.';
+   }else if(!gameOver&&!wolfAlive&&(!secondWolfAlive||!secondWolfAwake)&&found.size<10)note.textContent='🐺 Lobos vencidos · Sigue explorando y encuentra los diez recuerdos.';
  }
  animate();
 }catch(err){
