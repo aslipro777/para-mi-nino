@@ -307,7 +307,7 @@ try{
  swordRig.rotation.z=-.35;
 
  // Recuerdos convertidos en pequeñas luces cálidas.
- const positions=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-21],[7,-25],[-7,-29],[2,-33],[9,-37],[-9,-39]];
+ const positions=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-17.8],[4,-29],[-7,-31],[2,-34],[9,-37],[-9,-39]];
  const found=new Set(),orbs=[];
  positions.forEach((p,i)=>{
    const light=new THREE.PointLight(0xffd69a,2.1,6);light.position.set(p[0],1.25,p[1]);scene.add(light);
@@ -373,6 +373,7 @@ try{
  const stopCameraDrag=()=>{draggingCamera=false;};
  renderer.domElement.addEventListener('pointerup',stopCameraDrag);renderer.domElement.addEventListener('pointercancel',stopCameraDrag);renderer.domElement.addEventListener('lostpointercapture',stopCameraDrag);
  renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());renderer.domElement.addEventListener('wheel',e=>{if(skyEnding)return;e.preventDefault();cameraDistance=THREE.MathUtils.clamp(cameraDistance+e.deltaY*.012,12,27);},{passive:false});
+  let pinchStart=0,pinchDistance=cameraDistance;renderer.domElement.addEventListener('touchstart',e=>{if(e.touches.length===2){pinchStart=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);pinchDistance=cameraDistance;}},{passive:true});renderer.domElement.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinchStart>0){e.preventDefault();const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);cameraDistance=THREE.MathUtils.clamp(pinchDistance-(d-pinchStart)*.025,12,27);}},{passive:false});renderer.domElement.addEventListener('touchend',e=>{if(e.touches.length<2)pinchStart=0;},{passive:true});
  let skyPhotosStarted=false,skyStars=null;
  function layoutSkyPhotos(){
   if(!skyPhotoSprites.length)return;
@@ -422,7 +423,7 @@ try{
    let wolfMoving=false;
    if(wolfAlive&&dist>1.65&&!gameOver&&!skyEnding){
      const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
-     wolf.position.x+=vx*1.35*dt;wolf.position.z+=vz*1.35*dt;
+     const wx=wolf.position.x+vx*1.35*dt,wz=wolf.position.z+vz*1.35*dt;const wolfAtLake=wz>-27.45&&wz<-18.55&&Math.abs(wx)>1.48;if(!wolfAtLake){wolf.position.x=wx;wolf.position.z=wz;}
      wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
    }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
      energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
