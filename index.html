@@ -264,62 +264,94 @@ try{
  for(let i=0;i<10;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
  const mushroomStem=mat(0xe0d4b8),mushroomCaps=[mat(0xc56b70),mat(0xd6a65f),mat(0xb7a5d8)];
  for(let i=0;i<14;i++){const x=(Math.random()-.5)*25,z=6-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,.2,7),mushroomStem);stem.position.set(x,.1,z);scene.add(stem);const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mushroomCaps[i%3]);cap.scale.y=.48;cap.position.set(x,.22,z);scene.add(cap);}
- // Personaje 3D reconstruido con silueta humana estilizada y articulaciones originales.
+ // Personaje reconstruido como volúmenes continuos con articulaciones profundas.
+ // Las referencias avatar, armPivots, legPivots y swordRig se conservan para el juego.
  const avatar=new THREE.Group();scene.add(avatar);avatar.position.set(0,0,5);
  const skin=mat(0xe6b99d),skinShade=mat(0xc98f7c),shirt=mat(0x39845b),shirtLight=mat(0x5ba477),shirtDark=mat(0x245b42),pants=mat(0x697b91),pantsLight=mat(0x8494a8),shoes=mat(0x343746),shoeTrim=mat(0x596070),hair=mat(0x17151b),hairLight=mat(0x302b35),glasses=mat(0x18202a,.35);
- function loftY(p,n=14){const v=[],ix=[];for(const [y,rx,rz,cx=0,cz=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,y,cz+Math.sin(a)*rz);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,d,b,b,d,c);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
- function loftZ(p,n=14){const v=[],ix=[];for(const [z,rx,ry,cx=0,cy=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,z);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,b,d,b,c,d);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
- function part(parent,geo,material,pos=[0,0,0]){const m=new THREE.Mesh(geo,material);m.position.set(...pos);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
- const torso=part(avatar,loftY([[.76,.21,.15],[.84,.26,.17],[1.02,.29,.18],[1.22,.33,.19],[1.39,.365,.18],[1.51,.29,.155]],18),shirt);
- part(avatar,loftY([[.765,.215,.15],[.80,.26,.17],[.835,.26,.17]],16),shirtDark);
- part(avatar,loftY([[1.34,.29,.16],[1.43,.37,.18],[1.51,.34,.17]],16),shirtLight);
- part(avatar,loftY([[.91,.22,.09],[1.08,.245,.105],[1.35,.225,.09]],14),shirtDark,[0,0,-.235]);
- part(avatar,loftY([[1.00,.105,.025],[1.13,.13,.03]],12),shirtLight,[0,0,-.34]);
- for(const side of [-1,1])part(avatar,loftY([[.99,.035,.025,side*.245,-.13],[1.22,.04,.03,side*.265,-.13],[1.43,.035,.025,side*.25,-.12]],10),shirtLight);
- part(avatar,loftY([[-.02,.105,.10],[.04,.115,.105],[.18,.12,.105],[.23,.105,.095]],14),skin,[0,1.52,0]);
- // Cabeza con mandíbula y mejillas, no una esfera uniforme.
- part(avatar,loftY([[-.39,.19,.17],[-.31,.27,.205],[-.17,.335,.245],[.02,.35,.255],[.22,.31,.235],[.34,.22,.18],[.39,.12,.11]],20),skin,[0,1.99,0]);
- part(avatar,loftY([[-.34,.18,.06],[-.27,.255,.075],[-.19,.27,.08]],16),skinShade,[0,1.99,.11]);
- for(const side of [-1,1]){
-  part(avatar,loftY([[-.10,.035,.045],[0,.075,.055],[.12,.06,.045]],10),skin,[side*.335,1.96,-.005]);
-  part(avatar,loftY([[-.045,.018,.012],[.015,.036,.016],[.07,.025,.012]],10),skinShade,[side*.365,1.96,.025]);
+ function smoothLathe(profile,material,parent,position=[0,0,0],zScale=.72,segments=24){
+   const points=profile.map(p=>new THREE.Vector2(p[0],p[1]));
+   const geo=new THREE.LatheGeometry(points,segments);geo.scale(1,1,zScale);
+   const mesh=new THREE.Mesh(geo,material);mesh.position.set(...position);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
  }
- // Cabello negro por capas: nuca, laterales, casquete irregular y flequillo separado.
- part(avatar,loftY([[.12,.22,.17],[.22,.32,.235],[.34,.345,.25],[.45,.30,.22],[.51,.20,.15],[.53,.06,.06]],18),hair,[0,2.02,-.025]);
- part(avatar,loftY([[-.24,.25,.10],[-.08,.31,.14],[.12,.30,.15],[.24,.22,.11]],16),hair,[0,2,-.205]);
- for(const side of [-1,1])part(avatar,loftY([[-.23,.045,.07],[-.08,.09,.095],[.12,.075,.08],[.28,.04,.045]],12),hairLight,[side*.285,2.02,.005]);
- part(avatar,loftY([[-.10,.24,.07],[0,.30,.10],[.12,.27,.085]],16),hair,[0,2.15,.205]);
- const fringe=[[-.19,2.13,.275,-.22],[-.055,2.12,.30,.08],[.085,2.14,.27,.25],[.205,2.17,.22,.38]];
- for(const [x,y,z,r] of fringe){const m=part(avatar,loftY([[-.16,.015,.025],[-.08,.075,.06],[.05,.085,.07],[.16,.025,.025]],10),hair,[x,y,z]);m.rotation.z=r;m.scale.set(.12,.23,.10);}
- // Ojos, cejas y lentes simétricos, colocados delante del rostro.
+ function solidPart(parent,geometry,material,pos=[0,0,0]){const mesh=new THREE.Mesh(geometry,material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
+ function limb(parent,profile,material,pos=[0,0,0],zScale=.8){return smoothLathe(profile,material,parent,pos,zScale,18);}
+ // Torso único: la pelvis, cintura, caja torácica y hombros forman una silueta continua.
+ smoothLathe([[0,.69],[.18,.69],[.235,.73],[.255,.82],[.275,.98],[.305,1.16],[.345,1.34],[.355,1.42],[.29,1.49],[.12,1.53],[0,1.54]],shirt,avatar,[0,0,0],.67,32);
+ // Dobladillo y cuello superpuestos dentro del torso para evitar bordes abiertos.
+ smoothLathe([[0,.735],[.235,.735],[.252,.77],[.248,.795],[0,.795]],shirtDark,avatar,[0,0,0],.68,24);
+ smoothLathe([[0,1.475],[.115,1.475],[.145,1.50],[.135,1.535],[.09,1.55],[0,1.55]],shirtLight,avatar,[0,0,0],.78,24);
+ // Cabeza con mandíbula afinada y mejillas suaves, deformada desde una sola malla.
+ const headGeo=new THREE.SphereGeometry(1,40,32);
+ const hp=headGeo.attributes.position;
+ for(let i=0;i<hp.count;i++){
+   const x=hp.getX(i),y=hp.getY(i),z=hp.getZ(i);
+   const jawWidth=THREE.MathUtils.lerp(.79,1.0,THREE.MathUtils.smoothstep(y,-.55,.25));
+   hp.setXYZ(i,x*.335*jawWidth,y*.405,z*.255*(y<-.45?.88:1));
+ }
+ headGeo.computeVertexNormals();
+ solidPart(avatar,headGeo,skin,[0,1.99,.015]);
+ // Orejas integradas parcialmente en la cabeza.
+ for(const side of [-1,1]){
+   const ear=solidPart(avatar,new THREE.SphereGeometry(1,20,16),skin,[side*.319,1.96,-.005]);ear.scale.set(.055,.095,.052);
+   const inner=solidPart(avatar,new THREE.SphereGeometry(1,16,12),skinShade,[side*.35,1.96,.022]);inner.scale.set(.018,.052,.025);
+ }
+ // Peinado como una sola masa continua: casquete envolvente y flequillo en una superficie conectada.
+ const capGeo=new THREE.SphereGeometry(1,48,32,0,Math.PI*2,0,Math.PI*.68);
+ capGeo.scale(.355,.445,.292);
+ solidPart(avatar,capGeo,hair,[0,2.055,-.018]);
+ // Una sola superficie de flequillo, con borde inferior ondulado y grosor visual continuo.
+ function makeFringe(){
+   const cols=32,rows=8,v=[],ix=[];
+   for(let r=0;r<=rows;r++)for(let c=0;c<=cols;c++){
+     const u=c/cols*2-1, t=r/rows;
+     const x=u*.315;
+     const edge=2.075+.045*Math.cos((u+.18)*Math.PI*.92)-.025*Math.exp(-Math.pow((u+.42)*4,2));
+     const y=THREE.MathUtils.lerp(2.355,edge,t);
+     const z=.205+.065*(1-u*u)+.012*Math.sin(t*Math.PI);
+     v.push(x,y,z);
+   }
+   for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const a=r*(cols+1)+c,b=a+1,d=(r+1)*(cols+1)+c,e=d+1;ix.push(a,d,b,b,d,e);}
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;
+ }
+ const fringe=solidPart(avatar,makeFringe(),hair);fringe.material.side=THREE.DoubleSide;
+ // Laterales del peinado son extensiones anchas y pegadas al casquete, no mechones flotantes.
+ for(const side of [-1,1]){
+   const lock=solidPart(avatar,new THREE.SphereGeometry(1,24,18),hairLight,[side*.285,2.015,.015]);lock.scale.set(.075,.245,.105);
+ }
+ // Rasgos con profundidad moderada y simetría facial.
  const eyeWhite=mat(0xf5e8dc),eyeDark=mat(0x30242a),browMat=mat(0x30252a);
  for(const side of [-1,1]){
-  const brow=part(avatar,loftY([[-.018,.012,.018],[0,.075,.025],[.018,.012,.018]],10),browMat,[side*.145,2.105,.257]);brow.rotation.z=side*.12;
-  part(avatar,loftY([[-.035,.035,.018],[0,.052,.026],[.035,.035,.018]],12),eyeWhite,[side*.145,2.005,.255]);
-  part(avatar,loftY([[-.025,.018,.012],[0,.022,.016],[.025,.018,.012]],10),eyeDark,[side*.145,2.002,.282]);
-  const frame=new THREE.Mesh(new THREE.TorusGeometry(.105,.018,8,24),glasses);frame.position.set(side*.145,2.015,.286);frame.scale.set(1.05,.91,1);frame.rotation.y=side*-.07;frame.castShadow=true;avatar.add(frame);
-  const temple=part(avatar,loftZ([[-.02,.014,.014],[.10,.013,.013],[.22,.009,.009]],8),glasses,[side*.245,2.02,.10]);temple.rotation.y=side*-.05;
+   const brow=solidPart(avatar,new THREE.SphereGeometry(1,18,12),browMat,[side*.137,2.105,.251]);brow.scale.set(.073,.018,.012);brow.rotation.z=side*-.08;
+   const eye=solidPart(avatar,new THREE.SphereGeometry(1,20,14),eyeWhite,[side*.137,2.015,.249]);eye.scale.set(.048,.032,.018);
+   const pupil=solidPart(avatar,new THREE.SphereGeometry(1,16,12),eyeDark,[side*.137,2.014,.265]);pupil.scale.set(.018,.025,.012);
+   const frame=new THREE.Mesh(new THREE.TorusGeometry(.092,.014,8,32),glasses);frame.position.set(side*.137,2.018,.274);frame.scale.set(1.12,.92,1);frame.rotation.y=side*-.055;frame.castShadow=true;avatar.add(frame);
+   const temple=solidPart(avatar,new THREE.CylinderGeometry(.009,.009,.23,8),glasses,[side*.235,2.025,.115]);temple.rotation.z=Math.PI/2;temple.rotation.y=side*-.08;
  }
- part(avatar,loftZ([[-.015,.018,.014],[.015,.018,.014],[.055,.014,.012]],8),glasses,[0,2.015,.285]);
- part(avatar,loftY([[-.055,.018,.022],[0,.04,.035],[.055,.025,.025]],10),skinShade,[0,1.91,.285]);
- part(avatar,loftY([[-.012,.035,.012],[0,.045,.012],[.012,.035,.012]],10),skinShade,[0,1.825,.265]);
- part(avatar,loftY([[-.025,.15,.12],[0,.19,.14],[.035,.18,.13]],16),shirtLight,[0,1.51,.005]);
- part(avatar,loftY([[-.09,.07,.018],[0,.085,.022],[.09,.07,.018]],12),shirtLight,[.18,1.19,.19]);
+ const bridge=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.09,10),glasses);bridge.rotation.z=Math.PI/2;bridge.position.set(0,2.018,.276);avatar.add(bridge);
+ const nose=solidPart(avatar,new THREE.SphereGeometry(1,16,12),skinShade,[0,1.925,.265]);nose.scale.set(.025,.035,.026);
+ const mouth=solidPart(avatar,new THREE.SphereGeometry(1,16,10),skinShade,[0,1.835,.252]);mouth.scale.set(.038,.009,.008);
+ // Brazos articulados desde el interior del hombro: las mangas se solapan con el torso.
  const armPivots=[],legPivots=[];
  for(const side of [-1,1]){
-  const arm=new THREE.Group();arm.position.set(side*.365,1.405,0);avatar.add(arm);
-  part(arm,loftY([[-.31,.075,.075],[-.25,.105,.095],[-.10,.125,.11],[.015,.105,.10]],12),shirt);
-  part(arm,loftY([[-.49,.055,.055],[-.40,.075,.07],[-.30,.085,.08]],12),skin);
-  part(arm,loftY([[-.335,.078,.078],[-.30,.09,.085],[-.275,.085,.08]],12),shirtLight);
-  part(arm,loftY([[-.60,.052,.045],[-.55,.075,.055],[-.49,.065,.05]],12),skin,[0,0,.015]);
-  const thumb=part(arm,loftY([[-.56,.025,.025],[-.51,.035,.03],[-.48,.025,.025]],8),skin,[side*.065,-.015,.035]);thumb.rotation.z=side*.55;armPivots.push(arm);
-  const leg=new THREE.Group();leg.position.set(side*.17,.68,0);avatar.add(leg);
-  part(leg,loftY([[-.30,.085,.09],[-.23,.115,.115],[-.08,.14,.13],[.015,.13,.12]],12),pants);
-  part(leg,loftY([[-.345,.085,.09],[-.30,.105,.105],[-.26,.095,.10]],12),pantsLight);
-  part(leg,loftY([[-.52,.075,.09],[-.43,.085,.10],[-.34,.09,.095]],12),pants);
-  part(leg,loftZ([[-.08,.09,.075],[.02,.125,.09],[.20,.13,.085],[.27,.09,.07]],12),shoes,[0,-.55,.03]);
-  part(leg,loftZ([[-.06,.09,.025],[.02,.13,.025],[.20,.13,.025],[.26,.09,.02]],12),shoeTrim,[0,-.625,.03]);legPivots.push(leg);
+   const arm=new THREE.Group();arm.position.set(side*.285,1.365,0);avatar.add(arm);
+   // Manga superior más ancha en el hombro, estrechándose hacia el codo.
+   limb(arm,[[0,-.29],[.075,-.29],[.105,-.23],[.112,-.10],[.105,.035],[.075,.105],[0,.11]],shirt,[0,0,0],.88);
+   // Brazo de piel y antebrazo entran bajo la manga; no quedan juntas abiertas.
+   limb(arm,[[0,-.57],[.045,-.57],[.055,-.48],[.064,-.34],[.07,-.20],[.055,-.12],[0,-.12]],skin,[0,0,0],.82);
+   const cuff=solidPart(arm,new THREE.TorusGeometry(.082,.012,8,24),shirtLight,[0,-.245,0]);cuff.rotation.x=Math.PI/2;
+   const hand=solidPart(arm,new THREE.SphereGeometry(1,18,14),skin,[0,-.59,.015]);hand.scale.set(.062,.078,.052);
+   const thumb=solidPart(arm,new THREE.SphereGeometry(1,14,10),skin,[side*.052,-.565,.035]);thumb.scale.set(.025,.052,.027);thumb.rotation.z=side*.5;
+   armPivots.push(arm);
+   // Piernas nacen dentro de la pelvis; muslo y pantorrilla comparten un volumen solapado.
+   const leg=new THREE.Group();leg.position.set(side*.145,.755,0);avatar.add(leg);
+   limb(leg,[[0,-.57],[.065,-.57],[.083,-.49],[.095,-.31],[.112,-.14],[.125,-.035],[.105,.10],[0,.12]],pants,[0,0,0],.91);
+   const knee=solidPart(leg,new THREE.SphereGeometry(1,18,14),pantsLight,[0,-.30,.012]);knee.scale.set(.091,.105,.085);
+   limb(leg,[[0,-.55],[.06,-.55],[.072,-.48],[.078,-.37],[.09,-.25],[.095,-.17],[0,-.17]],pants,[0,0,0],.90);
+   const shoe=solidPart(leg,new THREE.SphereGeometry(1,22,16),shoes,[0,-.585,.09]);shoe.scale.set(.105,.075,.17);
+   const sole=solidPart(leg,new THREE.SphereGeometry(1,20,12),shoeTrim,[0,-.635,.09]);sole.scale.set(.105,.018,.17);
+   legPivots.push(leg);
  }
+ // Espada y empuñadura conservan el punto de anclaje original.
  const swordRig=new THREE.Group();swordRig.position.set(.49,1.28,.04);avatar.add(swordRig);
  const blade=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.68,5,10),new THREE.MeshStandardMaterial({color:0xe3efff,metalness:.65,roughness:.22,emissive:0x25364a}));blade.position.y=.43;swordRig.add(blade);
  const guard=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.23,4,9),mat(0xd4ad68));guard.rotation.z=Math.PI/2;guard.position.y=.07;swordRig.add(guard);
