@@ -44,15 +44,15 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 <button class="album" onclick="openPhoto('foto2.jpg','fotito besito')"><img src="foto2.jpg" alt="muak" onerror="this.alt='Agrega foto2.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum dos</span></button>
 <button class="album" onclick="openPhoto('foto3.jpg','dia de la peña')"><img src="foto3.jpg" alt="soi la manzanita jeje" onerror="this.alt='Agrega foto3.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum tres</span></button>
 </div></section>
-<section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de julio de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
+<section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
 <section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un pequeño bosque 3D. Muévete con WASD o las flechas y pulsa E cerca de una luz.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: atacar con espada · Shift: defenderse</div>
 <div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
 <div id="gameReward" class="game-note" hidden>✨ Encontraste los diez recuerdos. El bosque se ilumina para ti: “Hay momentos que se quedan para siempre”. ✨</div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
 <div class="albums">
-  <div class="panel"><video controls playsinline style="width:100%" poster="video1.jpg.webp"><source src="video1.mp4.mp4" type="video/mp4"></video><p class="sub">besiitosss muakmuak</p></div>
-  <div class="panel"><video controls playsinline style="width:100%" poster="video2.jpg.webp"><source src="video2.mp4.mp4" type="video/mp4"></video><p class="sub">Nuestro mini video dos</p></div>
-  <div class="panel"><video controls playsinline style="width:100%" poster="video3.jpg.webp"><source src="video3.mp4.mp4.mp4" type="video/mp4"></video><p class="sub">Nuestro mini video tres</p></div>
+  <div class="panel"><video controls playsinline style="width:100%;aspect-ratio:16/9;object-fit:cover;background:#eadde0" preload="metadata"><source src="video1.mp4.mp4" type="video/mp4"></video><p class="sub">besiitosss muakmuak</p></div>
+  <div class="panel"><video controls playsinline style="width:100%" preload="metadata"><source src="video2.mp4.mp4" type="video/mp4"></video><p class="sub">Nuestro mini video dos</p></div>
+  <div class="panel"><video controls playsinline style="width:100%" preload="metadata"><source src="video3.mp4.mp4.mp4" type="video/mp4"></video><p class="sub">Nuestro mini video tres</p></div>
 </div></section>
 <section id="preguntas"><h2>Trivia: ¿cuánto sabemos de nosotros? ♡</h2><p class="sub">Responde estas preguntitas y descubre tu resultado.</p><div class="panel" id="questions"></div></section>
 <section id="regalo" class="gift"><h2>Un último regalo</h2><p class="sub">Hay muchas razones por las que te quiero. Abre tu regalo y descubre una cada vez. ♡</p><button class="primary" id="openGiftButton" type="button">Abrir mi regalo ♡</button><div class="gift-text" id="giftText"><div style="font-size:1.15rem;color:#a95873;margin-bottom:12px">Una razón por la que te quiero…</div><div class="reason-burst" id="reasonBurst"><span class="burst-heart">♥</span><span class="burst-heart">♡</span><span class="burst-heart">♥</span><span class="burst-heart">✦</span><p id="loveReason" aria-live="polite" style="font-size:1.25rem;min-height:3em">Cada pequeño detalle tuyo tiene un lugar especial en mi corazón. ♡</p></div><button class="primary" id="anotherReason" type="button">Dame otra razón ♡</button><p class="edit-note">Cada vez aparecerá una razón distinta.</p></div></section>
@@ -63,7 +63,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 const song=document.getElementById('ourSong'),musicButton=document.getElementById('musicButton');
 song.addEventListener('error',()=>{musicButton.textContent='Error al cargar canción (código '+(song.error?.code||'?')+')'}); musicButton.addEventListener('click',async()=>{try{if(song.paused){await song.play();musicButton.textContent='♫ Pausar nuestra canción'}else{song.pause();musicButton.textContent='♫ Activar nuestra canción'}}catch(e){musicButton.textContent='No se pudo reproducir: '+e.name}});
 function openPhoto(src,title){document.getElementById('photoTitle').textContent=title;document.getElementById('photoLarge').src=src;document.getElementById('photoDialog').showModal()}
-const start=new Date(2026,6,15,0,0,0);
+const start=new Date(2026,1,2,0,0,0);
 function tick(){let s=Math.max(0,Math.floor((Date.now()-start)/1000)),d=Math.floor(s/86400);s%=86400;let h=Math.floor(s/3600);s%=3600;let m=Math.floor(s/60);s%=60;document.getElementById('counter').textContent=`${d} días · ${h} horas · ${m} minutos · ${s} segundos`}
 tick();setInterval(tick,1000);
 const memories=[
@@ -75,8 +75,8 @@ const memories=[
 {date:'junio',title:'volvimos a hablar',text:'bueeno dia raro e inesperado pero lindo',image:'recuerdo6.jpg'},
 {date:'nose',title:'besito',text:'fotitos de besitos, te amo',image:'recuerdo7.jpg'},
 {date:'marzo',title:'yendo juntos al colegio',text:'amaba irme con usted, gracias a sus papas y usted por todo',image:'recuerdo8.jpg'},
-{date:'mua',title:'todos.',text:'cada momento feliz a su lado es mi fav',image:'recuerdo9.jpg'},
-{date:'noviembre',title:'Hasta aquí, nuestra aventura',text:'pocos momentos que hemos vivido, y se que vamos por mas',image:'recuerdo10.jpg'}
+{date:'mua',title:'todos.',text:'cada momento feliz a su lado es mi fav',image:'recuero9.jpg'},
+{date:'noviembre',title:'Hasta aquí, nuestra aventura',text:'pocos momentos que hemos vivido, y se que vamos por mas',image:'reuerdo10.jpg'}
 ];
 const quiz=[
  {q:'¿En qué fecha empezamos oficialmente?',a:['15 de julio','17 de febrero','7 de junio'],correct:1,why:'El 17 de febrero quedó guardado como una fecha especial. ♡'},
