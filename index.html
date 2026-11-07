@@ -298,13 +298,42 @@ try{
    const ear=solidPart(avatar,new THREE.SphereGeometry(1,20,16),skin,[side*.319,1.96,-.005]);ear.scale.set(.06,.095,.052);
    const inner=solidPart(avatar,new THREE.SphereGeometry(1,16,12),skinShade,[side*.35,1.96,.022]);inner.scale.set(.02,.052,.025);
  }
- // Cabello corto y limpio: casquete superior separado de la piel, sin flequillo sobre la cara.
- const capGeo=new THREE.SphereGeometry(1,48,32,0,Math.PI*2,0,.8);
+ // Cabello completo y unido: volumen posterior, laterales suaves y flequillo curvo.
+ // El casquete sigue la forma de la cabeza y baja hasta la línea superior de la frente.
+ const capGeo=new THREE.SphereGeometry(1,48,32,0,Math.PI*2,0,1.48);
  capGeo.scale(.365,.435,.292);
- const hairCap=solidPart(avatar,capGeo,hair,[0,2.01,-.012]);
- // Solo corona superior: el borde queda por encima de la frente y no toca la cara.
+ const hairCap=solidPart(avatar,capGeo,hair,[0,2.005,-.012]);
  hairCap.castShadow=false;
  hairCap.receiveShadow=false;
+ // Masa posterior: da continuidad al cabello por detrás y cubre la nuca sin invadir el rostro.
+ const backHair=solidPart(avatar,new THREE.SphereGeometry(1,36,28),hair,[0,1.965,-.145]);
+ backHair.scale.set(.305,.365,.19);
+ backHair.castShadow=false;
+ backHair.receiveShadow=false;
+ // Dos mechones laterales estrechos, integrados con la masa posterior.
+ for(const side of [-1,1]){
+   const sideLock=solidPart(avatar,new THREE.SphereGeometry(1,28,22),hair,[side*.282,1.965,-.075]);
+   sideLock.scale.set(.085,.235,.105);
+   sideLock.rotation.z=side*-.10;
+   sideLock.castShadow=false;
+   sideLock.receiveShadow=false;
+ }
+ // Flequillo asimétrico y redondeado, con puntas suaves sobre la frente.
+ const fringeShape=new THREE.Shape();
+ fringeShape.moveTo(-.305,.145);
+ fringeShape.bezierCurveTo(-.20,.205,.16,.205,.305,.135);
+ fringeShape.bezierCurveTo(.292,.075,.255,.025,.205,-.015);
+ fringeShape.lineTo(.145,.055);
+ fringeShape.lineTo(.075,-.035);
+ fringeShape.lineTo(.012,.052);
+ fringeShape.lineTo(-.075,-.025);
+ fringeShape.lineTo(-.145,.065);
+ fringeShape.lineTo(-.225,.015);
+ fringeShape.bezierCurveTo(-.275,.055,-.30,.095,-.305,.145);
+ const fringeGeo=new THREE.ExtrudeGeometry(fringeShape,{depth:.035,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:.012,bevelThickness:.012});
+ const fringe=solidPart(avatar,fringeGeo,hair,[0,2.075,.238]);
+ fringe.castShadow=false;
+ fringe.receiveShadow=false;
  // Rasgos con profundidad moderada y simetría facial.
  const eyeWhite=mat(0xf5e8dc),eyeDark=mat(0x30242a),browMat=mat(0x30252a);
  for(const side of [-1,1]){
