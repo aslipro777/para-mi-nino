@@ -100,7 +100,7 @@ const memories=[
 {date:'nose',title:'besito',text:'fotitos de besitos, te amo',image:'recuerdo7.jpg'},
 {date:'marzo',title:'yendo juntos al colegio',text:'amaba irme con usted, gracias a sus papas y usted por todo',image:'recuerdo8.jpg'},
 {date:'mua',title:'todos.',text:'cada momento feliz a su lado es mi fav',image:'recuero9.jpg'},
-{date:'noviembre',title:'Hasta aquí, nuestra aventura',text:'pocos momentos que hemos vivido, y se que vamos por mas',image:'reuerdo10.jpg'}
+{date:'noviembre',title:'Hasta aquí, nuestra aventura',text:'pocos momentos que hemos vivido, y se que vamos por mas',image:'recuerdo10.jpg'}
 ];
 const quiz=[
  {q:'¿En qué fecha empezamos oficialmente?',a:['15 de julio','17 de febrero','7 de junio'],correct:1,why:'El 17 de febrero quedó guardado como una fecha especial. ♡'},
@@ -518,7 +518,7 @@ try{
  }
  function createSkyPhotos(){
   if(skyPhotosStarted)return;skyPhotosStarted=true;
-  const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'];
+  const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','recuerdo10.jpg'];
   const starPositions=[],starDepth=23,halfH=starDepth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),halfW=halfH*camera.aspect;
   for(let i=0;i<520;i++)starPositions.push((Math.random()*2-1)*halfW*1.12,(Math.random()*2-1)*halfH*1.12,-starDepth);
   const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
