@@ -133,14 +133,14 @@ try{
  scene.background=new THREE.Color(0x111b35);
  scene.fog=new THREE.FogExp2(0x172747,.019);
  const camera=new THREE.PerspectiveCamera(48,host.clientWidth/host.clientHeight,.1,150);
- const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});
+ const renderer=new THREE.WebGLRenderer({antialias:false,alpha:false,powerPreference:"high-performance"});
  renderer.setSize(host.clientWidth,host.clientHeight);
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.25));
  renderer.outputColorSpace=THREE.SRGBColorSpace;
  renderer.toneMapping=THREE.ACESFilmicToneMapping;
  renderer.toneMappingExposure=1.25;
- renderer.shadowMap.enabled=true;
- renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.shadowMap.enabled=false;
+ renderer.shadowMap.type=THREE.BasicShadowMap;
  host.appendChild(renderer.domElement);
 
  scene.add(new THREE.HemisphereLight(0xcbdcff,0x263d37,2.0));
@@ -197,24 +197,23 @@ try{
    root.add(crown);root.position.set(x,0,z);root.scale.setScalar(s);scene.add(root);
    trees.push({crown,phase:Math.random()*6.28});
  }
- for(let i=0;i<125;i++){
+ for(let i=0;i<58;i++){
    let x=(Math.random()-.5)*44,z=9-Math.random()*68;
    if(Math.abs(x)<3&&z>-2&&z<12)x+=x<0?-4:4;
    makeTree(x,z,.72+Math.random()*.7);
  }
  const fireflies=[];
- for(let i=0;i<70;i++){
+ for(let i=0;i<26;i++){
    const g=new THREE.Group();
-   const glow=new THREE.PointLight(i%3===0?0xffdca0:0x9be7cb,.7,4);
-   const dot=new THREE.Mesh(new THREE.SphereGeometry(.055,10,8),new THREE.MeshBasicMaterial({color:0xffedb0}));
-   g.add(dot,glow);g.position.set((Math.random()-.5)*28,.45+Math.random()*2,5-Math.random()*55);scene.add(g);
+   const dot=new THREE.Mesh(new THREE.SphereGeometry(.065,8,6),new THREE.MeshBasicMaterial({color:0xffedb0}));
+   g.add(dot);g.position.set((Math.random()-.5)*28,.45+Math.random()*2,5-Math.random()*55);scene.add(g);
    fireflies.push({g,phase:Math.random()*6.28,baseY:g.position.y});
  }
- for(let i=0;i<100;i++){
+ for(let i=0;i<42;i++){
    const x=(Math.random()-.5)*27,z=6-Math.random()*58;
    const bush=new THREE.Group();
    for(let j=0;j<3;j++){
-     const b=new THREE.Mesh(new THREE.SphereGeometry(.36+Math.random()*.2,14,11),bushMats[j%3]);
+     const b=new THREE.Mesh(new THREE.SphereGeometry(.36+Math.random()*.2,10,8),bushMats[j%3]);
      b.position.set((j-1)*.32,.28+Math.random()*.1,(Math.random()-.5)*.22);b.castShadow=true;bush.add(b);
    }
    bush.position.set(x,0,z);bush.scale.setScalar(.45+Math.random()*.55);scene.add(bush);
