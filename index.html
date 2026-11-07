@@ -528,12 +528,16 @@ try{
    sourceTexture.colorSpace=THREE.SRGBColorSpace;
    const img=sourceTexture.image,canvas=document.createElement('canvas');canvas.width=512;canvas.height=640;
    const ctx=canvas.getContext('2d');
-   ctx.fillStyle='#fffdfb';ctx.fillRect(0,0,512,640);
-   ctx.fillStyle='rgba(36,25,34,.16)';ctx.fillRect(19,19,474,574);
-   ctx.fillStyle='#fff';ctx.fillRect(15,15,482,580);
-   const box={x:34,y:34,w:444,h:490},scale=Math.min(box.w/img.width,box.h/img.height),dw=img.width*scale,dh=img.height*scale;
-   ctx.save();ctx.beginPath();ctx.rect(box.x,box.y,box.w,box.h);ctx.clip();ctx.drawImage(img,box.x+(box.w-dw)/2,box.y+(box.h-dh)/2,dw,dh);ctx.restore();
-   ctx.fillStyle='#b77b91';ctx.font='34px Georgia,serif';ctx.textAlign='center';ctx.fillText('♡',256,574);
+   // Fotografía flotante sin marco blanco: esquinas suaves y un brillo rosado muy sutil.
+   const x=10,y=10,w=492,h=620,r=30;
+   ctx.save();
+   ctx.shadowColor='rgba(238,153,190,.32)';ctx.shadowBlur=28;ctx.shadowOffsetY=9;
+   ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.restore();
+   ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();
+   const scale=Math.max(w/img.width,h/img.height),dw=img.width*scale,dh=img.height*scale;
+   ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
+   ctx.restore();
+   ctx.save();ctx.strokeStyle='rgba(255,225,237,.58)';ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(x+2,y+2,w-4,h-4,r-2);ctx.stroke();ctx.restore();
    const framedTexture=new THREE.CanvasTexture(canvas);framedTexture.colorSpace=THREE.SRGBColorSpace;
    const photo=new THREE.Sprite(new THREE.SpriteMaterial({map:framedTexture,transparent:true,opacity:0,depthTest:false,depthWrite:false}));
    photo.renderOrder=10;
