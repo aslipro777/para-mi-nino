@@ -156,14 +156,14 @@ function showLoveReason(){let n;do{n=Math.floor(Math.random()*loveReasons.length
 const host=document.getElementById('game'),fallback=document.getElementById('fallback');
 try{
  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
- fallback?.remove();
+
 
  // Bosque 3D de cuento: formas suaves, colores ricos y luz nocturna.
  const scene=new THREE.Scene();
  scene.background=new THREE.Color(0x111b35);
  scene.fog=new THREE.FogExp2(0x172747,.019);
  const camera=new THREE.PerspectiveCamera(48,host.clientWidth/host.clientHeight,.1,150);
- const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+ const renderer=new THREE.WebGLRenderer({antialias:false,alpha:false,powerPreference:"low-power"});
  renderer.setSize(host.clientWidth,host.clientHeight);
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.35));
  renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -172,6 +172,7 @@ try{
  renderer.shadowMap.enabled=false;
  renderer.shadowMap.type=THREE.BasicShadowMap;
  host.appendChild(renderer.domElement);
+ fallback?.remove();
 
  scene.add(new THREE.HemisphereLight(0xcbdcff,0x263d37,2.0));
  const moonLight=new THREE.DirectionalLight(0xb8d2ff,2.1);
@@ -436,8 +437,8 @@ try{
  }
  animate();
 }catch(err){
- if(fallback)fallback.textContent='No se pudo cargar el bosque 3D. La página y las demás secciones siguen funcionando. Revisa tu conexión a internet.';
- console.error(err);
+ if(fallback){fallback.style.display='block';fallback.textContent='No se pudo iniciar el bosque 3D: '+(err?.message||'error desconocido')+'. La página sigue disponible. Recarga e inténtalo otra vez.';}
+ console.error('Error al iniciar el bosque 3D:',err);
 }
 </script><script>
 (function(){
