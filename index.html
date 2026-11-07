@@ -428,8 +428,8 @@ try{
    const brow=wPart(wolf,wY([[-.018,.012,.014],[0,.075,.025],[.018,.012,.014]],12),furDark,[side*.205,1.505,1.17]);brow.rotation.z=side*.12;
  }
  // Boca oscura abierta, visible bajo el hocico.
- const mouth=wPart(wolf,new THREE.SphereGeometry(1,24,16),new THREE.MeshBasicMaterial({color:0x17151a}),[0,1.205,1.405]);
- mouth.scale.set(.142,.078,.205);
+ const wolfMouth=wPart(wolf,new THREE.SphereGeometry(1,24,16),new THREE.MeshBasicMaterial({color:0x17151a}),[0,1.205,1.405]);
+ wolfMouth.scale.set(.142,.078,.205);
  // Encía y colmillos marfil: dos superiores apuntan hacia abajo y dos inferiores hacia arriba.
  const toothMat=new THREE.MeshStandardMaterial({color:0xf2e6cc,roughness:.48});
  for(const side of [-1,1]){
