@@ -385,51 +385,68 @@ try{
 
  // Lobo 3D reconstruido: lomo atlético, hocico largo, orejas triangulares y patas articuladas.
  const wolf=new THREE.Group();scene.add(wolf);wolf.position.set(3,0,-16.5);
- const fur=mat(0x788391),furLight=mat(0xa8b0bd),furMid=mat(0x626f80),furDark=mat(0x343e4d),muzzle=mat(0xd8d6d2),noseMat=mat(0x242630),innerEar=mat(0x9a6872),eyeGold=mat(0xffd28a);
- function wY(p,n=14){const v=[],ix=[];for(const [y,rx,rz,cx=0,cz=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,y,cz+Math.sin(a)*rz);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,d,b,b,d,c);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
- function wZ(p,n=16){const v=[],ix=[];for(const [z,rx,ry,cx=0,cy=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,z);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,b,d,b,c,d);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
+ const fur=mat(0x555f70),furLight=mat(0x929eae),furMid=mat(0x707d8f),furDark=mat(0x303946),muzzle=mat(0xc5cbd0),noseMat=mat(0x20242c),innerEar=mat(0x9b7180),eyeGold=mat(0xffc66f),eyeBlack=mat(0x24232a);
+ function wY(p,n=16){const v=[],ix=[];for(const [y,rx,rz,cx=0,cz=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,y,cz+Math.sin(a)*rz);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,d,b,b,d,c);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
+ function wZ(p,n=20){const v=[],ix=[];for(const [z,rx,ry,cx=0,cy=0] of p)for(let j=0;j<n;j++){const a=j/n*Math.PI*2;v.push(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,z);}for(let r=0;r<p.length-1;r++)for(let j=0;j<n;j++){const a=r*n+j,b=r*n+(j+1)%n,c=(r+1)*n+(j+1)%n,d=(r+1)*n+j;ix.push(a,b,d,b,c,d);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ix);g.computeVertexNormals();return g;}
  function wPart(parent,geo,material,pos=[0,0,0]){const m=new THREE.Mesh(geo,material);m.position.set(...pos);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
- // Torso along the back-to-chest axis, narrower at the waist.
- wPart(wolf,wZ([[-.91,.27,.28],[-.72,.39,.36],[-.43,.43,.39],[-.12,.34,.32],[.22,.35,.35],[.50,.42,.40],[.73,.33,.32],[.84,.22,.25]],18),fur,[0,.82,-.02]);
- wPart(wolf,wZ([[-.48,.31,.24],[-.18,.345,.28],[.15,.30,.25],[.42,.34,.29]],16),furMid,[0,.79,-.015]);
- wPart(wolf,wY([[-.28,.25,.25],[-.12,.34,.29],[.12,.39,.31],[.34,.32,.27],[.49,.22,.20]],16),furLight,[0,.91,.49]);
- wPart(wolf,wZ([[-.08,.25,.28],[.12,.30,.32],[.34,.27,.29],[.55,.22,.24],[.68,.18,.20]],16),fur,[0,1.05,.62]);
- for(let i=0;i<5;i++){const t=wPart(wolf,wY([[-.18,.035,.045],[0,.095,.065],[.16,.025,.03]],10),i%2?furLight:furMid,[(i-2)*.105,.83,.68+Math.abs(i-2)*.018]);t.rotation.z=(i-2)*-.12;}
- // Head profile widens at the skull and narrows into a distinct muzzle.
- wPart(wolf,wZ([[-.34,.16,.18],[-.22,.25,.24],[-.02,.31,.28],[.18,.29,.25],[.36,.22,.19],[.48,.16,.14]],18),furLight,[0,1.34,.88]);
- for(const side of [-1,1]){const cheek=wPart(wolf,wY([[-.16,.06,.07],[-.04,.12,.10],[.12,.10,.09],[.24,.04,.05]],12),fur,[side*.235,1.22,1]);cheek.rotation.z=side*-.16;}
- wPart(wolf,wZ([[.28,.17,.13],[.43,.145,.12],[.63,.105,.085],[.82,.07,.06],[.91,.045,.045]],16),muzzle,[0,1.285,.88]);
- wPart(wolf,wZ([[.28,.12,.055],[.43,.14,.065],[.62,.105,.055],[.76,.065,.04]],14),furDark,[0,1.17,.88]);
- wPart(wolf,wZ([[.82,.055,.045],[.88,.085,.065],[.96,.055,.045]],12),noseMat,[0,1.29,.88]);
- wPart(wolf,wZ([[.38,.012,.012],[.55,.014,.012],[.72,.01,.01]],8),furDark,[0,1.205,.88]);
- // Tall, tapered ears with inset inner surfaces and visible eyes.
+ // Cuerpo continuo y robusto, con pecho alto y cintura que se estrecha hacia la cadera.
+ wPart(wolf,wZ([[-1.02,.22,.24],[-.86,.34,.34],[-.62,.42,.39],[-.30,.40,.37],[.02,.36,.34],[.30,.40,.40],[.55,.43,.43],[.76,.35,.37],[.91,.23,.27]],24),fur,[0,.82,-.015]);
+ // Pecho claro integrado bajo el cuello.
+ wPart(wolf,wZ([[.28,.31,.31],[.48,.35,.36],[.68,.32,.34],[.83,.24,.27],[.91,.14,.18]],20),furLight,[0,.79,.015]);
+ // Cuello ancho que enlaza el pecho con el cráneo.
+ wPart(wolf,wZ([[.48,.27,.27],[.64,.36,.36],[.82,.39,.39],[1.00,.32,.34],[1.13,.22,.25]],22),furMid,[0,1.02,.02]);
+ // Cráneo ancho, con frente elevada y mejillas integradas.
+ wPart(wolf,wZ([[.67,.13,.14],[.78,.23,.23],[.94,.31,.29],[1.10,.32,.28],[1.25,.25,.22],[1.34,.16,.15]],24),fur,[0,1.43,.02]);
+ // Mejillas y patillas esculpidas en capas suaves, sin piezas redondas flotantes.
  for(const side of [-1,1]){
-  const ear=wPart(wolf,wY([[-.03,.105,.075],[.08,.12,.07],[.23,.085,.055],[.39,.012,.012]],12),furDark,[side*.19,1.62,.79]);ear.rotation.z=-side*.16;
-  const inner=wPart(wolf,wY([[.04,.045,.018],[.12,.065,.025],[.27,.012,.012]],10),innerEar,[side*.19,1.65,.855]);inner.rotation.z=-side*.16;
-  wPart(wolf,wY([[-.045,.055,.035],[0,.085,.045],[.045,.055,.035]],10),furDark,[side*.245,1.405,1.105]);
-  wPart(wolf,wY([[-.025,.026,.018],[0,.043,.025],[.025,.026,.018]],10),eyeGold,[side*.245,1.407,1.14]);
-  wPart(wolf,wY([[-.02,.012,.012],[0,.018,.014],[.02,.012,.012]],8),furDark,[side*.245,1.407,1.163]);
-  const brow=wPart(wolf,wY([[-.018,.012,.015],[0,.075,.025],[.018,.012,.015]],10),furMid,[side*.245,1.48,1.12]);brow.rotation.z=side*.14;
+   const cheek=wPart(wolf,wY([[-.22,.045,.06],[-.12,.12,.105],[.04,.15,.12],[.19,.11,.09],[.28,.035,.045]],18),furMid,[side*.245,1.30,.94]);
+   cheek.rotation.z=side*-.12;
+   const cheekLight=wPart(wolf,wY([[-.16,.025,.04],[-.07,.085,.065],[.08,.10,.075],[.18,.025,.035]],16),furLight,[side*.255,1.255,1.015]);
+   cheekLight.rotation.z=side*-.13;
  }
- // Layered cheek ruff gives the silhouette a wolf-like mane instead of a bear face.
- for(const side of [-1,1])for(let i=0;i<3;i++){const r=wPart(wolf,wY([[-.14,.025,.035],[-.02,.09,.07],[.12,.045,.04]],10),i===1?furLight:fur,[side*(.25+i*.025),1.04-i*.035,.72-i*.045]);r.rotation.z=side*(.25+i*.08);}
+ // Hocico alargado y ancho en la base, afinado hacia la nariz.
+ wPart(wolf,wZ([[1.08,.20,.15],[1.20,.19,.145],[1.38,.155,.12],[1.55,.12,.095],[1.66,.085,.075],[1.70,.045,.045]],22),muzzle,[0,1.335,.015]);
+ // Puente superior gris para integrar el hocico con la frente.
+ wPart(wolf,wZ([[1.04,.19,.12],[1.19,.16,.115],[1.36,.125,.09],[1.49,.085,.065]],20),furLight,[0,1.405,.025]);
+ // Mandíbula inferior claramente definida, pero unida visualmente al hocico.
+ wPart(wolf,wZ([[1.12,.12,.055],[1.24,.145,.065],[1.43,.115,.06],[1.55,.075,.045]],18),furDark,[0,1.205,.045]);
+ // Nariz ancha, ligeramente triangular, en la punta del hocico.
+ const nose=wPart(wolf,new THREE.SphereGeometry(1,24,18),noseMat,[0,1.365,1.665]);nose.scale.set(.105,.073,.075);
+ // Línea corta de boca y pequeños detalles de la nariz.
+ wPart(wolf,wZ([[1.43,.008,.008],[1.52,.012,.01],[1.58,.009,.008]],10),furDark,[0,1.205,.045]);
+ // Orejas triangulares con interior visible y base ancha.
+ for(const side of [-1,1]){
+   const ear=wPart(wolf,wY([[-.055,.115,.085],[.055,.12,.075],[.19,.075,.05],[.34,.012,.012]],16),furDark,[side*.205,1.69,.80]);
+   ear.rotation.z=-side*.13;
+   const inner=wPart(wolf,wY([[.005,.045,.018],[.095,.061,.022],[.245,.009,.008]],14),innerEar,[side*.205,1.715,.865]);
+   inner.rotation.z=-side*.13;
+   // Ojos ámbar hundidos bajo cejas para una expresión alerta.
+   const eye=wPart(wolf,new THREE.SphereGeometry(1,20,14),eyeGold,[side*.205,1.445,1.205]);eye.scale.set(.052,.043,.022);
+   const pupil=wPart(wolf,new THREE.SphereGeometry(1,16,12),eyeBlack,[side*.205,1.445,1.226]);pupil.scale.set(.019,.032,.012);
+   const brow=wPart(wolf,wY([[-.018,.012,.014],[0,.075,.025],[.018,.012,.014]],12),furDark,[side*.205,1.505,1.17]);brow.rotation.z=side*.12;
+ }
+ // Melena de cuello con mechones alargados que siguen la dirección del pecho.
+ for(let i=0;i<5;i++){
+   const side=i-2;
+   const tuft=wPart(wolf,wY([[-.24,.025,.035],[-.12,.085,.07],[.02,.11,.085],[.16,.045,.04]],14),i%2?furLight:furMid,[side*.105,.91,.56+Math.abs(side)*.018]);
+   tuft.rotation.z=-side*.10;
+ }
  const wolfLegs=[];
- for(const side of [-1,1])for(const z of [-.53,.48]){
-  const pivot=new THREE.Group();pivot.position.set(side*(z>0?.31:.34),.57,z);wolf.add(pivot);
-  wPart(pivot,wY([[-.30,.075,.085],[-.22,.12,.12],[-.08,.145,.14],[.02,.12,.12]],12),z>0?furLight:fur);
-  wPart(pivot,wY([[-.36,.07,.075],[-.30,.095,.095],[-.25,.09,.09]],12),furMid);
-  wPart(pivot,wY([[-.53,.055,.06],[-.44,.075,.075],[-.34,.085,.08]],12),furDark);
-  wPart(pivot,wY([[-.55,.06,.065],[-.50,.075,.075]],10),fur);
-  wPart(pivot,wZ([[-.035,.07,.06],[.045,.105,.075],[.18,.115,.075],[.24,.085,.06]],12),furLight,[0,-.56,.035]);
-  for(let toe=-1;toe<=1;toe++)wPart(pivot,wZ([[.16,.012,.014],[.22,.018,.018],[.27,.008,.01]],8),furDark,[toe*.052,-.57,.035]);
-  wolfLegs.push(pivot);
+ for(const side of [-1,1])for(const z of [-.58,.53]){
+   const pivot=new THREE.Group();pivot.position.set(side*(z>0?.30:.32),.59,z);wolf.add(pivot);
+   // Extremidades con volumen continuo y patas anchas.
+   wPart(pivot,wY([[-.39,.075,.085],[-.30,.105,.11],[-.13,.135,.13],[.04,.145,.14],[.17,.115,.11]],18),z>0?furMid:fur);
+   wPart(pivot,wY([[-.46,.07,.075],[-.37,.09,.09],[-.28,.09,.09]],16),furDark);
+   const paw=wPart(pivot,new THREE.SphereGeometry(1,20,14),furLight,[0,-.48,.105]);paw.scale.set(.115,.085,.17);
+   for(let toe=-1;toe<=1;toe++){const claw=wPart(pivot,new THREE.SphereGeometry(1,12,8),furDark,[toe*.052,-.515,.235]);claw.scale.set(.018,.018,.035);}
+   wolfLegs.push(pivot);
  }
- const tailPivot=new THREE.Group();tailPivot.position.set(0,.99,-.76);wolf.add(tailPivot);
- const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-.06,-.20),new THREE.Vector3(.035,-.12,-.42),new THREE.Vector3(.015,-.18,-.62)]);
- wPart(tailPivot,new THREE.TubeGeometry(tailCurve,12,.105,8,false),furDark);
- wPart(tailPivot,wZ([[-.67,.035,.04],[-.59,.085,.09],[-.49,.10,.095]],12),furLight,[.015,-.18,0]);
+ const tailPivot=new THREE.Group();tailPivot.position.set(0,.99,-.83);wolf.add(tailPivot);
+ const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(-.025,-.035,-.19),new THREE.Vector3(.015,-.10,-.40),new THREE.Vector3(.055,-.16,-.61)]);
+ wPart(tailPivot,new THREE.TubeGeometry(tailCurve,18,.105,10,false),fur);
+ const tailTip=wPart(tailPivot,new THREE.SphereGeometry(1,20,14),furLight,[.055,-.16,-.60]);tailTip.scale.set(.12,.13,.18);
 
-let wolfHP=3,wolfAlive=true,attackCooldown=0;
+ let wolfHP=3,wolfAlive=true,attackCooldown=0;
  let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
  const skyPhotoSprites=[];
  const note=document.getElementById('gameNote');
