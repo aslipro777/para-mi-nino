@@ -72,7 +72,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 <div class="memory-sky-heading"><strong>Nuestros diez recuerdos ♡</strong><span>Toca una fotografía para verla de cerca</span></div>
 <div class="memory-orbit" id="memoryOrbit" aria-label="Diez fotografías girando en círculo"></div>
 <button type="button" class="memory-sky-back" id="backToForest">Volver al bosque</button>
-</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · Arrastra para girar la cámara · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
+</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
 <div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
 <div id="gameReward" class="game-note" hidden><strong>¡Felicidades! Has encontrado los 10 recuerdos. 💚</strong><br><button class="primary" id="startMemorySky" type="button" style="margin-top:12px">Continuar ♡</button></div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
@@ -367,20 +367,30 @@ try{
  }
  window.showMemory=showMemory;
 
- // Cámara orbital: arrastra el mouse o el dedo para girar 360 grados.
- let yaw=0,pitch=.42,dragging=false,lastX=0,lastY=0,skyMode=false;
- window.enterMemorySky=()=>{skyMode=true;};
- window.exitMemorySky=()=>{skyMode=false;};
- renderer.domElement.style.cursor='grab';renderer.domElement.style.touchAction='none';
- renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';});
- renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;yaw-=dx*.008;pitch=THREE.MathUtils.clamp(pitch+dy*.006,.12,1.05);});
- const stopDrag=()=>{dragging=false;renderer.domElement.style.cursor='grab';};
- renderer.domElement.addEventListener('pointerup',stopDrag);renderer.domElement.addEventListener('pointercancel',stopDrag);
- renderer.domElement.addEventListener('wheel',e=>{cameraDistance=THREE.MathUtils.clamp(cameraDistance+e.deltaY*.008,5.5,13);e.preventDefault();},{passive:false});
- let cameraDistance=8.2;
- function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);}
+  // Cámara fija desde arriba, con inclinación suave de aventura clásica.
+ const yaw=0;renderer.domElement.style.touchAction='none';
+ let skyPhotosStarted=false,skyStars=null;
+ function layoutSkyPhotos(){
+  if(!skyPhotoSprites.length)return;
+  const portrait=camera.aspect<1.05,columns=portrait?2:5,rows=portrait?5:2;
+  const spacingX=portrait?2.05:2.55,spacingY=portrait?1.58:2.05;
+  skyPhotoSprites.forEach(photo=>{if(!photo)return;const i=photo.userData.index,col=i%columns,row=Math.floor(i/columns),aspect=photo.userData.aspect;const maxW=portrait?1.9:2.35,maxH=portrait?1.38:1.72;let w=maxH*aspect,h=maxH;if(w>maxW){w=maxW;h=w/aspect;}photo.scale.set(w,h,1);photo.position.set((col-(columns-1)/2)*spacingX,((rows-1)/2-row)*spacingY,-10);photo.userData.baseX=w;photo.userData.baseY=h;photo.userData.baseYPosition=photo.position.y;});
+ }
+ function createSkyPhotos(){
+  if(skyPhotosStarted)return;skyPhotosStarted=true;
+  const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'];
+  const starPositions=[],starDepth=23,halfH=starDepth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),halfW=halfH*camera.aspect;
+  for(let i=0;i<520;i++)starPositions.push((Math.random()*2-1)*halfW*1.12,(Math.random()*2-1)*halfH*1.12,-starDepth);
+  const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+  skyStars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf0f4ff,size:2.2,transparent:true,opacity:.98,depthTest:false,sizeAttenuation:false}));skyStars.renderOrder=2;camera.add(skyStars);
+  const loader=new THREE.TextureLoader();
+  files.forEach((file,i)=>loader.load(file,texture=>{texture.colorSpace=THREE.SRGBColorSpace;const photo=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,opacity:0,depthTest:false}));photo.renderOrder=10;photo.userData={index:i,aspect:texture.image.width/texture.image.height,phase:i*.73,baseYPosition:0,baseX:1,baseY:1};camera.add(photo);skyPhotoSprites[i]=photo;layoutSkyPhotos();},undefined,()=>{}));
+ }
+ document.getElementById('startMemorySky')?.addEventListener('click',()=>{document.getElementById('gameReward').hidden=true;skyEnding=true;skyEndingProgress=0;createSkyPhotos();note.textContent='Nuestros diez recuerdos… 💚';});
+ const skyRaycaster=new THREE.Raycaster(),skyPointer=new THREE.Vector2();
+ renderer.domElement.addEventListener('click',e=>{if(!skyEnding||!skyPhotoSprites.length)return;const rect=renderer.domElement.getBoundingClientRect();skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);skyRaycaster.setFromCamera(skyPointer,camera);const hit=skyRaycaster.intersectObjects(skyPhotoSprites.filter(Boolean))[0]?.object;if(hit)window.showMemory?.(hit.userData.index);});
+ function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);if(skyEnding&&skyStars){const p=skyStars.geometry.attributes.position,depth=23,hh=depth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),hw=hh*camera.aspect;for(let i=0;i<p.count;i++){p.setX(i,(Math.random()*2-1)*hw*1.12);p.setY(i,(Math.random()*2-1)*hh*1.12);}p.needsUpdate=true;layoutSkyPhotos();}}
  new ResizeObserver(resize).observe(host);
-
  const clock=new THREE.Clock();let walkTime=0;
  function animate(){
    requestAnimationFrame(animate);
@@ -438,11 +448,21 @@ try{
    attackCooldown=Math.max(0,attackCooldown-dt);damageCooldown=Math.max(0,damageCooldown-dt);
 
    trees.forEach(tree=>{tree.crown.rotation.z=Math.sin(t*.45+tree.phase)*.018;});
-   fireflies.forEach(f=>{f.g.position.y=f.baseY+Math.sin(t*1.7+f.phase)*.22;f.g.position.x+=Math.sin(t*.7+f.phase)*.0008;});
+   fireflies.forEach(f=>{f.g.position.y=f.baseY+Math.sin(t*1.7+f.phase)*.22;f.g.position.x+=Math.sin(t*.7+f.phase)*.0008;if(f.glow)f.glow.scale.setScalar(.85+.35*(.5+.5*Math.sin(t*3+f.phase)));});
    orbs.forEach(o=>{o.orb.position.y=1.25+Math.sin(t*2+o.phase)*.12;o.halo.scale.setScalar(1+Math.sin(t*2+o.phase)*.09);o.light.intensity=1.7+Math.sin(t*2+o.phase)*.5;});
    stars.rotation.y=Math.sin(t*.025)*.025;
 
-   if(skyMode){const skyTarget=new THREE.Vector3(avatar.position.x,13,avatar.position.z+5);camera.position.lerp(skyTarget,.035);camera.lookAt(avatar.position.x,34,avatar.position.z-18);}else{const target=new THREE.Vector3(avatar.position.x+Math.sin(yaw)*cameraDistance,avatar.position.y+2.1+pitch*2.1,avatar.position.z+Math.cos(yaw)*cameraDistance);camera.position.lerp(target,.12);camera.lookAt(avatar.position.x,1.05,avatar.position.z);}
+   if(skyEnding){
+   skyEndingProgress=Math.min(1,skyEndingProgress+dt*.32);
+   const ease=skyEndingProgress*skyEndingProgress*(3-2*skyEndingProgress);
+   const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+1.8,avatar.position.z+5.2);
+   camera.position.lerp(skyCamera,.055);
+   camera.lookAt(avatar.position.x,avatar.position.y+2.2+17*ease,avatar.position.z-5.5*ease);
+   skyPhotoSprites.forEach(photo=>{photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.13;photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.045)*3.2));});
+  }else{
+   const target=new THREE.Vector3(avatar.position.x,17,avatar.position.z+8);
+   camera.position.lerp(target,.16);camera.lookAt(avatar.position.x,.55,avatar.position.z);
+  }
    renderer.render(scene,camera);
    if(!gameOver&&wolfAlive){
      const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
