@@ -13,7 +13,7 @@ nav{position:sticky;top:0;z-index:5;background:#fffaf2eF;backdrop-filter:blur(8p
 section{padding:70px 20px;max-width:1050px;margin:auto}h2{text-align:center;font-size:2.2rem;font-weight:400;color:#87485e;margin:0 0 30px}.letter{max-width:700px;margin:auto;background:white;padding:35px;border:1px solid #efdde1;box-shadow:0 10px 35px #5a24300d;line-height:1.8;white-space:pre-wrap;min-height:150px}.sub{text-align:center;font:14px Arial,sans-serif;color:#806c72}
 .albums{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.album{border:0;background:#fff;padding:12px 12px 20px;box-shadow:0 8px 25px #4b263014;color:#714354;transition:.2s}.album:hover{transform:translateY(-5px)}.album img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#eadde0;display:block;margin-bottom:12px}.album span{font-size:1.15rem}
 .counter{text-align:center;background:#f4e6e8;padding:35px 15px;border-radius:18px}.digits{font:clamp(1.4rem,4vw,2.5rem) Arial,sans-serif;color:#85465b;margin-top:12px}.timeline{max-width:700px;margin:auto}.event{border-left:2px solid #c9879b;padding:0 0 28px 25px;position:relative}.event:before{content:"";position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:#b85d79}.event small{font:12px Arial,sans-serif;color:#9b6577}.event h3{margin:5px 0}.event p{margin:0;color:#6e5b62}
-.panel{background:#fff;padding:24px;border-radius:16px;box-shadow:0 8px 30px #4b263010;margin:16px auto;max-width:760px}.question{padding:14px 0;border-bottom:1px solid #eee}.question button,.primary{border:0;border-radius:30px;padding:11px 18px;background:#a95873;color:white}.answer{display:none;margin:10px 0 0;color:#6c4a57}.forest-wrap{background:#171b22;border-radius:16px;overflow:hidden;color:#fff}.forest-head{padding:22px;text-align:center}.forest-head p{font:14px Arial,sans-serif;color:#ddd}.game{height:440px;position:relative;background:radial-gradient(ellipse at 50% 35%,#64766b,#1b2928 65%,#10171a);overflow:hidden}.game canvas{width:100%;height:100%;display:block}.game canvas{image-rendering:pixelated}
+.panel{background:#fff;padding:24px;border-radius:16px;box-shadow:0 8px 30px #4b263010;margin:16px auto;max-width:760px}.question{padding:14px 0;border-bottom:1px solid #eee}.question button,.primary{border:0;border-radius:30px;padding:11px 18px;background:#a95873;color:white}.answer{display:none;margin:10px 0 0;color:#6c4a57}.forest-wrap{background:#171b22;border-radius:16px;overflow:hidden;color:#fff}.forest-head{padding:22px;text-align:center}.forest-head p{font:14px Arial,sans-serif;color:#ddd}.game{height:440px;position:relative;background:radial-gradient(ellipse at 50% 35%,#334c58,#182b35 65%,#0c1722);overflow:hidden}.game canvas{width:100%;height:100%;display:block}.game canvas{image-rendering:auto}
 .combat-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
 .hit-pop{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);font:900 25px Arial,sans-serif;color:#ffe07a;text-shadow:2px 3px 0 #7b263c,0 0 12px #ffb347;white-space:nowrap;animation:hit-pop .8s ease-out forwards}
 .hit-pop.miss{color:#e6f2ff;text-shadow:2px 3px 0 #27384d}
@@ -46,7 +46,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 </div></section>
 <section id="tiempo"><h2>El tiempo a tu lado</h2><div class="counter"><div>Desde el 15 de julio de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
 <section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un pequeño bosque 3D. Muévete con WASD o las flechas y pulsa E cerca de una luz.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: atacar con espada · Shift: defenderse</div>
-<div class="game-note" id="gameStats">♡ Energía: <span id="energy">5</span>/5 · Recuerdos: <span id="found">0</span>/10</div>
+<div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
 <div id="gameReward" class="game-note" hidden>✨ Encontraste los diez recuerdos. El bosque se ilumina para ti: “Hay momentos que se quedan para siempre”. ✨</div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">Pon tus videos en la misma carpeta y cambia estos nombres desde el código.</p>
 <div class="albums">
@@ -127,69 +127,314 @@ const host=document.getElementById('game'),fallback=document.getElementById('fal
 try{
  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
  fallback?.remove();
- const scene=new THREE.Scene();scene.background=new THREE.Color(0x101722);scene.fog=new THREE.Fog(0x101722,10,43);
- const camera=new THREE.PerspectiveCamera(66,host.clientWidth/host.clientHeight,.1,100);
- const renderer=new THREE.WebGLRenderer({antialias:false});renderer.setSize(host.clientWidth,host.clientHeight);renderer.setPixelRatio(1);renderer.domElement.style.imageRendering='pixelated';host.appendChild(renderer.domElement);
- scene.add(new THREE.HemisphereLight(0xbacbff,0x1c291e,1.7));const moon=new THREE.DirectionalLight(0xc5d7ff,1.8);moon.position.set(-5,10,4);scene.add(moon);
- const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:0x263b2d,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.1;scene.add(ground);
- for(let i=0;i<190;i++){let x=(Math.random()-.5)*48,z=(Math.random()-.5)*55;if(Math.abs(x)<2&&z>0&&z<12)continue;let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.2,1.6,5),new THREE.MeshStandardMaterial({color:0x49372d}));trunk.position.set(x,.8,z);scene.add(trunk);for(let j=0;j<3;j++){let leaf=new THREE.Mesh(new THREE.ConeGeometry(1.1-j*.18,2.4,5),new THREE.MeshStandardMaterial({color:j===0?0x183d30:0x28533d,flatShading:true}));leaf.position.set(x,2+j*.82,z);scene.add(leaf)}}
- // Tomi: camisa verde, pantalón gris, pelo negro y lentes
- const avatar=new THREE.Group(),skin=new THREE.MeshStandardMaterial({color:0xd9aa8c}),green=new THREE.MeshStandardMaterial({color:0x287449}),gray=new THREE.MeshStandardMaterial({color:0x777d88}),black=new THREE.MeshStandardMaterial({color:0x17151a});
- const torso=new THREE.Mesh(new THREE.BoxGeometry(.62,.82,.34),green);torso.position.y=1.05;avatar.add(torso);
- const head=new THREE.Mesh(new THREE.BoxGeometry(.48,.48,.42),skin);head.position.y=1.72;avatar.add(head);
- const hair=new THREE.Mesh(new THREE.BoxGeometry(.51,.18,.45),black);hair.position.set(0,1.98,-.01);avatar.add(hair);
- for(const x of [-.12,.12]){const lens=new THREE.Mesh(new THREE.BoxGeometry(.15,.1,.035),new THREE.MeshStandardMaterial({color:0x141b22,metalness:.5}));lens.position.set(x,1.74,.225);avatar.add(lens)}
- for(const x of [-.18,.18]){const leg=new THREE.Mesh(new THREE.BoxGeometry(.19,.58,.22),gray);leg.position.set(x,.3,0);avatar.add(leg)}
- const swordRig=new THREE.Group();swordRig.position.set(.38,1.05,.05);avatar.add(swordRig);
- const sword=new THREE.Group();const blade=new THREE.Mesh(new THREE.BoxGeometry(.075,.78,.09),new THREE.MeshStandardMaterial({color:0xdce9f5,metalness:.8,roughness:.22,emissive:0x263746}));blade.position.y=.43;sword.add(blade);
- const guard=new THREE.Mesh(new THREE.BoxGeometry(.34,.07,.13),new THREE.MeshStandardMaterial({color:0xc69b50,metalness:.65}));guard.position.y=.08;sword.add(guard);
- const grip=new THREE.Mesh(new THREE.BoxGeometry(.09,.22,.1),new THREE.MeshStandardMaterial({color:0x553a2c}));grip.position.y=-.06;sword.add(grip);swordRig.add(sword);swordRig.rotation.z=-.25;scene.add(avatar);avatar.position.set(0,0,5);
+
+ // Bosque nocturno suave: luz de luna, bruma azul y vegetación redondeada.
+ const scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x101a2a);
+ scene.fog=new THREE.FogExp2(0x142334,.027);
+ const camera=new THREE.PerspectiveCamera(58,host.clientWidth/host.clientHeight,.1,120);
+ const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});
+ renderer.setSize(host.clientWidth,host.clientHeight);
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.18;
+ host.appendChild(renderer.domElement);
+
+ scene.add(new THREE.HemisphereLight(0xc8dcff,0x203323,2.0));
+ const moonLight=new THREE.DirectionalLight(0xb9d1ff,2.25);
+ moonLight.position.set(-8,15,5);scene.add(moonLight);
+ const warmFill=new THREE.PointLight(0x9dc9b0,1.1,32);
+ warmFill.position.set(4,5,-12);scene.add(warmFill);
+
+ const moon=new THREE.Mesh(new THREE.SphereGeometry(1.65,32,24),new THREE.MeshBasicMaterial({color:0xfff0ce}));
+ moon.position.set(-13,13,-34);scene.add(moon);
+ const moonGlow=new THREE.PointLight(0xa9c8ff,1.4,48);
+ moonGlow.position.copy(moon.position);scene.add(moonGlow);
+
+ const groundMat=new THREE.MeshStandardMaterial({color:0x294735,roughness:1});
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,120),groundMat);
+ ground.rotation.x=-Math.PI/2;ground.position.set(0,-.12,-20);scene.add(ground);
+
+ // Pequeñas estrellas sobre el dosel.
+ const starPositions=[];
+ for(let i=0;i<190;i++)starPositions.push((Math.random()-.5)*75,9+Math.random()*22,-48+Math.random()*48);
+ const starGeo=new THREE.BufferGeometry();
+ starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+ const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xdde9ff,size:.11,transparent:true,opacity:.85}));
+ scene.add(stars);
+
+ const mat=(color,roughness=1)=>new THREE.MeshStandardMaterial({color,roughness});
+ const trunkMat=mat(0x76503b),trunkLight=mat(0x98694b);
+ const leafMats=[mat(0x315e48),mat(0x3b7253),mat(0x477f5d),mat(0x294f42)];
+ const bushMats=[mat(0x315c45),mat(0x477b58),mat(0x527e5c)];
+ const flowerMats=[mat(0xe6b6c5),mat(0xe8d69a),mat(0xb9c9ef)];
+
+ function makeTree(x,z,scale=1){
+   const g=new THREE.Group();
+   const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.2*scale,.3*scale,1.75*scale,12),trunkMat);
+   trunk.position.y=.87*scale;g.add(trunk);
+   const roots=new THREE.Mesh(new THREE.SphereGeometry(.42*scale,14,10),trunkLight);
+   roots.scale.set(1,.28,1);roots.position.y=.12*scale;g.add(roots);
+   const crown=new THREE.Group();
+   const layers=[
+     [0,2.05,.95,.82,.9,0],
+     [-.48,2.62,.75,.78,.72,1],
+     [.48,2.62,.78,.8,.72,2],
+     [0,3.18,.78,.78,.78,1],
+     [0,2.55,.98,.72,.82,3]
+   ];
+   for(const [ox,oy,rx,ry,rz,mi] of layers){
+     const blob=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),leafMats[mi]);
+     blob.position.set(ox*scale,oy*scale,0);
+     blob.scale.set(rx*scale,ry*scale,rz*scale);
+     crown.add(blob);
+   }
+   g.add(crown);g.position.set(x,0,z);g.scale.setScalar(scale);scene.add(g);
+   return {g,crown,phase:Math.random()*Math.PI*2};
+ }
+ const trees=[];
+ for(let i=0;i<105;i++){
+   let x=(Math.random()-.5)*42,z=8-Math.random()*58;
+   if(Math.abs(x)<2.5&&z>-1&&z<11){x+=x<0?-4:4}
+   trees.push(makeTree(x,z,.78+Math.random()*.65));
+ }
+ // Arbustos y flores suaves junto al sendero.
+ for(let i=0;i<72;i++){
+   const x=(Math.random()-.5)*26,z=5-Math.random()*48;
+   const bush=new THREE.Group();
+   for(let j=0;j<3;j++){
+     const b=new THREE.Mesh(new THREE.SphereGeometry(.42+Math.random()*.16,14,11),bushMats[j%3]);
+     b.position.set((j-1)*.34,.32+Math.random()*.12,(Math.random()-.5)*.25);bush.add(b);
+   }
+   bush.position.set(x,0,z);bush.scale.setScalar(.55+Math.random()*.55);scene.add(bush);
+   if(i%3===0){
+     const flower=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),flowerMats[i%3]);
+     flower.position.set(x+.28,.58,z+.1);scene.add(flower);
+   }
+ }
+
+ // Personaje de cuerpo completo con silueta suave y proporciones redondeadas.
+ const avatar=new THREE.Group();
+ const skin=mat(0xe2b69a),green=mat(0x347a50),greenLight=mat(0x559568),pants=mat(0x737f91),shoeMat=mat(0x343846),hairMat=mat(0x211b22),glassMat=new THREE.MeshStandardMaterial({color:0x18202b,metalness:.35,roughness:.35});
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.31,.55,7,14),green);
+ torso.position.y=1.13;avatar.add(torso);
+ const collar=new THREE.Mesh(new THREE.SphereGeometry(.22,16,12),greenLight);
+ collar.position.set(0,1.43,.015);collar.scale.set(1,.38,.8);avatar.add(collar);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.36,22,18),skin);
+ head.position.y=1.92;avatar.add(head);
+ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.38,20,14),hairMat);
+ hairCap.position.set(0,2.13,-.015);hairCap.scale.set(1,.58,1);avatar.add(hairCap);
+ for(let i=0;i<5;i++){
+   const fringe=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),hairMat);
+   fringe.position.set(-.25+i*.12,2.02,.27);fringe.scale.set(1,.8,.7);avatar.add(fringe);
+ }
+ // Lentes redondeados, puente y ojos.
+ for(const x of [-.145,.145]){
+   const frame=new THREE.Mesh(new THREE.TorusGeometry(.115,.025,8,20),glassMat);
+   frame.position.set(x,1.96,.323);avatar.add(frame);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),mat(0x241e20));
+   eye.position.set(x,1.96,.35);avatar.add(eye);
+ }
+ const bridge=new THREE.Mesh(new THREE.BoxGeometry(.08,.025,.025),glassMat);
+ bridge.position.set(0,1.96,.33);avatar.add(bridge);
+ const armGeo=new THREE.CapsuleGeometry(.105,.42,5,10);
+ for(const side of [-1,1]){
+   const arm=new THREE.Mesh(armGeo,side<0?skin:skin);
+   arm.position.set(side*.39,1.16,.015);arm.rotation.z=side*.16;avatar.add(arm);
+   const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.43,5,10),pants);
+   leg.position.set(side*.17,.43,0);avatar.add(leg);
+   const shoe=new THREE.Mesh(new THREE.SphereGeometry(.16,14,10),shoeMat);
+   shoe.scale.set(1,.55,1.35);shoe.position.set(side*.17,.13,.07);avatar.add(shoe);
+ }
+ const swordRig=new THREE.Group();swordRig.position.set(.48,1.13,.05);avatar.add(swordRig);
+ const sword=new THREE.Group();
+ const blade=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.63,4,8),new THREE.MeshStandardMaterial({color:0xe1edf7,metalness:.72,roughness:.2,emissive:0x263746}));
+ blade.position.y=.42;sword.add(blade);
+ const guard=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.22,3,8),new THREE.MeshStandardMaterial({color:0xc9a25d,metalness:.55}));
+ guard.rotation.z=Math.PI/2;guard.position.y=.08;sword.add(guard);
+ const grip=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.13,3,8),mat(0x634735));
+ grip.position.y=-.06;sword.add(grip);swordRig.add(sword);swordRig.rotation.z=-.25;
+ scene.add(avatar);avatar.position.set(0,0,5);
+
  const positions=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-21],[7,-25],[-7,-29],[2,-33],[9,-37],[-9,-39]];
  const found=new Set(),orbs=[];
- positions.forEach((p,i)=>{let light=new THREE.PointLight(0xffc978,2.1,5);light.position.set(p[0],1.2,p[1]);scene.add(light);let orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.24,1),new THREE.MeshBasicMaterial({color:0xffd58b}));orb.position.copy(light.position);scene.add(orb);orbs.push({light,orb,index:i})});
- // Lobo 3D reconocible: cuerpo, hocico, patas, cola y orejas.
+ positions.forEach((p,i)=>{
+   const light=new THREE.PointLight(0xffd69a,2.0,5.5);
+   light.position.set(p[0],1.25,p[1]);scene.add(light);
+   const orb=new THREE.Mesh(new THREE.SphereGeometry(.2,18,14),new THREE.MeshBasicMaterial({color:0xffe3a6}));
+   orb.position.copy(light.position);scene.add(orb);
+   const halo=new THREE.Mesh(new THREE.SphereGeometry(.34,14,12),new THREE.MeshBasicMaterial({color:0xffd18a,transparent:true,opacity:.13}));
+   halo.position.copy(light.position);scene.add(halo);
+   orbs.push({light,orb,halo,index:i,phase:Math.random()*6.28});
+ });
+
+ // Lobo de cuatro patas, con torso, cuello, hocico, orejas y cola redondeados.
  const wolf=new THREE.Group();
- const wolfMat=new THREE.MeshStandardMaterial({color:0x59616c,roughness:1,flatShading:true});
- const darkFur=new THREE.MeshStandardMaterial({color:0x303944,roughness:1,flatShading:true});
- const muzzleMat=new THREE.MeshStandardMaterial({color:0x9aa0a8,roughness:1});
- const eyeMat=new THREE.MeshStandardMaterial({color:0xffc36a,emissive:0x6b3100,emissiveIntensity:.7});
- const body=new THREE.Mesh(new THREE.BoxGeometry(.62,.62,1.15),wolfMat);body.position.y=.72;wolf.add(body);
- const chest=new THREE.Mesh(new THREE.BoxGeometry(.68,.72,.42),wolfMat);chest.position.set(0,.76,.48);wolf.add(chest);
- const wolfHead=new THREE.Mesh(new THREE.BoxGeometry(.58,.55,.58),wolfMat);wolfHead.position.set(0,1.13,.82);wolf.add(wolfHead);
- const snout=new THREE.Mesh(new THREE.ConeGeometry(.22,.48,5),muzzleMat);snout.rotation.x=Math.PI/2;snout.position.set(0,1.02,1.2);wolf.add(snout);
- for(const x of [-.2,.2]){const ear=new THREE.Mesh(new THREE.ConeGeometry(.13,.42,5),darkFur);ear.position.set(x,1.55,.72);wolf.add(ear);const eye=new THREE.Mesh(new THREE.SphereGeometry(.055,6,5),eyeMat);eye.position.set(x*1.45,1.2,1.105);wolf.add(eye)}
- for(const x of [-.23,.23])for(const z of [-.36,.43]){const leg=new THREE.Mesh(new THREE.BoxGeometry(.18,.62,.2),darkFur);leg.position.set(x,.32,z);wolf.add(leg);const paw=new THREE.Mesh(new THREE.BoxGeometry(.23,.14,.27),wolfMat);paw.position.set(x,.09,z+.04);wolf.add(paw)}
- const tail=new THREE.Mesh(new THREE.ConeGeometry(.14,.72,5),darkFur);tail.rotation.x=-Math.PI/2;tail.position.set(0,.85,-.78);wolf.add(tail);
- scene.add(wolf);wolf.position.set(3,0,-18);
- let wolfHP=3,wolfAlive=true,attackCooldown=0;
- let energy=5,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false;
- const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key.toLowerCase()==='e')openNearest();if(e.code==='Space'){e.preventDefault();if(attackCooldown<=0){attackFlash=.42;attackHitDone=false;attackCooldown=.65;}}});
- addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
- function openNearest(){let best=null,dist=2.7;orbs.forEach(o=>{if(found.has(o.index))return;let d=Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z);if(d<dist){dist=d;best=o}});if(best){found.add(best.index);best.orb.visible=false;best.light.intensity=0;window.showMemory(best.index);document.getElementById('found').textContent=found.size;if(found.size===10&&!won){won=true;scene.fog.color.set(0x46364d);scene.background=new THREE.Color(0x46364d);moon.intensity=3;document.getElementById('gameReward').hidden=false;}}}
- window.showMemory=showMemory;
- function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight)}new ResizeObserver(resize).observe(host);
- function animate(){requestAnimationFrame(animate);let dx=0,dz=0;if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;let len=Math.hypot(dx,dz)||1;avatar.position.x+=dx/len*.095;avatar.position.z+=dz/len*.095;avatar.position.x=Math.max(-14,Math.min(14,avatar.position.x));avatar.position.z=Math.max(-42,Math.min(8,avatar.position.z));
-  const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
-  if(wolfAlive&&dist>1.45){wolf.position.x+=(avatar.position.x-wolf.position.x)*.0025;wolf.position.z+=(avatar.position.z-wolf.position.z)*.0025;wolf.rotation.y=Math.atan2(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z);}
-  else if(wolfAlive&&damageCooldown<=0&&!keys.shift){energy=Math.max(0,energy-1);document.getElementById('energy').textContent=energy;damageCooldown=2.5;if(energy===0)energy=5;}
-  if(wolfAlive&&keys.shift)wolf.position.x+=(wolf.position.x-avatar.position.x)*.008;
-  if(attackFlash>0){
-   attackFlash-=.016;const swing=1-Math.max(0,attackFlash)/.42;
-   swordRig.rotation.z=-.25-Math.sin(Math.min(1,swing)*Math.PI)*1.75;
-   swordRig.rotation.x=Math.sin(Math.min(1,swing)*Math.PI)*.35;
-   if(!attackHitDone&&swing>.32){attackHitDone=true;
-    if(wolfAlive&&dist<2.8){wolfHP--;wolf.position.x+=(wolf.position.x-avatar.position.x)*.22;wolf.position.z+=(wolf.position.z-avatar.position.z)*.22;showCombatText('¡LOBO -1! 💥');wolf.scale.setScalar(.82);setTimeout(()=>{if(wolfAlive)wolf.scale.setScalar(1)},130);
-     if(wolfHP<=0){wolfAlive=false;scene.remove(wolf);document.getElementById('gameNote').textContent='🐺 ¡Desafío superado! El lobo se retiró y puedes seguir buscando los recuerdos.';document.getElementById('gameStats').innerHTML='♡ Energía: <span id="energy">'+energy+'</span>/5 · Lobo vencido · Recuerdos: <span id="found">'+found.size+'</span>/10';}
-    }else{showCombatText('¡FALLASTE!',true)}
+ const fur=mat(0x78808c),furLight=mat(0x9ba3ad),furDark=mat(0x48515f),muzzle=mat(0xd2d1d0),noseMat=mat(0x242630),eyeMat=new THREE.MeshStandardMaterial({color:0xffd08a,emissive:0x71401a,emissiveIntensity:.55});
+ const wolfBody=new THREE.Mesh(new THREE.SphereGeometry(1,22,16),fur);
+ wolfBody.scale.set(.53,.43,.88);wolfBody.position.set(0,.82,-.02);wolf.add(wolfBody);
+ const chest=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),furLight);
+ chest.scale.set(.42,.48,.38);chest.position.set(0,.86,.52);wolf.add(chest);
+ const neck=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),fur);
+ neck.scale.set(.38,.4,.4);neck.position.set(0,1.05,.67);wolf.add(neck);
+ const wolfHead=new THREE.Mesh(new THREE.SphereGeometry(.36,20,16),furLight);
+ wolfHead.position.set(0,1.22,.88);wolf.add(wolfHead);
+ const snout=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),muzzle);
+ snout.scale.set(.22,.17,.34);snout.position.set(0,1.1,1.17);wolf.add(snout);
+ const nose=new THREE.Mesh(new THREE.SphereGeometry(.09,14,10),noseMat);
+ nose.position.set(0,1.13,1.47);wolf.add(nose);
+ for(const side of [-1,1]){
+   const ear=new THREE.Mesh(new THREE.ConeGeometry(.13,.42,16),furDark);
+   ear.position.set(side*.23,1.55,.78);ear.rotation.z=side*-.16;wolf.add(ear);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.045,12,10),eyeMat);
+   eye.position.set(side*.22,1.28,1.17);wolf.add(eye);
+   const brow=new THREE.Mesh(new THREE.SphereGeometry(.09,12,8),furDark);
+   brow.scale.set(1,.3,.35);brow.position.set(side*.22,1.35,1.12);wolf.add(brow);
+ }
+ for(const side of [-1,1]){
+   for(const z of [-.48,.48]){
+     const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.105,.38,5,10),furDark);
+     leg.position.set(side*.34,.38,z);wolf.add(leg);
+     const paw=new THREE.Mesh(new THREE.SphereGeometry(.15,14,10),furLight);
+     paw.scale.set(1,.65,1.25);paw.position.set(side*.34,.13,z+.05);wolf.add(paw);
    }
-  }else{swordRig.rotation.z+=( -.25-swordRig.rotation.z)*.28;swordRig.rotation.x*=.72;}
-  attackCooldown=Math.max(0,attackCooldown-.016);damageCooldown=Math.max(0,damageCooldown-.016);
-  camera.position.lerp(new THREE.Vector3(avatar.position.x,avatar.position.y+3.3,avatar.position.z+6),.09);camera.lookAt(avatar.position.x,1,avatar.position.z-2);renderer.render(scene,camera);
-  let near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
-  document.getElementById('gameNote').textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · E: recuerdo · Espacio: atacar (3 golpes) · Shift: defenderse';
+ }
+ const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.48,5,10),furDark);
+ tail.position.set(0,.88,-.88);tail.rotation.x=-.9;wolf.add(tail);
+ scene.add(wolf);wolf.position.set(3,0,-18);
+
+ let wolfHP=3,wolfAlive=true,attackCooldown=0;
+ let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false;
+ const stats=document.getElementById('gameStats'),note=document.getElementById('gameNote');
+ const keys={};
+ function updateStats(){
+   document.getElementById('energy').textContent=energy;
+   document.getElementById('found').textContent=found.size;
+ }
+ function showCombatText(message,miss=false){
+   const fx=document.getElementById('combatFx');
+   if(!fx)return;
+   const pop=document.createElement('div');
+   pop.className='hit-pop'+(miss?' miss':'');
+   pop.textContent=message;fx.appendChild(pop);
+   setTimeout(()=>pop.remove(),850);
+ }
+ addEventListener('keydown',e=>{
+   keys[e.key.toLowerCase()]=true;
+   if(e.key.toLowerCase()==='e'&&!gameOver)openNearest();
+   if(e.code==='Space'&&!gameOver){
+     e.preventDefault();
+     if(attackCooldown<=0){attackFlash=.42;attackHitDone=false;attackCooldown=.65;}
+   }
+   if(e.key.toLowerCase()==='r'&&gameOver){
+     energy=100;gameOver=false;damageCooldown=1.2;avatar.position.set(0,0,5);
+     note.textContent='Volviste al bosque. ¡Busca los recuerdos!';
+     updateStats();
+   }
+ });
+ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+ function openNearest(){
+   let best=null,dist=2.7;
+   orbs.forEach(o=>{
+     if(found.has(o.index))return;
+     const d=Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z);
+     if(d<dist){dist=d;best=o;}
+   });
+   if(best){
+     found.add(best.index);best.orb.visible=false;best.halo.visible=false;best.light.intensity=0;
+     window.showMemory(best.index);updateStats();
+     if(found.size===10&&!won){
+       won=true;scene.fog.color.set(0x46364d);scene.background=new THREE.Color(0x46364d);
+       moonLight.intensity=3;document.getElementById('gameReward').hidden=false;
+     }
+   }
+ }
+ window.showMemory=showMemory;
+ function resize(){
+   camera.aspect=host.clientWidth/host.clientHeight;
+   camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);
+ }
+ new ResizeObserver(resize).observe(host);
+
+ function animate(){
+   requestAnimationFrame(animate);
+   const dt=1/60;
+   if(!gameOver){
+     let dx=0,dz=0;
+     if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;
+     if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;
+     const len=Math.hypot(dx,dz)||1;
+     avatar.position.x+=dx/len*.095;avatar.position.z+=dz/len*.095;
+     avatar.position.x=Math.max(-14,Math.min(14,avatar.position.x));
+     avatar.position.z=Math.max(-42,Math.min(8,avatar.position.z));
+   }
+
+   const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
+   if(wolfAlive&&dist>1.55){
+     wolf.position.x+=(avatar.position.x-wolf.position.x)*.0025;
+     wolf.position.z+=(avatar.position.z-wolf.position.z)*.0025;
+     wolf.rotation.y=Math.atan2(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z);
+   }else if(wolfAlive&&dist<=1.55&&damageCooldown<=0&&!keys.shift&&!gameOver){
+     energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();
+     showCombatText('-20 VIDA',true);
+     host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
+     if(energy<=0){
+       gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';
+     }
+   }
+   if(wolfAlive&&keys.shift)wolf.position.x+=(wolf.position.x-avatar.position.x)*.008;
+
+   if(attackFlash>0&&!gameOver){
+     attackFlash-=dt;
+     const swing=1-Math.max(0,attackFlash)/.42;
+     swordRig.rotation.z=-.25-Math.sin(Math.min(1,swing)*Math.PI)*1.75;
+     swordRig.rotation.x=Math.sin(Math.min(1,swing)*Math.PI)*.35;
+     if(!attackHitDone&&swing>.32){
+       attackHitDone=true;
+       if(wolfAlive&&dist<3.05){
+         wolfHP--;wolf.position.x+=(wolf.position.x-avatar.position.x)*.22;
+         wolf.position.z+=(wolf.position.z-avatar.position.z)*.22;
+         showCombatText('¡LOBO -1! ✨');
+         wolf.scale.setScalar(.88);
+         setTimeout(()=>{if(wolfAlive)wolf.scale.setScalar(1)},130);
+         if(wolfHP<=0){
+           wolfAlive=false;scene.remove(wolf);
+           note.textContent='🐺 ¡Lobo vencido! Puedes seguir buscando los recuerdos.';
+         }
+       }else showCombatText('¡MÁS CERCA!',true);
+     }
+   }else{
+     swordRig.rotation.z+=(-.25-swordRig.rotation.z)*.28;
+     swordRig.rotation.x*=.72;
+   }
+   attackCooldown=Math.max(0,attackCooldown-dt);
+   damageCooldown=Math.max(0,damageCooldown-dt);
+
+   // Movimiento sutil de copas, luces y luciérnagas.
+   const t=performance.now()*.001;
+   trees.forEach(tree=>{tree.crown.rotation.z=Math.sin(t*.45+tree.phase)*.018;});
+   orbs.forEach(o=>{o.orb.position.y=1.25+Math.sin(t*2+o.phase)*.12;o.halo.scale.setScalar(1+Math.sin(t*2+o.phase)*.08);o.light.intensity=1.6+Math.sin(t*2+o.phase)*.45;});
+   stars.rotation.y=Math.sin(t*.025)*.025;
+
+   camera.position.lerp(new THREE.Vector3(avatar.position.x,avatar.position.y+3.7,avatar.position.z+7.3),.09);
+   camera.lookAt(avatar.position.x,1.1,avatar.position.z-2.2);
+   renderer.render(scene,camera);
+
+   if(!gameOver&&wolfAlive){
+     const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
+     if(near)note.textContent='✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.';
+     else note.textContent='WASD/flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse';
+   }else if(!gameOver&&found.size<10&&wolfAlive===false){
+     note.textContent='🐺 Lobo vencido · Sigue explorando y encuentra los diez recuerdos.';
+   }
  }
  animate();
-}catch(err){if(fallback)fallback.textContent='No se pudo cargar el bosque 3D. La página y las demás secciones siguen funcionando. Revisa tu conexión a internet.';console.error(err)}
+}catch(err){
+ if(fallback)fallback.textContent='No se pudo cargar el bosque 3D. La página y las demás secciones siguen funcionando. Revisa tu conexión a internet.';
+ console.error(err);
+}
 </script>
 <script>
 // Respaldo del bosque: si Three.js no carga, se dibuja un bosque en perspectiva
@@ -199,8 +444,8 @@ try{
  function startFallback(){
   if(host.querySelector('canvas')) return;
   const old=document.getElementById('fallback'); if(old) old.remove();
-  const c=document.createElement('canvas'); c.style.cssText='width:100%;height:100%;display:block;image-rendering:pixelated'; host.appendChild(c);
-  const ctx=c.getContext('2d'); let W=1,H=1,px=0,pz=5,yaw=0,attack=0,attackHitDone=false,defend=0,energy=5,wolf={x:3,z:-18},wolfHP=3,wolfAlive=true;
+  const c=document.createElement('canvas'); c.style.cssText='width:100%;height:100%;display:block;image-rendering:auto'; host.appendChild(c);
+  const ctx=c.getContext('2d'); let W=1,H=1,px=0,pz=5,yaw=0,attack=0,attackHitDone=false,defend=0,energy=100,damageTimer=0,wolf={x:3,z:-18},wolfHP=3,wolfAlive=true;
   const keys={},spots=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-21],[7,-25],[-7,-29],[2,-33],[9,-37],[-9,-39]],found=new Set();
   let seed=92831;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
   const trees=Array.from({length:170},()=>({x:(rnd()-.5)*36,z:8-rnd()*58,h:3+rnd()*2,r:.5+rnd()*.8}));
@@ -208,11 +453,11 @@ try{
   new ResizeObserver(resize).observe(host);resize();
   function project(x,y,z){let dx=x-px,dz=z-pz,co=Math.cos(yaw),si=Math.sin(yaw),rx=dx*co-dz*si,rz=dx*si+dz*co;if(rz<.35)return null;let f=H*.86/Math.tan(Math.PI/6),k=f/rz;return{x:W/2+rx*k,y:H*.53-y*k,k,z:rz}}
   function polygon(points,color){ctx.fillStyle=color;ctx.beginPath();points.forEach((p,i)=>{if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.closePath();ctx.fill()}
-  function tree(t){let a=project(t.x,0,t.z);if(!a||a.k<.5)return;let q=a.k*t.r;ctx.fillStyle='#49372d';ctx.fillRect(a.x-q*.16,a.y-q*1.7,q*.32,q*1.7);polygon([{x:a.x-q*1.3,y:a.y-q*1.1},{x:a.x,y:a.y-q*4.1},{x:a.x+q*1.3,y:a.y-q*1.1}],'#173b2d');polygon([{x:a.x-q,y:a.y-q*2.1},{x:a.x,y:a.y-q*4.5},{x:a.x+q,y:a.y-q*2.1}],'#28513a')}
+  function tree(t){let a=project(t.x,0,t.z);if(!a||a.k<.5)return;let q=a.k*t.r;ctx.fillStyle='#76503b';ctx.fillRect(a.x-q*.13,a.y-q*1.65,q*.26,q*1.65);for(const [ox,oy,r,col] of [[0,2.5,1.35,'#315e48'],[-.55,2.9,1,'#3b7253'],[.55,2.9,1,'#477f5d'],[0,3.45,1,'#315e48']]){ctx.fillStyle=col;ctx.beginPath();ctx.arc(a.x+ox*q,a.y-oy*q,r*q,0,Math.PI*2);ctx.fill()}}
   function person(x,z,isWolf){let a=project(x,0,z);if(!a)return;let q=a.k*(isWolf?1:.7);if(q<.8)return;if(isWolf){ctx.fillStyle='#59616c';ctx.fillRect(a.x-q*.58,a.y-q*.95,q*1.16,q*.55);ctx.fillRect(a.x-q*.2,a.y-q*1.42,q*.65,q*.58);polygon([{x:a.x-q*.18,y:a.y-q*1.65},{x:a.x-q*.12,y:a.y-q*2.15},{x:a.x+q*.02,y:a.y-q*1.65}],'#303944');polygon([{x:a.x+q*.2,y:a.y-q*1.65},{x:a.x+q*.35,y:a.y-q*2.15},{x:a.x+q*.42,y:a.y-q*1.65}],'#303944');ctx.fillStyle='#ffc36a';ctx.fillRect(a.x-q*.08,a.y-q*1.24,q*.09,q*.08);ctx.fillRect(a.x+q*.2,a.y-q*1.24,q*.09,q*.08);ctx.fillStyle='#303944';ctx.fillRect(a.x-q*.4,a.y-q*.4,q*.22,q*.5);ctx.fillRect(a.x+q*.18,a.y-q*.4,q*.22,q*.5)}else{ctx.fillStyle='#777d88';ctx.fillRect(a.x-q*.3,a.y-q*.45,q*.22,q*.45);ctx.fillRect(a.x+q*.08,a.y-q*.45,q*.22,q*.45);ctx.fillStyle='#287449';ctx.fillRect(a.x-q*.4,a.y-q*1.35,q*.8,q*.88);ctx.fillStyle='#d9aa8c';ctx.fillRect(a.x-q*.28,a.y-q*1.92,q*.56,q*.55);ctx.fillStyle='#17151a';ctx.fillRect(a.x-q*.34,a.y-q*2.02,q*.68,q*.2);ctx.strokeStyle='#111';ctx.lineWidth=Math.max(1,q*.045);ctx.strokeRect(a.x-q*.23,a.y-q*1.7,q*.17,q*.1);ctx.strokeRect(a.x+q*.06,a.y-q*1.7,q*.17,q*.1);if(attack>0){let swing=Math.sin((1-attack/24)*Math.PI);ctx.save();ctx.translate(a.x+q*.38,a.y-q*.82);ctx.rotate(-.25-swing*1.75);ctx.strokeStyle='#dce9f5';ctx.lineWidth=Math.max(2,q*.11);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(q*.12,-q*1.18);ctx.stroke();ctx.strokeStyle='#d5aa5b';ctx.lineWidth=Math.max(2,q*.16);ctx.beginPath();ctx.moveTo(-q*.16,-q*.12);ctx.lineTo(q*.16,q*.12);ctx.stroke();ctx.restore()}}}
   function draw(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#101722');g.addColorStop(.5,'#304b43');g.addColorStop(1,'#17251e');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);polygon([{x:W*.42,y:H},{x:W*.58,y:H},{x:W*.53,y:H*.43},{x:W*.47,y:H*.43}],'#62543d');
    const objs=trees.map(t=>({z:t.z,fn:()=>tree(t)}));spots.forEach((p,i)=>{if(found.has(i))return;objs.push({z:p[1],fn:()=>{let a=project(p[0],1.4,p[1]);if(!a)return;let r=Math.max(2,a.k*.22);ctx.fillStyle='#ffd58b';ctx.shadowColor='#ffd58b';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(a.x,a.y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}})});if(wolfAlive)objs.push({z:wolf.z,fn:()=>person(wolf.x,wolf.z,true)});objs.sort((a,b)=>b.z-a.z).forEach(o=>o.fn());person(px,pz,false);ctx.fillStyle='#fff';ctx.font='12px Arial';ctx.textAlign='center';ctx.fillText('BOSQUE DE RECUERDOS',W/2,20)}
-  function update(){let v=.22;if(keys.w||keys.arrowup)pz-=v;if(keys.s||keys.arrowdown)pz+=v;if(keys.a||keys.arrowleft)px-=v;if(keys.d||keys.arrowright)px+=v;px=Math.max(-16,Math.min(16,px));pz=Math.max(-46,Math.min(8,pz));if(wolfAlive){let dx=px-wolf.x,dz=pz-wolf.z,d=Math.hypot(dx,dz);if(d>1.5){wolf.x+=dx/d*.035;wolf.z+=dz/d*.035}if(d<1.4&&!defend){energy=Math.max(0,energy-.015);document.getElementById('energy').textContent=Math.ceil(energy)}}if(attack>0){attack--;if(!attackHitDone&&attack<16){attackHitDone=true;if(wolfAlive&&Math.hypot(px-wolf.x,pz-wolf.z)<2.8){wolfHP--;wolf.x+=(wolf.x-px)*.25;wolf.z+=(wolf.z-pz)*.25;showCombatText('¡LOBO -1! 💥');if(wolfHP<=0){wolfAlive=false;document.getElementById('gameNote').textContent='🐺 ¡Desafío superado! El lobo se retiró.'}}else{showCombatText('¡FALLASTE!',true)}}}if(defend>0)defend--;draw();requestAnimationFrame(update)}
+  function update(){let v=.22;if(keys.w||keys.arrowup)pz-=v;if(keys.s||keys.arrowdown)pz+=v;if(keys.a||keys.arrowleft)px-=v;if(keys.d||keys.arrowright)px+=v;px=Math.max(-16,Math.min(16,px));pz=Math.max(-46,Math.min(8,pz));if(wolfAlive){let dx=px-wolf.x,dz=pz-wolf.z,d=Math.hypot(dx,dz);if(d>1.5){wolf.x+=dx/d*.035;wolf.z+=dz/d*.035}if(d<1.4&&!defend&&damageTimer<=0){energy=Math.max(0,energy-20);damageTimer=90;document.getElementById('energy').textContent=energy;if(energy===0){document.getElementById('gameNote').textContent='Te quedaste sin vida. Pulsa R para volver al bosque.'}}}if(damageTimer>0)damageTimer--;if(attack>0){attack--;if(!attackHitDone&&attack<16){attackHitDone=true;if(wolfAlive&&Math.hypot(px-wolf.x,pz-wolf.z)<2.8){wolfHP--;wolf.x+=(wolf.x-px)*.25;wolf.z+=(wolf.z-pz)*.25;showCombatText('¡LOBO -1! 💥');if(wolfHP<=0){wolfAlive=false;document.getElementById('gameNote').textContent='🐺 ¡Desafío superado! El lobo se retiró.'}}else{showCombatText('¡FALLASTE!',true)}}}if(defend>0)defend--;draw();requestAnimationFrame(update)}
   addEventListener('keydown',e=>{let k=e.key.toLowerCase();keys[k]=true;if(k===' '){e.preventDefault();if(attack<=0){attack=24;attackHitDone=false}}if(k==='shift')defend=20;if(k==='e'){let best=-1,d=2.8;spots.forEach((p,i)=>{let n=Math.hypot(px-p[0],pz-p[1]);if(n<d&&!found.has(i)){d=n;best=i}});if(best>=0){found.add(best);if(typeof window.showMemory==='function')window.showMemory(best);document.getElementById('found').textContent=found.size;if(found.size===10)document.getElementById('gameReward').hidden=false}}});
   addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
   document.getElementById('gameNote').textContent='WASD o flechas: caminar · E: recuerdo · Espacio: espada · Shift: defensa';requestAnimationFrame(update);
