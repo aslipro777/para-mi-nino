@@ -48,7 +48,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 <section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
 <section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un pequeño bosque 3D. Muévete con WASD o las flechas y pulsa E cerca de una luz.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: atacar con espada · Shift: defenderse</div>
 <div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
-<div id="gameReward" class="game-note" hidden>✨ Encontraste los diez recuerdos. El bosque se ilumina para ti: “Hay momentos que se quedan para siempre”. ✨</div></div></section>
+<div id="gameReward" class="game-note" hidden><strong>¡Felicidades! Has encontrado los 10 recuerdos. 💚</strong><br><button class="primary" id="startMemorySky" type="button" style="margin-top:12px">Continuar ♡</button></div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
 <div class="albums">
   <div class="panel"><video controls playsinline style="width:100%;height:clamp(260px,55vw,560px);display:block;object-fit:contain;background:#eadde0" preload="metadata" poster="video1.jpg.webp"><source src="video1.mp4.mp4" type="video/mp4"></video><p class="sub">BEEESIIITOOOSSS MUAAAK</p></div>
@@ -295,7 +295,8 @@ try{
  const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);
 
  let wolfHP=3,wolfAlive=true,attackCooldown=0;
- let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false;
+ let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
+ const skyPhotoSprites=[];
  const note=document.getElementById('gameNote');
  const keys={};
  function updateStats(){document.getElementById('energy').textContent=energy;document.getElementById('found').textContent=found.size;}
@@ -305,8 +306,8 @@ try{
  }
  addEventListener('keydown',e=>{
    keys[e.key.toLowerCase()]=true;
-   if(e.key.toLowerCase()==='e'&&!gameOver)openNearest();
-   if(e.code==='Space'&&!gameOver){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
+   if(e.key.toLowerCase()==='e'&&!gameOver&&!skyEnding)openNearest();
+   if(e.code==='Space'&&!gameOver&&!skyEnding){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
    if(e.key.toLowerCase()==='r'&&gameOver){energy=100;gameOver=false;damageCooldown=1.2;avatar.position.set(0,0,5);note.textContent='Volviste al bosque. ¡Busca los recuerdos!';updateStats();}
  });
  addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
@@ -315,7 +316,7 @@ try{
    let best=null,dist=2.7;
    orbs.forEach(o=>{if(found.has(o.index))return;const d=Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z);if(d<dist){dist=d;best=o;}});
    if(best){found.add(best.index);best.orb.visible=false;best.halo.visible=false;best.light.intensity=0;window.showMemory(best.index);updateStats();
-     if(found.size===10&&!won){won=true;scene.fog.color.set(0x46364d);scene.background=new THREE.Color(0x46364d);moonLight.intensity=3;document.getElementById('gameReward').hidden=false;}
+     if(found.size===10&&!won){won=true;scene.fog.color.set(0x172747);scene.background=new THREE.Color(0x101a36);moonLight.intensity=2.5;document.getElementById('gameReward').hidden=false;note.textContent='¡Encontraste los diez recuerdos!';}
    }
  }
  window.showMemory=showMemory;
@@ -323,12 +324,46 @@ try{
  // Cámara orbital: arrastra el mouse o el dedo para girar 360 grados.
  let yaw=0,pitch=.42,dragging=false,lastX=0,lastY=0;
  renderer.domElement.style.cursor='grab';renderer.domElement.style.touchAction='none';
- renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';});
+ renderer.domElement.addEventListener('pointerdown',e=>{if(skyEnding)return;dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';});
  renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;yaw-=dx*.008;pitch=THREE.MathUtils.clamp(pitch+dy*.006,.12,1.05);});
  const stopDrag=()=>{dragging=false;renderer.domElement.style.cursor='grab';};
  renderer.domElement.addEventListener('pointerup',stopDrag);renderer.domElement.addEventListener('pointercancel',stopDrag);
  renderer.domElement.addEventListener('wheel',e=>{cameraDistance=THREE.MathUtils.clamp(cameraDistance+e.deltaY*.008,5.5,13);e.preventDefault();},{passive:false});
  let cameraDistance=8.2;
+ function createSkyPhotos(){
+   if(skyPhotoSprites.length)return;
+   const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'];
+   const spots=[[-6,10],[-3,13],[0,11],[3,15],[6,11],[-5,16],[-2,14],[2,17],[5,15],[0,19]];
+   const loader=new THREE.TextureLoader();
+   files.forEach((file,i)=>{
+     loader.load(file,texture=>{
+       texture.colorSpace=THREE.SRGBColorSpace;
+       const photo=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,opacity:0,depthTest:false}));
+       const aspect=texture.image.width/texture.image.height,h=2.45,w=h*aspect;
+       if(w>2.05)photo.scale.set(2.05,2.05/aspect,1);else photo.scale.set(w,h,1);
+       photo.position.set(avatar.position.x+spots[i][0],spots[i][1],avatar.position.z-9+(i%3)*.35);
+       photo.userData={index:i,baseX:photo.scale.x,baseY:photo.scale.y,phase:i*.73,baseYPosition:photo.position.y};
+       scene.add(photo);skyPhotoSprites.push(photo);
+     },undefined,()=>{});
+   });
+ }
+ document.getElementById('startMemorySky')?.addEventListener('click',()=>{
+   document.getElementById('gameReward').hidden=true;
+   skyEnding=true;skyEndingProgress=0;createSkyPhotos();
+   note.textContent='Nuestros diez recuerdos… 💚';
+ });
+ const skyRaycaster=new THREE.Raycaster(),skyPointer=new THREE.Vector2();
+ renderer.domElement.addEventListener('click',e=>{
+   if(!skyEnding||!skyPhotoSprites.length)return;
+   const rect=renderer.domElement.getBoundingClientRect();
+   skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
+   skyRaycaster.setFromCamera(skyPointer,camera);
+   const hit=skyRaycaster.intersectObjects(skyPhotoSprites)[0]?.object;
+   if(hit)skyPhotoSprites.forEach(photo=>{
+     const scale=photo===hit?1.18:1;
+     photo.scale.set(photo.userData.baseX*scale,photo.userData.baseY*scale,1);
+   });
+ });
  function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);}
  new ResizeObserver(resize).observe(host);
 
@@ -337,7 +372,7 @@ try{
    requestAnimationFrame(animate);
    const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
    let dx=0,dz=0;
-   if(!gameOver){
+   if(!gameOver&&!skyEnding){
      if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;
      if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;
      const len=Math.hypot(dx,dz);
@@ -358,11 +393,11 @@ try{
    armPivots[0].rotation.z=.08;armPivots[1].rotation.z=-.08;
    const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
    let wolfMoving=false;
-   if(wolfAlive&&dist>1.65&&!gameOver){
+   if(wolfAlive&&dist>1.65&&!gameOver&&!skyEnding){
      const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
      wolf.position.x+=vx*1.35*dt;wolf.position.z+=vz*1.35*dt;
      wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
-   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver){
+   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
      energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
      host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
      if(energy<=0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';}
@@ -394,7 +429,19 @@ try{
    stars.rotation.y=Math.sin(t*.025)*.025;
 
    const target=new THREE.Vector3(avatar.position.x+Math.sin(yaw)*cameraDistance,avatar.position.y+2.1+pitch*2.1,avatar.position.z+Math.cos(yaw)*cameraDistance);
-   camera.position.lerp(target,.12);camera.lookAt(avatar.position.x,1.05,avatar.position.z);
+   if(skyEnding){
+     skyEndingProgress=Math.min(1,skyEndingProgress+dt*.32);
+     const ease=skyEndingProgress*skyEndingProgress*(3-2*skyEndingProgress);
+     const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+2.25,avatar.position.z+6.2);
+     camera.position.lerp(skyCamera,.055);
+     camera.lookAt(avatar.position.x,avatar.position.y+2.2+17*ease,avatar.position.z-5.5*ease);
+     skyPhotoSprites.forEach(photo=>{
+       photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.22;
+       photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.055)*2.5));
+     });
+   }else{
+     camera.position.lerp(target,.12);camera.lookAt(avatar.position.x,1.05,avatar.position.z);
+   }
    renderer.render(scene,camera);
    if(!gameOver&&wolfAlive){
      const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
