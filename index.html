@@ -261,9 +261,9 @@ try{
 
 
  // Suelo vivo: hierba, rocas, helechos, troncos caídos y honguitos.
- const grassGeo=new THREE.ConeGeometry(.055,.42,5),grassMat=mat(0x47734c),grass=new THREE.InstancedMesh(grassGeo,grassMat,360),dummy=new THREE.Object3D();
+ const grassGeo=new THREE.ConeGeometry(.055,.42,5),grassMat=mat(0x47734c),grass=new THREE.InstancedMesh(grassGeo,grassMat,260),dummy=new THREE.Object3D();
  for(let i=0;i<260;i++){const x=(Math.random()-.5)*36,z=8-Math.random()*68;dummy.position.set(x,.16,z);dummy.rotation.set((Math.random()-.5)*.18,Math.random()*Math.PI*2,(Math.random()-.5)*.35);const h=.55+Math.random()*.9;dummy.scale.set(.7+Math.random()*.6,h,.7+Math.random()*.6);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);}scene.add(grass);
- const rockGeo=new THREE.DodecahedronGeometry(.28,0),rockMat=mat(0x66716c),rocks=new THREE.InstancedMesh(rockGeo,rockMat,92);
+ const rockGeo=new THREE.DodecahedronGeometry(.28,0),rockMat=mat(0x66716c),rocks=new THREE.InstancedMesh(rockGeo,rockMat,55);
  for(let i=0;i<55;i++){const x=(Math.random()-.5)*34,z=7-Math.random()*66;dummy.position.set(x,.12,z);dummy.rotation.set(Math.random(),Math.random()*3,Math.random());dummy.scale.set(.55+Math.random(),.35+Math.random()*.6,.6+Math.random());dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);}scene.add(rocks);
  const fernLeafMat=mat(0x3d7955),fernStemMat=mat(0x77915d);
  for(let i=0;i<10;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
@@ -350,8 +350,8 @@ try{
  }
  addEventListener('keydown',e=>{
    keys[e.key.toLowerCase()]=true;
-   if(e.key.toLowerCase()==='e'&&!gameOver)openNearest();
-   if(e.code==='Space'&&!gameOver){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
+   if(e.key.toLowerCase()==='e'&&!gameOver&&!skyEnding)openNearest();
+   if(e.code==='Space'&&!gameOver&&!skyEnding){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
    if(e.key.toLowerCase()==='r'&&gameOver){energy=100;gameOver=false;damageCooldown=1.2;avatar.position.set(0,0,5);note.textContent='Volviste al bosque. ¡Busca los recuerdos!';updateStats();}
  });
  addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
@@ -394,7 +394,7 @@ try{
    requestAnimationFrame(animate);
    const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
    let dx=0,dz=0;
-   if(!gameOver){
+   if(!gameOver&&!skyEnding){
      if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;
      if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;
      const len=Math.hypot(dx,dz);
@@ -407,7 +407,7 @@ try{
        walkTime+=dt*10;
      }
    }
-   const moving=Math.hypot(dx,dz)>.01&&!gameOver;
+   const moving=Math.hypot(dx,dz)>.01&&!gameOver&&!skyEnding;
    const swing=moving?Math.sin(walkTime):0;
    avatar.position.y=moving?Math.abs(Math.cos(walkTime*2))*.045:Math.sin(t*2)*.012;
    legPivots[0].rotation.x=swing*.62;legPivots[1].rotation.x=-swing*.62;
@@ -415,11 +415,11 @@ try{
    armPivots[0].rotation.z=.08;armPivots[1].rotation.z=-.08;
    const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
    let wolfMoving=false;
-   if(wolfAlive&&dist>1.65&&!gameOver){
+   if(wolfAlive&&dist>1.65&&!gameOver&&!skyEnding){
      const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
      wolf.position.x+=vx*1.35*dt;wolf.position.z+=vz*1.35*dt;
      wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
-   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver){
+   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
      energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
      host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
      if(energy<=0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';}
