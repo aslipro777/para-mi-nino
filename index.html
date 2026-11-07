@@ -176,6 +176,8 @@ try{
  scene.background=new THREE.Color(0x111b35);
  scene.fog=new THREE.FogExp2(0x172747,.019);
  const camera=new THREE.PerspectiveCamera(43,host.clientWidth/host.clientHeight,.1,150);
+ // La cámara debe pertenecer a la escena para que Three.js renderice sus estrellas y fotografías hijas.
+ scene.add(camera);
  const renderer=new THREE.WebGLRenderer({antialias:false,alpha:false,powerPreference:"low-power"});
  renderer.setSize(host.clientWidth,host.clientHeight);
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.35));
