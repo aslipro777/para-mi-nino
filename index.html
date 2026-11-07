@@ -522,7 +522,7 @@ try{
  }
  document.getElementById('startMemorySky')?.addEventListener('click',()=>{document.getElementById('gameReward').hidden=true;skyEnding=true;skyEndingProgress=0;createSkyPhotos();note.textContent='Nuestros diez recuerdos… 💚';});
  const skyRaycaster=new THREE.Raycaster(),skyPointer=new THREE.Vector2();
- renderer.domElement.addEventListener('click',e=>{if(!skyEnding||!skyPhotoSprites.length)return;const rect=renderer.domElement.getBoundingClientRect();skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);skyRaycaster.setFromCamera(skyPointer,camera);const hit=skyRaycaster.intersectObjects(skyPhotoSprites.filter(Boolean))[0]?.object;if(hit)window.showMemory?.(hit.userData.index);});
+ renderer.domElement.addEventListener('click',e=>{if(!skyEnding||!skyPhotoSprites.length)return;const rect=renderer.domElement.getBoundingClientRect();skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);skyRaycaster.setFromCamera(skyPointer,camera);const hit=skyRaycaster.intersectObjects(skyPhotoSprites.filter(Boolean))[0]?.object;if(hit){const selected=hit.userData.selected=!hit.userData.selected;const factor=selected?1.12:1;hit.scale.set(hit.userData.baseX*factor,hit.userData.baseY*factor,1);}});
  function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);if(skyEnding&&skyStars){const p=skyStars.geometry.attributes.position,depth=23,hh=depth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),hw=hh*camera.aspect;for(let i=0;i<p.count;i++){p.setX(i,(Math.random()*2-1)*hw*1.12);p.setY(i,(Math.random()*2-1)*hh*1.12);}p.needsUpdate=true;layoutSkyPhotos();}}
  new ResizeObserver(resize).observe(host);
  const clock=new THREE.Clock();let walkTime=0;
@@ -604,9 +604,12 @@ try{
    if(skyEnding){
    skyEndingProgress=Math.min(1,skyEndingProgress+dt*.32);
    const ease=skyEndingProgress*skyEndingProgress*(3-2*skyEndingProgress);
-   const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+1.8,avatar.position.z+5.2);
+   // Giro cinematográfico alrededor del personaje mientras la cámara asciende hacia el cielo.
+   const orbitAngle=ease*Math.PI*1.65;
+   const orbitRadius=5.2-1.1*ease;
+   const skyCamera=new THREE.Vector3(avatar.position.x+Math.sin(orbitAngle)*orbitRadius,avatar.position.y+1.8+5.5*ease,avatar.position.z+Math.cos(orbitAngle)*orbitRadius);
    camera.position.lerp(skyCamera,.055);
-   camera.lookAt(avatar.position.x,avatar.position.y+2.2+17*ease,avatar.position.z-5.5*ease);
+   camera.lookAt(avatar.position.x,avatar.position.y+2.2+10*ease,avatar.position.z);
    skyPhotoSprites.forEach(photo=>{photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.13;photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.045)*3.2));});
   }else{
    const distance=cameraDistance,horizontal=distance*Math.cos(viewTilt);
