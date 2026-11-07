@@ -274,6 +274,14 @@ try{
  const skin=mat(0xe6b99d),shirt=mat(0x39845b),shirtLight=mat(0x5ba477),pants=mat(0x697b91),shoes=mat(0x343746),hair=mat(0x241d25),glasses=mat(0x18202a,.35);
  function capsule(parent,r,len,material,pos){const m=new THREE.Mesh(new THREE.CapsuleGeometry(r,len,6,12),material);m.position.set(...pos);m.castShadow=true;parent.add(m);return m;}
  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.34,.57,8,16),shirt);body.position.y=1.13;body.castShadow=true;avatar.add(body);
+ const backpackMat=mat(0x245b42),backpack=new THREE.Mesh(new THREE.BoxGeometry(.48,.54,.22),backpackMat);
+ backpack.position.set(0,1.18,-.31);backpack.castShadow=true;avatar.add(backpack);
+ const packPocket=new THREE.Mesh(new THREE.BoxGeometry(.32,.19,.055),shirtLight);
+ packPocket.position.set(0,1.04,-.45);avatar.add(packPocket);
+ for(const side of [-1,1]){
+  const strap=new THREE.Mesh(new THREE.BoxGeometry(.075,.48,.08),shirtLight);
+  strap.position.set(side*.25,1.2,-.19);avatar.add(strap);
+ }
  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.18,12),skin);neck.position.y=1.55;avatar.add(neck);
  const head=new THREE.Mesh(new THREE.SphereGeometry(.39,24,20),skin);head.position.y=1.94;head.castShadow=true;avatar.add(head);
  const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.405,22,16),hair);hairCap.position.set(0,2.14,-.025);hairCap.scale.set(1,.58,1);avatar.add(hairCap);
