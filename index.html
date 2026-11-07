@@ -67,7 +67,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 <button class="album" onclick="openPhoto('foto3.jpg','dia de la peña')"><img src="foto3.jpg" alt="soi la manzanita jeje" onerror="this.alt='Agrega foto3.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum tres</span></button>
 </div></section>
 <section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
-<section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque 3D nocturno. Muévete con WASD o las flechas, gira la cámara arrastrando y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div>
+<section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque nocturno visto desde arriba. Muévete con WASD o las flechas y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div>
 <div id="memorySky" class="memory-sky" hidden>
 <div class="memory-sky-heading"><strong>Nuestros diez recuerdos ♡</strong><span>Toca una fotografía para verla de cerca</span></div>
 <div class="memory-orbit" id="memoryOrbit" aria-label="Diez fotografías girando en círculo"></div>
@@ -179,7 +179,7 @@ try{
  const scene=new THREE.Scene();
  scene.background=new THREE.Color(0x111b35);
  scene.fog=new THREE.FogExp2(0x172747,.019);
- const camera=new THREE.PerspectiveCamera(48,host.clientWidth/host.clientHeight,.1,150);
+ const camera=new THREE.PerspectiveCamera(43,host.clientWidth/host.clientHeight,.1,150);
  const renderer=new THREE.WebGLRenderer({antialias:false,alpha:false,powerPreference:"low-power"});
  renderer.setSize(host.clientWidth,host.clientHeight);
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.35));
@@ -189,6 +189,7 @@ try{
  renderer.shadowMap.enabled=false;
  renderer.shadowMap.type=THREE.BasicShadowMap;
  host.appendChild(renderer.domElement);
+ camera.position.set(0,17,13);camera.lookAt(0,0,5);
  fallback?.remove();
 
  scene.add(new THREE.HemisphereLight(0xcbdcff,0x263d37,2.0));
@@ -342,7 +343,8 @@ try{
  const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);
 
  let wolfHP=3,wolfAlive=true,attackCooldown=0;
- let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false;
+ let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
+ const skyPhotoSprites=[];
  const note=document.getElementById('gameNote');
  const keys={};
  function updateStats(){document.getElementById('energy').textContent=energy;document.getElementById('found').textContent=found.size;}
@@ -466,7 +468,7 @@ try{
    renderer.render(scene,camera);
    if(!gameOver&&wolfAlive){
      const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
-     note.textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse · Arrastra para girar la cámara';
+     note.textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse';
    }else if(!gameOver&&wolfAlive===false&&found.size<10)note.textContent='🐺 Lobo vencido · Sigue explorando y encuentra los diez recuerdos.';
  }
  animate();
@@ -476,39 +478,13 @@ try{
 }
 </script><script>
 (function(){
- const sky=document.getElementById('memorySky'),orbit=document.getElementById('memoryOrbit');
- if(!sky||!orbit)return;
- memories.forEach((memory,index)=>{
-   const angle=index*36,button=document.createElement('button');
-   button.type='button';button.className='memory-orbit-button';
-   button.style.setProperty('--angle',angle+'deg');button.style.setProperty('--counter-angle',(-angle)+'deg');
-   button.setAttribute('aria-label','Abrir recuerdo: '+memory.title);
-   const img=document.createElement('img');img.src=memory.image;img.alt=memory.title;
-   img.onerror=()=>{img.style.opacity='.25';img.alt='Fotografía no disponible';};
-   button.appendChild(img);button.addEventListener('click',()=>{if(window.showMemory)window.showMemory(index);});
-   orbit.appendChild(button);
- });
- document.getElementById('startMemorySky')?.addEventListener('click',()=>{
-   window.enterMemorySky?.();sky.hidden=false;document.getElementById('game')?.classList.add('memory-finale');
- });
- document.getElementById('backToForest')?.addEventListener('click',()=>{
-   sky.hidden=true;window.exitMemorySky?.();document.getElementById('game')?.classList.remove('memory-finale');
- });
  document.querySelectorAll('#mobileControls [data-game-key]').forEach(button=>{
-   const key=button.dataset.gameKey;
-   const press=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keydown',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
-   const release=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keyup',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
-   button.addEventListener('pointerdown',press);button.addEventListener('pointerup',release);
-   button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+  const key=button.dataset.gameKey;
+  const press=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keydown',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+  const release=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keyup',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+  button.addEventListener('pointerdown',press);button.addEventListener('pointerup',release);
+  button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
  });
-})();
-</script>uscando los recuerdos.';}}else pop('¡MÁS CERCA!',true);}}
-   attackCooldown=Math.max(0,attackCooldown-dt);damage=Math.max(0,damage-dt);defend=Math.max(0,defend-dt);
-  }
-  render(t);requestAnimationFrame(loop);
- }
- note.textContent='Muévete con las flechas o WASD · E: recoger recuerdo · Espacio: atacar · Shift: defender';
- stats();requestAnimationFrame(loop);
 })();
 </script>
 <style>
