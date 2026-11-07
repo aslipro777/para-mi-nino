@@ -220,6 +220,7 @@ try{
   // Árboles de copa frondosa y silueta orgánica.
   const trunkMat=mat(0x68452f),pineMats=[mat(0x174b3b),mat(0x216348),mat(0x2d7651),mat(0x3b8158)];
   const bushMats=[mat(0x245b3d),mat(0x34764b),mat(0x47885a),mat(0x5b9865)];
+   const canopyGeometries=Array.from({length:7},(_,seed)=>{const g=new THREE.IcosahedronGeometry(1,3),p=g.attributes.position;for(let n=0;n<p.count;n++){const x=p.getX(n),y=p.getY(n),z=p.getZ(n),wave=Math.sin(x*7+seed)*Math.cos(y*6-seed*.7)*Math.sin(z*5+seed*.4);const k=1+wave*.075;p.setXYZ(n,x*k,y*k,z*k);}p.needsUpdate=true;g.computeVertexNormals();return g;});
   const flowerMats=[mat(0xe7b8cb),mat(0xf0dca0),mat(0xb9c9f2)];
   const trees=[];
   function makePine(x,z,s=1){
@@ -227,7 +228,7 @@ try{
     const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.2*s,.9*s,8),trunkMat);trunk.position.y=.43*s;tree.add(trunk);
     const branch=new THREE.Mesh(new THREE.CylinderGeometry(.055*s,.09*s,1.25*s,7),trunkMat);branch.position.set(.25*s,1.05*s,.08*s);branch.rotation.z=-.72;tree.add(branch);
      const crownShape=[[-.58,1.18,0,.82,.72,.76],[-.12,1.62,.08,.9,.82,.88],[.48,1.25,-.08,.78,.68,.8],[.12,2.12,-.04,.72,.78,.72],[-.38,1.92,.3,.63,.66,.62],[.52,1.88,.28,.62,.66,.65],[0,2.48,-.12,.48,.52,.5]];
-     crownShape.forEach((v,k)=>{const crown=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),pineMats[(k+Math.floor(Math.random()*2))%pineMats.length]);crown.position.set(v[0]*s,v[1]*s,v[2]*s);crown.scale.set(v[3]*s,v[4]*s,v[5]*s);crown.castShadow=true;crown.receiveShadow=true;tree.add(crown);});
+     crownShape.forEach((v,k)=>{const crown=new THREE.Mesh(canopyGeometries[k],pineMats[(k+Math.floor(Math.random()*2))%pineMats.length]);crown.position.set(v[0]*s,v[1]*s,v[2]*s);crown.scale.set(v[3]*s,v[4]*s,v[5]*s);crown.castShadow=true;crown.receiveShadow=true;tree.add(crown);});
      for(let k=0;k<5;k++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.18*s,10,8),pineMats[(k+2)%pineMats.length]);const a=k*Math.PI*2/5;leaf.position.set(Math.cos(a)*.82*s,1.5*s,Math.sin(a)*.82*s);leaf.scale.set(1,.55,1.25);tree.add(leaf);}
      tree.position.set(x,0,z);tree.scale.setScalar(s);scene.add(tree);trees.push({crown:tree,phase:Math.random()*6.28});
   }
@@ -288,6 +289,12 @@ try{
    const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),mat(0x211b20));eye.position.set(side*.15,1.97,.374);avatar.add(eye);
  }
  const bridge=new THREE.Mesh(new THREE.BoxGeometry(.075,.025,.025),glasses);bridge.position.set(0,1.97,.37);avatar.add(bridge);
+  const noseTip=new THREE.Mesh(new THREE.SphereGeometry(.045,12,9),mat(0xd49b82));noseTip.position.set(0,1.84,.385);avatar.add(noseTip);
+  const mouth=new THREE.Mesh(new THREE.TorusGeometry(.065,.012,6,18,Math.PI),mat(0x8f5553));mouth.position.set(0,1.75,.365);mouth.rotation.z=Math.PI;avatar.add(mouth);
+  const browMat=mat(0x30252a);for(const side of [-1,1]){const brow=new THREE.Mesh(new THREE.CapsuleGeometry(.018,.12,3,7),browMat);brow.position.set(side*.15,2.09,.36);brow.rotation.z=side*.12;avatar.add(brow);}
+  const collar=new THREE.Mesh(new THREE.TorusGeometry(.19,.035,7,18),shirtLight);collar.position.set(0,1.48,.015);collar.rotation.x=Math.PI/2;avatar.add(collar);
+  const pocket=new THREE.Mesh(new THREE.BoxGeometry(.16,.18,.025),shirtLight);pocket.position.set(.19,1.18,.323);avatar.add(pocket);
+  for(let i=0;i<3;i++){const button=new THREE.Mesh(new THREE.SphereGeometry(.025,8,6),mat(0xc6d8a0));button.position.set(0,1.27-i*.12,.345);avatar.add(button);}
  const armPivots=[],legPivots=[];
  for(const side of [-1,1]){
    const armPivot=new THREE.Group();armPivot.position.set(side*.39,1.38,0);avatar.add(armPivot);
@@ -320,6 +327,7 @@ try{
  const wolf=new THREE.Group();scene.add(wolf);wolf.position.set(3,0,-16.5);
  const fur=mat(0x788391),furLight=mat(0xa8b0bd),furDark=mat(0x485362),muzzle=mat(0xd8d6d2),noseMat=mat(0x242630);
  const wolfBody=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),fur);wolfBody.scale.set(.55,.43,.88);wolfBody.position.set(0,.82,-.02);wolf.add(wolfBody);
+  for(const side of [-1,1]){const haunch=new THREE.Mesh(new THREE.SphereGeometry(.34,16,12),fur);haunch.scale.set(.92,1.05,1.12);haunch.position.set(side*.31,.77,-.48);wolf.add(haunch);const shoulder=new THREE.Mesh(new THREE.SphereGeometry(.3,16,12),furLight);shoulder.scale.set(.9,1.15,.92);shoulder.position.set(side*.3,.83,.48);wolf.add(shoulder);}
  const chest=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),furLight);chest.scale.set(.43,.48,.4);chest.position.set(0,.88,.55);wolf.add(chest);
  const wolfHead=new THREE.Mesh(new THREE.SphereGeometry(.38,22,18),furLight);wolfHead.position.set(0,1.25,.9);wolf.add(wolfHead);
  const neckFur=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),furLight);neckFur.scale.set(.38,.4,.47);neckFur.position.set(0,1.03,.65);wolf.add(neckFur);const snout=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),muzzle);snout.scale.set(.23,.17,.34);snout.position.set(0,1.12,1.2);wolf.add(snout);const lowerJaw=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),furDark);lowerJaw.scale.set(.19,.085,.27);lowerJaw.position.set(0,1.01,1.18);wolf.add(lowerJaw);
@@ -336,7 +344,7 @@ try{
    }
  }
  const tailPivot=new THREE.Group();tailPivot.position.set(0,.94,-.78);wolf.add(tailPivot);
- const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);
+ const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);const tailTip=new THREE.Mesh(new THREE.SphereGeometry(.15,12,9),furLight);tailTip.position.set(0,.03,-.58);tailPivot.add(tailTip);
 
  let wolfHP=3,wolfAlive=true,attackCooldown=0;
  let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
