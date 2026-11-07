@@ -421,9 +421,24 @@ try{
    const inner=wPart(wolf,wY([[.005,.045,.018],[.095,.061,.022],[.245,.009,.008]],14),innerEar,[side*.205,1.715,.865]);
    inner.rotation.z=-side*.13;
    // Ojos ámbar hundidos bajo cejas para una expresión alerta.
-   const eye=wPart(wolf,new THREE.SphereGeometry(1,20,14),eyeGold,[side*.205,1.445,1.205]);eye.scale.set(.052,.043,.022);
-   const pupil=wPart(wolf,new THREE.SphereGeometry(1,16,12),eyeBlack,[side*.205,1.445,1.226]);pupil.scale.set(.019,.032,.012);
+   const eyeSocket=wPart(wolf,new THREE.SphereGeometry(1,20,14),furDark,[side*.205,1.445,1.185]);eyeSocket.scale.set(.075,.061,.035);
+   const eye=wPart(wolf,new THREE.SphereGeometry(1,24,18),eyeGold,[side*.205,1.445,1.218]);eye.scale.set(.057,.047,.027);
+   const pupil=wPart(wolf,new THREE.SphereGeometry(1,18,14),eyeBlack,[side*.205,1.445,1.242]);pupil.scale.set(.021,.036,.014);
+   const glint=wPart(wolf,new THREE.SphereGeometry(1,12,8),new THREE.MeshBasicMaterial({color:0xfff2d1}),[side*.205-.014,1.463,1.255]);glint.scale.set(.009,.009,.006);
    const brow=wPart(wolf,wY([[-.018,.012,.014],[0,.075,.025],[.018,.012,.014]],12),furDark,[side*.205,1.505,1.17]);brow.rotation.z=side*.12;
+ }
+ // Boca oscura abierta, visible bajo el hocico.
+ const mouth=wPart(wolf,new THREE.SphereGeometry(1,24,16),new THREE.MeshBasicMaterial({color:0x17151a}),[0,1.205,1.405]);
+ mouth.scale.set(.142,.078,.205);
+ // Encía y colmillos marfil: dos superiores apuntan hacia abajo y dos inferiores hacia arriba.
+ const toothMat=new THREE.MeshStandardMaterial({color:0xf2e6cc,roughness:.48});
+ for(const side of [-1,1]){
+   const upperFang=wPart(wolf,new THREE.ConeGeometry(.035,.145,12),toothMat,[side*.092,1.245,1.535]);
+   upperFang.rotation.x=Math.PI;
+   const lowerFang=wPart(wolf,new THREE.ConeGeometry(.028,.105,12),toothMat,[side*.088,1.172,1.535]);
+   lowerFang.rotation.x=0;
+   const smallTooth=wPart(wolf,new THREE.ConeGeometry(.018,.065,10),toothMat,[side*.125,1.205,1.47]);
+   smallTooth.rotation.x=Math.PI;
  }
  // Melena de cuello con mechones alargados que siguen la dirección del pecho.
  for(let i=0;i<5;i++){
