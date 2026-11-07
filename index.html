@@ -68,11 +68,7 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 </div></section>
 <section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
 <section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque nocturno visto desde arriba. Muévete con WASD o las flechas y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div>
-<div id="memorySky" class="memory-sky" hidden>
-<div class="memory-sky-heading"><strong>Nuestros diez recuerdos ♡</strong><span>Toca una fotografía para verla de cerca</span></div>
-<div class="memory-orbit" id="memoryOrbit" aria-label="Diez fotografías girando en círculo"></div>
-<button type="button" class="memory-sky-back" id="backToForest">Volver al bosque</button>
-</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
+</div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
 <div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
 <div id="gameReward" class="game-note" hidden><strong>¡Felicidades! Has encontrado los 10 recuerdos. 💚</strong><br><button class="primary" id="startMemorySky" type="button" style="margin-top:12px">Continuar ♡</button></div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
@@ -205,12 +201,12 @@ try{
  const moonGlow=new THREE.PointLight(0xaacaff,1.8,65);moonGlow.position.copy(moon.position);scene.add(moonGlow);
 
  const mat=(color,roughness=1)=>new THREE.MeshStandardMaterial({color,roughness});
- const groundMat=mat(0x294b3d);
+ const groundMat=mat(0x315b43);
  const ground=new THREE.Mesh(new THREE.PlaneGeometry(110,130),groundMat);
  ground.rotation.x=-Math.PI/2;ground.position.set(0,-.16,-23);ground.receiveShadow=true;scene.add(ground);
 
  // Sendero sinuoso y pequeñas zonas de hierba.
- const pathMat=mat(0x59634c);
+ const pathMat=mat(0x6c7350);
  for(let i=0;i<54;i++){const z=8-i*1.95,x=Math.sin(i*.15)*1.15,seg=new THREE.Mesh(new THREE.PlaneGeometry(5.2,2.25),pathMat);seg.rotation.x=-Math.PI/2;seg.rotation.z=Math.cos(i*.15)*.08;seg.position.set(x,-.115,z);seg.receiveShadow=true;scene.add(seg);}
  const pathEdge=mat(0x78806a);
  for(let i=0;i<78;i++){const z=7-i*.98,x=Math.sin(i*.15)*1.15+(i%2?2.8:-2.8)+(Math.random()-.5)*.8,p=new THREE.Mesh(new THREE.DodecahedronGeometry(.13+(i%4)*.035,0),pathEdge);p.scale.set(1,.42,1.45);p.rotation.y=Math.random()*3;p.position.set(x,-.035,z);scene.add(p);}
