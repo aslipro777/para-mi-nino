@@ -84,7 +84,11 @@ const quiz=[
  {q:'¿En qué fecha empezamos oficialmente?',a:['15 de julio','17 de febrero','7 de junio'],correct:1,why:'El 17 de febrero quedó guardado como una fecha especial. ♡'},
  {q:'¿Qué flor fue parte de uno de nuestros recuerdos?',a:['Lirios','Girasoles','Tulipanes'],correct:0,why:'¡Los lirios! Un recuerdo que merece su propio rinconcito.'},
  {q:'¿Qué color representan la relacion?',a:['morado y verde','rojo y verde','azul y rosa'],correct:1,why:'rojo y verde, por supuesto. 💚'},
- {q:'¿Qué sería perfecto para una tarde juntos?',a:['pintar cuadritos','hacer galletas','ver tele'],correct:0,why:'Cualquier plan puede ser bonito si lo compartimos.'}
+ {q:'¿Qué sería perfecto para una tarde juntos?',a:['pintar cuadritos','hacer galletas','ver tele'],correct:0,why:'Cualquier plan puede ser bonito si lo compartimos.'},
+ {q:'Animal que tendríamos',a:['perro','gato','conejo'],correct:0,why:'¡Un perrito! 🐶'},
+ {q:'¿Cuándo empezamos a hablar?',a:['2 de julio','2 de febrero','10 de febrero'],correct:1,why:'El 2 de febrero comenzó nuestra historia. ♡'},
+ {q:'¿Cuándo nos vimos por primera vez?',a:['10 de febrero','5 de febrero','8 de febrero'],correct:0,why:'¡El 10 de febrero! Ese fue nuestro primer encuentro.'},
+ {q:'¿Quién dio el primer beso?',a:['asli','tomi'],correct:1,why:'¡Tomi dio el primer beso! 💚'}
 ];
 const qbox=document.getElementById('questions');let quizIndex=0,quizScore=0;
 function renderQuiz(){const item=quiz[quizIndex];qbox.innerHTML=`<div class="quiz-progress">Pregunta ${quizIndex+1} de ${quiz.length}</div><h3>${item.q}</h3><div class="quiz-options">${item.a.map((a,i)=>`<button type="button" class="quiz-option" data-choice="${i}">${a}</button>`).join('')}</div><p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p><button type="button" class="primary" id="quizNext" disabled>${quizIndex===quiz.length-1?'Ver resultado':'Siguiente ♡'}</button>`;
