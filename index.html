@@ -152,7 +152,24 @@ const loveReasons=[
 'Porque eres tú, y eso ya es una razón enorme. ♡'
 ];
 let lastReason=-1;
-function showLoveReason(){let n;do{n=Math.floor(Math.random()*loveReasons.length)}while(n===lastReason&&loveReasons.length>1);lastReason=n;const burst=document.getElementById('reasonBurst');const p=document.getEle<script type="module">
+function showLoveReason(){
+ let n;
+ do{n=Math.floor(Math.random()*loveReasons.length)}while(n===lastReason&&loveReasons.length>1);
+ lastReason=n;
+ const burst=document.getElementById('reasonBurst');
+ const p=document.getElementById('loveReason');
+ p.textContent=loveReasons[n];
+ burst.classList.remove('pop');
+ void burst.offsetWidth;
+ burst.classList.add('pop');
+}
+document.getElementById('openGiftButton').addEventListener('click',()=>{
+ document.getElementById('giftText').style.display='block';
+ document.getElementById('openGiftButton').style.display='none';
+ showLoveReason();
+});
+document.getElementById('anotherReason').addEventListener('click',showLoveReason);
+</script><script type="module">
 const host=document.getElementById('game'),fallback=document.getElementById('fallback');
 try{
  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
