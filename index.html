@@ -356,7 +356,7 @@ try{
    const starDepth=23,halfH=starDepth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),halfW=halfH*camera.aspect;
    for(let i=0;i<520;i++)starPositions.push((Math.random()*2-1)*halfW*1.12,(Math.random()*2-1)*halfH*1.12,-starDepth);
    const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
-   skyStars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf0f4ff,size:.17,transparent:true,opacity:.98,depthTest:false,sizeAttenuation:false}));
+   skyStars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf0f4ff,size:2.2,transparent:true,opacity:.98,depthTest:false,sizeAttenuation:false}));
    skyStars.renderOrder=2;camera.add(skyStars);
    const loader=new THREE.TextureLoader();
    files.forEach((file,i)=>{
@@ -380,7 +380,7 @@ try{
    const rect=renderer.domElement.getBoundingClientRect();
    skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
    skyRaycaster.setFromCamera(skyPointer,camera);
-   const hit=skyRaycaster.intersectObjects(skyPhotoSprites)[0]?.object;
+   const hit=skyRaycaster.intersectObjects(skyPhotoSprites.filter(Boolean))[0]?.object;
    if(hit)skyPhotoSprites.forEach(photo=>{
      const scale=photo===hit?1.18:1;
      photo.scale.set(photo.userData.baseX*scale,photo.userData.baseY*scale,1);
