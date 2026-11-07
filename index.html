@@ -145,7 +145,7 @@ document.getElementById('anotherReason').addEventListener('click',showLoveReason
  let W=480,H=270,scale=1;
  const resize=()=>{
   const r=host.getBoundingClientRect();
-  W=Math.max(240,Math.floor(r.width*.72));H=Math.max(150,Math.floor(r.height*.72));
+  W=Math.max(320,Math.floor(r.width));H=Math.max(220,Math.floor(r.height));
   canvas.width=W;canvas.height=H;scale=Math.min(W/480,H/270);
  };
  new ResizeObserver(resize).observe(host);resize();
@@ -186,9 +186,21 @@ document.getElementById('anotherReason').addEventListener('click',showLoveReason
  function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
  function line(x,y,w,h,c){rect(x,y,w,h,c);}
  function drawTree(x,y,s=1){
-  const q=tile*s;rect(x-q*.13,y-q*.05,q*.27,q*.55,'#70452f');rect(x-q*.23,y+q*.34,q*.46,q*.12,'#89583b');
-  [[-.28,-.32,'#244b39'],[.05,-.43,'#315f43'],[-.35,-.68,'#2c573e'],[.34,-.63,'#3c704b'],[0,-.88,'#376849'],[-.05,-.53,'#477b50']].forEach(([a,b,c])=>rect(x+a*q,y+b*q,q*.56,q*.43,c));
-  rect(x-q*.23,y-q*.73,q*.12,q*.1,'#58865a');rect(x+q*.2,y-q*.5,q*.1,q*.1,'#58865a');
+  const q=tile*s;
+  // Tronco ancho y raíces, bajo una copa grande en varias capas.
+  rect(x-q*.18,y-q*.02,q*.36,q*.82,'#50382f');rect(x-q*.29,y+q*.48,q*.58,q*.18,'#76503a');
+  rect(x-q*1.18,y-q*1.05,q*2.36,q*1.28,'#173d35');
+  rect(x-q*.98,y-q*1.42,q*1.96,q*1.05,'#20513d');
+  rect(x-q*.67,y-q*1.72,q*1.34,q*.82,'#286347');
+  rect(x-q*1.42,y-q*.72,q*.82,q*.78,'#245941');rect(x+q*.60,y-q*.82,q*.82,q*.82,'#2c6848');
+  rect(x-q*.76,y-q*1.23,q*.58,q*.34,'#397952');rect(x+q*.20,y-q*1.48,q*.58,q*.34,'#43865a');
+  rect(x-q*.36,y-q*1.82,q*.40,q*.22,'#5b9662');rect(x+q*.72,y-q*.52,q*.24,q*.20,'#579064');
+  rect(x-q*.95,y-q*.30,q*.26,q*.18,'#102f2c');rect(x+q*.72,y-q*.18,q*.30,q*.20,'#163c32');
+ }
+ function drawBush(x,y,s=1){
+  const q=tile*s;rect(x-q*.48,y+q*.10,q*.96,q*.24,'#17372f');
+  rect(x-q*.46,y-q*.12,q*.42,q*.38,'#285b3e');rect(x-q*.16,y-q*.28,q*.48,q*.48,'#34724a');rect(x+q*.17,y-q*.10,q*.38,q*.36,'#24583d');
+  rect(x-q*.25,y-q*.24,q*.16,q*.10,'#65a36b');rect(x+q*.22,y-q*.05,q*.13,q*.08,'#579362');
  }
  function drawFlower(x,y,c){rect(x-2,y-2,4,4,c);rect(x-1,y+2,2,5,'#467747');}
  function drawHouse(x,y){
@@ -245,25 +257,45 @@ document.getElementById('anotherReason').addEventListener('click',showLoveReason
   if(sky){skyTime+=.016;drawSky(skyTime);return;}
   const camX=px*tile,camY=pz*tile,ox=W/2-camX,oy=H/2-camY;
   ctx.save();ctx.translate(ox,oy);
-  rect(0,0,worldW*tile,worldH*tile,'#416b48');
+  rect(0,0,worldW*tile,worldH*tile,'#315b49');
   for(let y=0;y<worldH;y++)for(let x=0;x<worldW;x++){
-   const v=rand(x,y);if(v>.38)rect(x*tile+v*15,y*tile+rand(y,x)*17,2,2,v>.8?'#70905a':'#52794d');
-   if(v>.965)drawFlower(x*tile+12,y*tile+12,['#e9b7ce','#f3d98f','#b9c7ec'][Math.floor(v*10)%3]);
+   const v=rand(x,y);if(v>.30)rect(x*tile+v*15,y*tile+rand(y,x)*17,2,2,v>.8?'#83a978':'#456e57');
+   if(v>.952)drawFlower(x*tile+12,y*tile+12,['#e9b7ce','#f3d98f','#c5d5ff'][Math.floor(v*10)%3]);
+   if(v>.88)rect(x*tile+rand(y,x)*12,y*tile+rand(x,y)*13,2,2,'#a1b98a');
   }
   // Senderos de tierra que conectan la cabaña, el puente y el claro.
   for(let y=12;y<31;y++){let x=19+Math.sin(y*.42)*2;rect(x*tile,y*tile,tile*3,tile,'#8b7652');rect(x*tile+4,y*tile,3,tile,'#a58a62');}
   drawHouse(5.5*tile,9.5*tile);drawPond(32*tile,7*tile);
   // Puente sobre el borde del estanque.
   for(let i=0;i<6;i++){rect(29*tile+i*8,8.1*tile,8,48,'#80543a');rect(29*tile+i*8,8.1*tile,3,48,'#bd8b5c');}
-  // Rocas y arbustos.
-  for(let i=0;i<45;i++){let x=rand(i,44)*worldW*tile,y=rand(i,45)*worldH*tile;if(rand(i,46)>.55){rect(x,y,9,6,'#68766a');rect(x+2,y-2,5,3,'#879080');}}
-  // Árboles en los bordes y grupos dentro del mapa.
-  for(let y=1;y<worldH-1;y++)for(let x=1;x<worldW-1;x++){const v=rand(x+71,y+93);if((x<4||x>35||y<3||y>30)&&v>.38)drawTree(x*tile+12,y*tile+15,.9+v*.5);else if(v>.985&&Math.hypot(x-px,y-pz)>3)drawTree(x*tile+12,y*tile+15,.7);}
+  // Rocas, flores y arbustos espesos para que se sienta como un bosque real.
+  for(let i=0;i<115;i++){
+   const x=rand(i+11,44)*worldW*tile,y=rand(i+17,45)*worldH*tile,v=rand(i+31,46);
+   if(v>.28)drawBush(x,y,.62+v*.72);
+   if(v>.72){rect(x+8,y+3,10,6,'#687b78');rect(x+10,y+1,6,3,'#a0aaa0');}
+  }
+  // Árboles grandes en grupos: un anillo frondoso y copas que se adentran en el claro.
+  for(let y=1;y<worldH-1;y++)for(let x=1;x<worldW-1;x++){
+   const v=rand(x+71,y+93),edge=x<5||x>34||y<5||y>28;
+   if(edge&&v>.16)drawTree(x*tile+12,y*tile+15,1.45+rand(x+4,y+8)*.9);
+   else if(v>.974&&Math.hypot(x-px,y-pz)>3)drawTree(x*tile+12,y*tile+15,1.15+v*.55);
+  }
   // Luces de recuerdos.
   spots.forEach((p,i)=>{if(!found.has(i))drawMemory(p[0]*tile+12,p[1]*tile+12,t,i);});
   if(wolf.alive)drawWolf(wolf.x*tile+12,wolf.y*tile+12,t);
   drawPlayer(px*tile+12,pz*tile+12,t);
+  // Luciérnagas animadas con halo cálido, repartidas por todo el bosque.
+  for(let i=0;i<42;i++){
+   const fx=rand(i+201,7)*worldW*tile+Math.sin(t*.75+i*2.1)*9;
+   const fy=rand(i+203,9)*worldH*tile+Math.cos(t*.62+i*1.7)*7;
+   const pulse=.45+.55*(.5+.5*Math.sin(t*3.2+i*2.7));
+   const sx=fx+ox,sy=fy+oy;
+   if(sx>-12&&sx<W+12&&sy>-12&&sy<H+12){ctx.save();ctx.globalAlpha=.35+pulse*.65;ctx.shadowColor='#b9ff91';ctx.shadowBlur=9+pulse*9;rect(sx,sy,3,3,'#eaff9a');rect(sx+1,sy-2,1,1,'#fff8c2');ctx.restore();}
+  }
   ctx.restore();
+  // Luz ambiental azul de luna y un resplandor cálido alrededor del personaje.
+  const night=ctx.createLinearGradient(0,0,0,H);night.addColorStop(0,'rgba(8,20,39,.10)');night.addColorStop(1,'rgba(5,18,30,.24)');ctx.fillStyle=night;ctx.fillRect(0,0,W,H);
+  const glow=ctx.createRadialGradient(W/2,H/2,8,W/2,H/2,Math.max(W,H)*.48);glow.addColorStop(0,'rgba(255,224,151,.16)');glow.addColorStop(.38,'rgba(161,218,164,.07)');glow.addColorStop(1,'rgba(5,15,28,.20)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
   // Marco HUD de pixel art.
   rect(8,8,112,26,'#252437');rect(10,10,108,22,'#b28b69');rect(12,12,104,18,'#302d42');
   ctx.fillStyle='#fff0d5';ctx.font='bold 10px monospace';ctx.textAlign='left';ctx.fillText('♥'.repeat(Math.ceil(energy/20))+'♡'.repeat(5-Math.ceil(energy/20)),18,25);
