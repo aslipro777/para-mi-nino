@@ -330,20 +330,42 @@ try{
  renderer.domElement.addEventListener('pointerup',stopDrag);renderer.domElement.addEventListener('pointercancel',stopDrag);
  renderer.domElement.addEventListener('wheel',e=>{cameraDistance=THREE.MathUtils.clamp(cameraDistance+e.deltaY*.008,5.5,13);e.preventDefault();},{passive:false});
  let cameraDistance=8.2;
+ let skyPhotosStarted=false,skyStars=null;
+ function layoutSkyPhotos(){
+   if(!skyPhotoSprites.length)return;
+   const portrait=camera.aspect<1.05;
+   const columns=portrait?2:5,rows=portrait?5:2;
+   const spacingX=portrait?2.05:2.55,spacingY=portrait?1.58:2.05;
+   skyPhotoSprites.forEach(photo=>{
+     if(!photo) return;
+     const i=photo.userData.index,col=i%columns,row=Math.floor(i/columns);
+     const aspect=photo.userData.aspect;
+     const maxW=portrait?1.9:2.35,maxH=portrait?1.38:1.72;
+     let w=maxH*aspect,h=maxH;
+     if(w>maxW){w=maxW;h=w/aspect;}
+     photo.scale.set(w,h,1);
+     photo.position.set((col-(columns-1)/2)*spacingX,((rows-1)/2-row)*spacingY,-10);
+     photo.userData.baseX=w;photo.userData.baseY=h;photo.userData.baseYPosition=photo.position.y;
+   });
+ }
  function createSkyPhotos(){
-   if(skyPhotoSprites.length)return;
+   if(skyPhotosStarted)return;
+   skyPhotosStarted=true;
    const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'];
-   const spots=[[-6,10],[-3,13],[0,11],[3,15],[6,11],[-5,16],[-2,14],[2,17],[5,15],[0,19]];
+   const starPositions=[];
+   const starDepth=23,halfH=starDepth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),halfW=halfH*camera.aspect;
+   for(let i=0;i<520;i++)starPositions.push((Math.random()*2-1)*halfW*1.12,(Math.random()*2-1)*halfH*1.12,-starDepth);
+   const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+   skyStars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf0f4ff,size:.17,transparent:true,opacity:.98,depthTest:false,sizeAttenuation:false}));
+   skyStars.renderOrder=2;camera.add(skyStars);
    const loader=new THREE.TextureLoader();
    files.forEach((file,i)=>{
      loader.load(file,texture=>{
        texture.colorSpace=THREE.SRGBColorSpace;
        const photo=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,opacity:0,depthTest:false}));
-       const aspect=texture.image.width/texture.image.height,h=2.45,w=h*aspect;
-       if(w>2.05)photo.scale.set(2.05,2.05/aspect,1);else photo.scale.set(w,h,1);
-       photo.position.set(avatar.position.x+spots[i][0],spots[i][1],avatar.position.z-9+(i%3)*.35);
-       photo.userData={index:i,baseX:photo.scale.x,baseY:photo.scale.y,phase:i*.73,baseYPosition:photo.position.y};
-       scene.add(photo);skyPhotoSprites.push(photo);
+       photo.renderOrder=10;
+       photo.userData={index:i,aspect:texture.image.width/texture.image.height,phase:i*.73,baseYPosition:0,baseX:1,baseY:1};
+       camera.add(photo);skyPhotoSprites[i]=photo;layoutSkyPhotos();
      },undefined,()=>{});
    });
  }
@@ -364,7 +386,7 @@ try{
      photo.scale.set(photo.userData.baseX*scale,photo.userData.baseY*scale,1);
    });
  });
- function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);}
+ function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);if(skyEnding){if(skyStars){const p=skyStars.geometry.attributes.position,depth=23,hh=depth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),hw=hh*camera.aspect;for(let i=0;i<p.count;i++){p.setX(i,(Math.random()*2-1)*hw*1.12);p.setY(i,(Math.random()*2-1)*hh*1.12);}p.needsUpdate=true;}layoutSkyPhotos();}}
  new ResizeObserver(resize).observe(host);
 
  const clock=new THREE.Clock();let walkTime=0;
@@ -432,12 +454,12 @@ try{
    if(skyEnding){
      skyEndingProgress=Math.min(1,skyEndingProgress+dt*.32);
      const ease=skyEndingProgress*skyEndingProgress*(3-2*skyEndingProgress);
-     const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+2.25,avatar.position.z+6.2);
+     const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+1.8,avatar.position.z+5.2);
      camera.position.lerp(skyCamera,.055);
      camera.lookAt(avatar.position.x,avatar.position.y+2.2+17*ease,avatar.position.z-5.5*ease);
      skyPhotoSprites.forEach(photo=>{
-       photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.22;
-       photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.055)*2.5));
+       photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.13;
+       photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.045)*3.2));
      });
    }else{
      camera.position.lerp(target,.12);camera.lookAt(avatar.position.x,1.05,avatar.position.z);
