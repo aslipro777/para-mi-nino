@@ -289,18 +289,20 @@ try{
    hp.setXYZ(i,x*.335*jawWidth,y*.405,z*.255*(y<-.45?.88:1));
  }
  headGeo.computeVertexNormals();
- solidPart(avatar,headGeo,skin,[0,1.99,.015]);
- const faceMesh=avatar.children[avatar.children.length-1];faceMesh.receiveShadow=false;
+ const faceMesh=solidPart(avatar,headGeo,new THREE.MeshBasicMaterial({color:0xe6b99d}),[0,1.99,.015]);
+ // La piel de la cara conserva un tono fijo y no puede volverse negra por sombras o luces del bosque.
+ faceMesh.castShadow=false;
+ faceMesh.receiveShadow=false;
  // Orejas integradas parcialmente en la cabeza.
  for(const side of [-1,1]){
    const ear=solidPart(avatar,new THREE.SphereGeometry(1,20,16),skin,[side*.319,1.96,-.005]);ear.scale.set(.06,.095,.052);
    const inner=solidPart(avatar,new THREE.SphereGeometry(1,16,12),skinShade,[side*.35,1.96,.022]);inner.scale.set(.02,.052,.025);
  }
  // Cabello corto y limpio: casquete superior separado de la piel, sin flequillo sobre la cara.
- const capGeo=new THREE.SphereGeometry(1,48,32,0,Math.PI*2,0,1.12);
+ const capGeo=new THREE.SphereGeometry(1,48,32,0,Math.PI*2,0,.8);
  capGeo.scale(.365,.435,.292);
- const hairCap=solidPart(avatar,capGeo,hair,[0,1.99,-.012]);
- // El cabello no proyecta sombras sobre el rostro ni modifica el material de la piel.
+ const hairCap=solidPart(avatar,capGeo,hair,[0,2.01,-.012]);
+ // Solo corona superior: el borde queda por encima de la frente y no toca la cara.
  hairCap.castShadow=false;
  hairCap.receiveShadow=false;
  // Rasgos con profundidad moderada y simetría facial.
