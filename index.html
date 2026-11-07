@@ -210,17 +210,17 @@ try{
    const root=new THREE.Group();
    const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.25*s,.39*s,2.15*s,12),trunkMat);trunk.position.y=1.02*s;trunk.castShadow=true;root.add(trunk);
    const barkRidges=mat(0x98694e);
-   for(let r=0;r<3;r++){const ridge=new THREE.Mesh(new THREE.CylinderGeometry(.025*s,.045*s,.9*s,6),barkRidges);ridge.position.set((r-1)*.11*s,1.02*s,.23*s);ridge.rotation.z=(r-1)*.13;root.add(ridge);}
-   for(let r=0;r<4;r++){const a=r*Math.PI/2+.35,rt=new THREE.Mesh(new THREE.CylinderGeometry(.045*s,.16*s,1*s,8),trunkLight);rt.position.set(Math.cos(a)*.38*s,.18*s,Math.sin(a)*.38*s);rt.rotation.z=Math.cos(a)*.95;rt.rotation.x=Math.sin(a)*.8;root.add(rt);}
-   for(let b=0;b<3;b++){const branch=new THREE.Mesh(new THREE.CylinderGeometry(.055*s,.12*s,1.15*s,8),trunkMat);branch.position.set((b-1)*.25*s,1.85*s,-.02*s);branch.rotation.z=(b-1)*-.58;branch.rotation.x=(b-1)*.22;root.add(branch);}
+   for(let r=0;r<1;r++){const ridge=new THREE.Mesh(new THREE.CylinderGeometry(.025*s,.045*s,.9*s,6),barkRidges);ridge.position.set((r-1)*.11*s,1.02*s,.23*s);ridge.rotation.z=(r-1)*.13;root.add(ridge);}
+   for(let r=0;r<3;r++){const a=r*Math.PI*2/3+.35,rt=new THREE.Mesh(new THREE.CylinderGeometry(.045*s,.16*s,1*s,8),trunkLight);rt.position.set(Math.cos(a)*.38*s,.18*s,Math.sin(a)*.38*s);rt.rotation.z=Math.cos(a)*.95;rt.rotation.x=Math.sin(a)*.8;root.add(rt);}
+   for(let b=0;b<2;b++){const branch=new THREE.Mesh(new THREE.CylinderGeometry(.055*s,.12*s,1.15*s,8),trunkMat);branch.position.set((b-1)*.25*s,1.85*s,-.02*s);branch.rotation.z=(b-1)*-.58;branch.rotation.x=(b-1)*.22;root.add(branch);}
    const crown=new THREE.Group();
    const blobs=[[0,2.25,1.12,.78,1.02,0],[-.72,2.72,.82,.78,.86,1],[.72,2.72,.86,.82,.88,2],[-.38,3.28,.86,.86,.84,3],[.42,3.35,.8,.8,.9,4],[0,3.85,.62,.62,.7,2],[-1.02,2.45,.55,.58,.68,4],[1.02,2.48,.56,.62,.68,1]];
    blobs.forEach(([x0,y,rx,ry,rz,c])=>{const b=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),leaves[c]);b.position.set(x0*s,y*s,0);b.scale.set(rx*s,ry*s,rz*s);b.castShadow=true;b.receiveShadow=true;crown.add(b);});
    const leafGeo=new THREE.SphereGeometry(.32,10,8);
-   for(let n=0;n<7;n++){const cl=new THREE.Mesh(leafGeo,leaves[(n+1)%leaves.length]),a=n*Math.PI*2/7;cl.position.set(Math.cos(a)*.82*s,(2.75+(n%3)*.34)*s,Math.sin(a)*.5*s);cl.scale.set(.9,.8,1);crown.add(cl);}
+   for(let n=0;n<4;n++){const cl=new THREE.Mesh(leafGeo,leaves[(n+1)%leaves.length]),a=n*Math.PI*2/7;cl.position.set(Math.cos(a)*.82*s,(2.75+(n%3)*.34)*s,Math.sin(a)*.5*s);cl.scale.set(.9,.8,1);crown.add(cl);}
    root.add(crown);root.position.set(x,0,z);root.scale.setScalar(s);scene.add(root);trees.push({crown,phase:Math.random()*6.28});
  }
- for(let i=0;i<46;i++){
+ for(let i=0;i<28;i++){
    let x=(Math.random()-.5)*44,z=9-Math.random()*68;
    if(Math.abs(x)<3&&z>-2&&z<12)x+=x<0?-4:4;
    makeTree(x,z,.72+Math.random()*.7);
@@ -252,11 +252,11 @@ try{
  const rockGeo=new THREE.DodecahedronGeometry(.28,0),rockMat=mat(0x66716c),rocks=new THREE.InstancedMesh(rockGeo,rockMat,92);
  for(let i=0;i<92;i++){const x=(Math.random()-.5)*34,z=7-Math.random()*66;dummy.position.set(x,.12,z);dummy.rotation.set(Math.random(),Math.random()*3,Math.random());dummy.scale.set(.55+Math.random(),.35+Math.random()*.6,.6+Math.random());dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);}scene.add(rocks);
  const fernLeafMat=mat(0x3d7955),fernStemMat=mat(0x77915d);
- for(let i=0;i<22;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
+ for(let i=0;i<14;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
  const logMat=mat(0x684b3b),logEnd=mat(0xb28a62);
- for(let i=0;i<13;i++){const log=new THREE.Group(),length=1.4+Math.random()*2.2,body=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,length,10),logMat);body.rotation.x=Math.PI/2;body.position.z=length*.5;log.add(body);for(const z of [0,length]){const end=new THREE.Mesh(new THREE.CircleGeometry(.19,12),logEnd);end.position.z=z;end.rotation.y=Math.PI/2;log.add(end);}log.position.set((Math.random()-.5)*27,.19,5-Math.random()*62);log.rotation.y=Math.random()*Math.PI;scene.add(log);}
+ for(let i=0;i<9;i++){const log=new THREE.Group(),length=1.4+Math.random()*2.2,body=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,length,10),logMat);body.rotation.x=Math.PI/2;body.position.z=length*.5;log.add(body);for(const z of [0,length]){const end=new THREE.Mesh(new THREE.CircleGeometry(.19,12),logEnd);end.position.z=z;end.rotation.y=Math.PI/2;log.add(end);}log.position.set((Math.random()-.5)*27,.19,5-Math.random()*62);log.rotation.y=Math.random()*Math.PI;scene.add(log);}
  const mushroomStem=mat(0xe0d4b8),mushroomCaps=[mat(0xc56b70),mat(0xd6a65f),mat(0xb7a5d8)];
- for(let i=0;i<28;i++){const x=(Math.random()-.5)*25,z=6-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,.2,7),mushroomStem);stem.position.set(x,.1,z);scene.add(stem);const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mushroomCaps[i%3]);cap.scale.y=.48;cap.position.set(x,.22,z);scene.add(cap);}
+ for(let i=0;i<20;i++){const x=(Math.random()-.5)*25,z=6-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,.2,7),mushroomStem);stem.position.set(x,.1,z);scene.add(stem);const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mushroomCaps[i%3]);cap.scale.y=.48;cap.position.set(x,.22,z);scene.add(cap);}
  // Personaje rediseñado con articulaciones para animar brazos y piernas.
  const avatar=new THREE.Group();scene.add(avatar);avatar.position.set(0,0,5);
  const skin=mat(0xe6b99d),shirt=mat(0x39845b),shirtLight=mat(0x5ba477),pants=mat(0x697b91),shoes=mat(0x343746),hair=mat(0x241d25),glasses=mat(0x18202a,.35);
