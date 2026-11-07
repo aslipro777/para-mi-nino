@@ -511,7 +511,7 @@ try{
   const portrait=camera.aspect<1.05;
   skyPhotoSprites.forEach(photo=>{
    if(!photo)return;
-   const w=portrait?.86:1.12,h=w*1.25;
+   const w=portrait ? .86 : 1.12,h=w*1.25;
    photo.scale.set(w,h,1);
    photo.userData.baseX=w;photo.userData.baseY=h;
   });
