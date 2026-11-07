@@ -23,13 +23,34 @@ section{padding:70px 20px;max-width:1050px;margin:auto}h2{text-align:center;font
 @keyframes game-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
 .game-note{font:13px Arial,sans-serif;text-align:center;padding:10px;color:#e8dce1}.gift{text-align:center}.gift button{font-size:1.1rem}.gift-text{display:none;line-height:1.8;margin:20px auto;max-width:600px}.edit-note{font:12px Arial,sans-serif;color:#8d777e;text-align:center;margin-top:18px}
 @media(max-width:650px){.albums{grid-template-columns:1fr}.album img{aspect-ratio:16/10}.hero{min-height:75vh}section{padding:52px 17px}.game{height:350px}}
+
+.game canvas{image-rendering:auto!important}
+.game.pixel-game{background:#101c2c;image-rendering:auto}
+.forest-head p{max-width:760px;margin:8px auto}
+.memory-sky{position:absolute;inset:0;z-index:25;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#263c61 0%,#101a35 56%,#080d20 100%);color:#fff;text-align:center}
+.memory-sky[hidden]{display:none}
+.memory-sky:before,.memory-sky:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 12% 18%,#fff 70%,transparent),radial-gradient(1px 1px at 75% 14%,#fff 70%,transparent),radial-gradient(2px 2px at 88% 66%,#dbe8ff 70%,transparent),radial-gradient(1px 1px at 34% 76%,#fff 70%,transparent),radial-gradient(1px 1px at 62% 48%,#fff 70%,transparent),radial-gradient(2px 2px at 20% 58%,#dbe8ff 70%,transparent)}
+.memory-sky:after{background:radial-gradient(circle at 50% 50%,#f4dba51b,transparent 48%);filter:blur(12px)}
+.memory-sky-heading{position:absolute;z-index:2;top:13px;left:10px;right:10px;display:grid;gap:4px;text-shadow:0 2px 9px #000}
+.memory-sky-heading strong{font:700 clamp(17px,4vw,23px) Georgia,serif;color:#fff0c9}
+.memory-sky-heading span{font:12px Arial,sans-serif;color:#dce6ff}
+.memory-orbit{position:absolute;width:min(82vw,330px);height:min(82vw,330px);max-height:330px;max-width:330px;left:50%;top:53%;transform:translate(-50%,-50%);border:1px solid #d9e6ff25;border-radius:50%;animation:memory-spin 44s linear infinite;box-shadow:0 0 45px #c2d6ff12,inset 0 0 35px #c2d6ff0c}
+.memory-orbit:before{content:"";position:absolute;inset:16%;border:1px dashed #d9e6ff20;border-radius:50%}
+.memory-orbit-button{position:absolute;left:50%;top:50%;width:clamp(49px,14vw,66px);height:clamp(65px,18vw,86px);padding:3px;border:1px solid #f7e8c9;border-radius:9px;background:#fff;box-shadow:0 5px 16px #0009;cursor:pointer;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-132px) rotate(var(--counter-angle))}
+.memory-orbit-button img{display:block;width:100%;height:100%;object-fit:cover;border-radius:6px;animation:memory-counter-spin 44s linear infinite}
+.memory-orbit-button:focus-visible{outline:3px solid #ffe5a1;outline-offset:4px}
+@keyframes memory-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes memory-counter-spin{to{transform:rotate(-360deg)}}
+.memory-sky-back{position:absolute;z-index:3;bottom:10px;left:50%;transform:translateX(-50%);border:1px solid #fff8;border-radius:24px;padding:9px 18px;background:#243a55e8;color:#fff;font-weight:700}
+#game.memory-finale #mobileControls{display:none!important}
+@media(max-width:650px){.memory-orbit{top:54%;width:270px;height:270px}.memory-orbit-button{transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-108px) rotate(var(--counter-angle))}}
 </style>
 </head>
 <body>
 <header class="hero">
   <div><h1>Para mi niño</h1><p>Un pequeño lugar para nuestros recuerdos ♡</p><a class="hero-enter" href="#carta">Abrir mi historia ♡</a><div class="hint" style="margin-top:15px">:3 + :v </div></div>
 </header>
-<nav><a href="#carta">CARTA</a><a href="#musica">NUESTRA CANCIÓN</a><a href="#albumes">ÁLBUMES</a><a href="#tiempo">TIEMPO JUNTOS</a><a href="#recuerdos">BOSQUE 2D</a><a href="#videos">MINI VIDEOS</a><a href="#preguntas">PREGUNTAS</a><a href="#regalo">ÚLTIMO REGALO</a></nav>
+<nav><a href="#carta">CARTA</a><a href="#musica">NUESTRA CANCIÓN</a><a href="#albumes">ÁLBUMES</a><a href="#tiempo">TIEMPO JUNTOS</a><a href="#recuerdos">BOSQUE 3D</a><a href="#videos">MINI VIDEOS</a><a href="#preguntas">PREGUNTAS</a><a href="#regalo">ÚLTIMO REGALO</a></nav>
 <section id="musica" style="text-align:center;padding-top:28px;padding-bottom:10px">
   <button class="primary" id="musicButton" type="button">♫ Activar nuestra canción</button>
   <audio id="ourSong" src="Complice%20Eterno.mp3" preload="none" loop></audio>
@@ -46,7 +67,12 @@ Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
 <button class="album" onclick="openPhoto('foto3.jpg','dia de la peña')"><img src="foto3.jpg" alt="soi la manzanita jeje" onerror="this.alt='Agrega foto3.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum tres</span></button>
 </div></section>
 <section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
-<section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque pixel-art 2D. Muévete con WASD o las flechas y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · E: recuerdo · Espacio: atacar con espada · Shift: defenderse</div>
+<section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque 3D nocturno. Muévete con WASD o las flechas, gira la cámara arrastrando y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div>
+<div id="memorySky" class="memory-sky" hidden>
+<div class="memory-sky-heading"><strong>Nuestros diez recuerdos ♡</strong><span>Toca una fotografía para verla de cerca</span></div>
+<div class="memory-orbit" id="memoryOrbit" aria-label="Diez fotografías girando en círculo"></div>
+<button type="button" class="memory-sky-back" id="backToForest">Volver al bosque</button>
+</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · Arrastra para girar la cámara · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
 <div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
 <div id="gameReward" class="game-note" hidden><strong>¡Felicidades! Has encontrado los 10 recuerdos. 💚</strong><br><button class="primary" id="startMemorySky" type="button" style="margin-top:12px">Continuar ♡</button></div></div></section>
 <section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
@@ -126,190 +152,322 @@ const loveReasons=[
 'Porque eres tú, y eso ya es una razón enorme. ♡'
 ];
 let lastReason=-1;
-function showLoveReason(){let n;do{n=Math.floor(Math.random()*loveReasons.length)}while(n===lastReason&&loveReasons.length>1);lastReason=n;const burst=document.getElementById('reasonBurst');const p=document.getElementById('loveReason');p.textContent=loveReasons[n];burst.classList.remove('pop');void burst.offsetWidth;burst.classList.add('pop')}
-document.getElementById('openGiftButton').addEventListener('click',()=>{document.getElementById('giftText').style.display='block';showLoveReason()});
-document.getElementById('anotherReason').addEventListener('click',showLoveReason);
-</script>
-<script>
-/* Bosque 2D pixel-art: cámara cenital, mapa, personaje, lobo y diez recuerdos. */
-(()=>{
- const host=document.getElementById('game'),fallback=document.getElementById('fallback');
- if(!host)return;
+function showLoveReason(){let n;do{n=Math.floor(Math.random()*loveReasons.length)}while(n===lastReason&&loveReasons.length>1);lastReason=n;const burst=document.getElementById('reasonBurst');const p=document.getEle<script type="module">
+const host=document.getElementById('game'),fallback=document.getElementById('fallback');
+try{
+ const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
  fallback?.remove();
- host.classList.add('pixel-game');
- const canvas=document.createElement('canvas');
- canvas.id='pixelForest';canvas.setAttribute('aria-label','Juego 2D del bosque de recuerdos');
- canvas.style.cssText='width:100%;height:100%;display:block;image-rendering:pixelated;touch-action:none';
- host.appendChild(canvas);
- const ctx=canvas.getContext('2d',{alpha:false});
- let W=480,H=270,scale=1;
- const resize=()=>{
-  const r=host.getBoundingClientRect();
-  W=Math.max(320,Math.floor(r.width));H=Math.max(220,Math.floor(r.height));
-  canvas.width=W;canvas.height=H;scale=Math.min(W/480,H/270);
- };
- new ResizeObserver(resize).observe(host);resize();
- const tile=24,worldW=40,worldH=34;
- const keys={};let px=19.5,pz=17.5,face=0,walk=0,energy=100,found=new Set();
- let wolf={x:27.5,y:17.5,hp:3,alive:true,flash:0};
- let attack=0,attackCooldown=0,attackDone=false,defend=0,damage=0,gameOver=false,sky=false,skyTime=0;
- const spots=[[13,14],[19,11],[25,13],[11,19],[17,21],[24,21],[29,17],[9,12],[31,22],[20,26]];
- const photos=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'].map(src=>{const im=new Image();im.src=src;return im});
- const rand=(x,y)=>{let n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n)};
- const note=document.getElementById('gameNote');
- const stats=()=>{document.getElementById('energy').textContent=energy;document.getElementById('found').textContent=found.size};
- const pop=(s,miss=false)=>{const d=document.createElement('div');d.className='hit-pop'+(miss?' miss':'');d.textContent=s;document.getElementById('combatFx').appendChild(d);setTimeout(()=>d.remove(),850)};
- const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
- const keydown=e=>{
-  const k=e.key.toLowerCase();keys[k]=true;
-  if(k==='e'&&!gameOver&&!sky)collect();
-  if(e.code==='Space'&&!gameOver&&!sky){e.preventDefault();if(attackCooldown<=0){attack=.28;attackCooldown=.55;attackDone=false;}}
-  if(k==='shift')defend=.18;
-  if(k==='r'&&gameOver){energy=100;gameOver=false;damage=.8;px=19.5;pz=17.5;wolf.x=27.5;wolf.y=17.5;wolf.hp=3;wolf.alive=true;stats();note.textContent='Volviste al bosque. ¡Busca los recuerdos!';}
- };
- const keyup=e=>{keys[e.key.toLowerCase()]=false};
- addEventListener('keydown',keydown);addEventListener('keyup',keyup);
- function collect(){
-  let best=-1,d=1.55;
-  spots.forEach((p,i)=>{const n=Math.hypot(px-p[0],pz-p[1]);if(n<d&&!found.has(i)){best=i;d=n;}});
-  if(best<0){note.textContent='Acércate a una lucecita y pulsa E para recogerla.';return;}
-  found.add(best);window.showMemory?.(best);stats();pop('¡RECUERDO! ♡');
-  if(found.size===10){document.getElementById('gameReward').hidden=false;note.textContent='¡Encontraste los diez recuerdos!';}
+
+ // Bosque 3D de cuento: formas suaves, colores ricos y luz nocturna.
+ const scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x111b35);
+ scene.fog=new THREE.FogExp2(0x172747,.019);
+ const camera=new THREE.PerspectiveCamera(48,host.clientWidth/host.clientHeight,.1,150);
+ const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+ renderer.setSize(host.clientWidth,host.clientHeight);
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.35));
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.25;
+ renderer.shadowMap.enabled=false;
+ renderer.shadowMap.type=THREE.BasicShadowMap;
+ host.appendChild(renderer.domElement);
+
+ scene.add(new THREE.HemisphereLight(0xcbdcff,0x263d37,2.0));
+ const moonLight=new THREE.DirectionalLight(0xb8d2ff,2.1);
+ moonLight.position.set(-10,18,8);moonLight.castShadow=true;
+ moonLight.shadow.mapSize.set(1024,1024);scene.add(moonLight);
+ const fill=new THREE.AmbientLight(0x8296d8,.35);scene.add(fill);
+
+ const moon=new THREE.Mesh(new THREE.SphereGeometry(1.7,32,24),new THREE.MeshBasicMaterial({color:0xfff1ce}));
+ moon.position.set(-13,15,-38);scene.add(moon);
+ const moonHalo=new THREE.Mesh(new THREE.SphereGeometry(2.8,24,18),new THREE.MeshBasicMaterial({color:0xc4d8ff,transparent:true,opacity:.09,depthWrite:false}));
+ moonHalo.position.copy(moon.position);scene.add(moonHalo);
+ const moonGlow=new THREE.PointLight(0xaacaff,1.8,65);moonGlow.position.copy(moon.position);scene.add(moonGlow);
+
+ const mat=(color,roughness=1)=>new THREE.MeshStandardMaterial({color,roughness});
+ const groundMat=mat(0x294b3d);
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(110,130),groundMat);
+ ground.rotation.x=-Math.PI/2;ground.position.set(0,-.16,-23);ground.receiveShadow=true;scene.add(ground);
+
+ // Sendero sinuoso y pequeñas zonas de hierba.
+ const pathMat=mat(0x59634c);
+ for(let i=0;i<54;i++){const z=8-i*1.95,x=Math.sin(i*.15)*1.15,seg=new THREE.Mesh(new THREE.PlaneGeometry(5.2,2.25),pathMat);seg.rotation.x=-Math.PI/2;seg.rotation.z=Math.cos(i*.15)*.08;seg.position.set(x,-.115,z);seg.receiveShadow=true;scene.add(seg);}
+ const pathEdge=mat(0x78806a);
+ for(let i=0;i<78;i++){const z=7-i*.98,x=Math.sin(i*.15)*1.15+(i%2?2.8:-2.8)+(Math.random()-.5)*.8,p=new THREE.Mesh(new THREE.DodecahedronGeometry(.13+(i%4)*.035,0),pathEdge);p.scale.set(1,.42,1.45);p.rotation.y=Math.random()*3;p.position.set(x,-.035,z);scene.add(p);}
+ const starPositions=[];
+ for(let i=0;i<260;i++)starPositions.push((Math.random()-.5)*95,10+Math.random()*28,-55+Math.random()*65);
+ const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+ const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xe5edff,size:.13,transparent:true,opacity:.9}));
+ scene.add(stars);
+
+ const trunkMat=mat(0x79513f),trunkLight=mat(0x98694e);
+ const leaves=[mat(0x315e4b),mat(0x3d7658),mat(0x4d8462),mat(0x294d43),mat(0x527e65)];
+ const bushMats=[mat(0x315b48),mat(0x47785a),mat(0x588365)];
+ const flowerMats=[mat(0xe7b8cb),mat(0xf0dca0),mat(0xb9c9f2)];
+ const trees=[];
+ function makeTree(x,z,s=1){
+   const root=new THREE.Group();
+   const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.25*s,.39*s,2.15*s,12),trunkMat);trunk.position.y=1.02*s;trunk.castShadow=true;root.add(trunk);
+   const barkRidges=mat(0x98694e);
+   for(let r=0;r<3;r++){const ridge=new THREE.Mesh(new THREE.CylinderGeometry(.025*s,.045*s,.9*s,6),barkRidges);ridge.position.set((r-1)*.11*s,1.02*s,.23*s);ridge.rotation.z=(r-1)*.13;root.add(ridge);}
+   for(let r=0;r<4;r++){const a=r*Math.PI/2+.35,rt=new THREE.Mesh(new THREE.CylinderGeometry(.045*s,.16*s,1*s,8),trunkLight);rt.position.set(Math.cos(a)*.38*s,.18*s,Math.sin(a)*.38*s);rt.rotation.z=Math.cos(a)*.95;rt.rotation.x=Math.sin(a)*.8;root.add(rt);}
+   for(let b=0;b<3;b++){const branch=new THREE.Mesh(new THREE.CylinderGeometry(.055*s,.12*s,1.15*s,8),trunkMat);branch.position.set((b-1)*.25*s,1.85*s,-.02*s);branch.rotation.z=(b-1)*-.58;branch.rotation.x=(b-1)*.22;root.add(branch);}
+   const crown=new THREE.Group();
+   const blobs=[[0,2.25,1.12,.78,1.02,0],[-.72,2.72,.82,.78,.86,1],[.72,2.72,.86,.82,.88,2],[-.38,3.28,.86,.86,.84,3],[.42,3.35,.8,.8,.9,4],[0,3.85,.62,.62,.7,2],[-1.02,2.45,.55,.58,.68,4],[1.02,2.48,.56,.62,.68,1]];
+   blobs.forEach(([x0,y,rx,ry,rz,c])=>{const b=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),leaves[c]);b.position.set(x0*s,y*s,0);b.scale.set(rx*s,ry*s,rz*s);b.castShadow=true;b.receiveShadow=true;crown.add(b);});
+   const leafGeo=new THREE.SphereGeometry(.32,10,8);
+   for(let n=0;n<7;n++){const cl=new THREE.Mesh(leafGeo,leaves[(n+1)%leaves.length]),a=n*Math.PI*2/7;cl.position.set(Math.cos(a)*.82*s,(2.75+(n%3)*.34)*s,Math.sin(a)*.5*s);cl.scale.set(.9,.8,1);crown.add(cl);}
+   root.add(crown);root.position.set(x,0,z);root.scale.setScalar(s);scene.add(root);trees.push({crown,phase:Math.random()*6.28});
  }
- document.getElementById('startMemorySky')?.addEventListener('click',()=>{sky=true;skyTime=0;note.textContent='Nuestros diez recuerdos brillan en el cielo. ♡';});
- document.querySelectorAll('#mobileControls [data-game-key]').forEach(b=>{
-  const k=b.dataset.gameKey;
-  const press=e=>{e.preventDefault();b.setPointerCapture?.(e.pointerId);window.dispatchEvent(new KeyboardEvent('keydown',{key:k===' '?' ':k,code:k===' '?'Space':k,bubbles:true}));};
-  const release=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keyup',{key:k===' '?' ':k,code:k===' '?'Space':k,bubbles:true}));};
-  b.addEventListener('pointerdown',press);b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release);
+ for(let i=0;i<46;i++){
+   let x=(Math.random()-.5)*44,z=9-Math.random()*68;
+   if(Math.abs(x)<3&&z>-2&&z<12)x+=x<0?-4:4;
+   makeTree(x,z,.72+Math.random()*.7);
+ }
+ const fireflies=[];
+ for(let i=0;i<34;i++){
+   const g=new THREE.Group();
+   const dot=new THREE.Mesh(new THREE.SphereGeometry(.065,8,6),new THREE.MeshBasicMaterial({color:0xffedb0}));
+   g.add(dot);g.position.set((Math.random()-.5)*28,.45+Math.random()*2,5-Math.random()*55);scene.add(g);
+   fireflies.push({g,phase:Math.random()*6.28,baseY:g.position.y});
+ }
+ for(let i=0;i<42;i++){
+   const x=(Math.random()-.5)*27,z=6-Math.random()*58;
+   const bush=new THREE.Group();
+   for(let j=0;j<3;j++){
+     const b=new THREE.Mesh(new THREE.SphereGeometry(.36+Math.random()*.2,10,8),bushMats[j%3]);
+     b.position.set((j-1)*.32,.28+Math.random()*.1,(Math.random()-.5)*.22);b.castShadow=true;bush.add(b);
+   }
+   bush.position.set(x,0,z);bush.scale.setScalar(.45+Math.random()*.55);scene.add(bush);
+   if(i%4===0){
+     const stem=new THREE.Mesh(new THREE.CylinderGeometry(.018,.025,.28,7),mat(0x47744d));stem.position.set(x+.2,.22,z);scene.add(stem);
+     const flower=new THREE.Mesh(new THREE.SphereGeometry(.13,12,10),flowerMats[i%3]);flower.position.set(x+.2,.4,z);scene.add(flower);
+   }
+ }
+
+ // Suelo vivo: hierba, rocas, helechos, troncos caídos y honguitos.
+ const grassGeo=new THREE.ConeGeometry(.055,.42,5),grassMat=mat(0x47734c),grass=new THREE.InstancedMesh(grassGeo,grassMat,360),dummy=new THREE.Object3D();
+ for(let i=0;i<360;i++){const x=(Math.random()-.5)*36,z=8-Math.random()*68;dummy.position.set(x,.16,z);dummy.rotation.set((Math.random()-.5)*.18,Math.random()*Math.PI*2,(Math.random()-.5)*.35);const h=.55+Math.random()*.9;dummy.scale.set(.7+Math.random()*.6,h,.7+Math.random()*.6);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);}scene.add(grass);
+ const rockGeo=new THREE.DodecahedronGeometry(.28,0),rockMat=mat(0x66716c),rocks=new THREE.InstancedMesh(rockGeo,rockMat,92);
+ for(let i=0;i<92;i++){const x=(Math.random()-.5)*34,z=7-Math.random()*66;dummy.position.set(x,.12,z);dummy.rotation.set(Math.random(),Math.random()*3,Math.random());dummy.scale.set(.55+Math.random(),.35+Math.random()*.6,.6+Math.random());dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);}scene.add(rocks);
+ const fernLeafMat=mat(0x3d7955),fernStemMat=mat(0x77915d);
+ for(let i=0;i<22;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
+ const logMat=mat(0x684b3b),logEnd=mat(0xb28a62);
+ for(let i=0;i<13;i++){const log=new THREE.Group(),length=1.4+Math.random()*2.2,body=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,length,10),logMat);body.rotation.x=Math.PI/2;body.position.z=length*.5;log.add(body);for(const z of [0,length]){const end=new THREE.Mesh(new THREE.CircleGeometry(.19,12),logEnd);end.position.z=z;end.rotation.y=Math.PI/2;log.add(end);}log.position.set((Math.random()-.5)*27,.19,5-Math.random()*62);log.rotation.y=Math.random()*Math.PI;scene.add(log);}
+ const mushroomStem=mat(0xe0d4b8),mushroomCaps=[mat(0xc56b70),mat(0xd6a65f),mat(0xb7a5d8)];
+ for(let i=0;i<28;i++){const x=(Math.random()-.5)*25,z=6-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,.2,7),mushroomStem);stem.position.set(x,.1,z);scene.add(stem);const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mushroomCaps[i%3]);cap.scale.y=.48;cap.position.set(x,.22,z);scene.add(cap);}
+ // Personaje rediseñado con articulaciones para animar brazos y piernas.
+ const avatar=new THREE.Group();scene.add(avatar);avatar.position.set(0,0,5);
+ const skin=mat(0xe6b99d),shirt=mat(0x39845b),shirtLight=mat(0x5ba477),pants=mat(0x697b91),shoes=mat(0x343746),hair=mat(0x241d25),glasses=mat(0x18202a,.35);
+ function capsule(parent,r,len,material,pos){const m=new THREE.Mesh(new THREE.CapsuleGeometry(r,len,6,12),material);m.position.set(...pos);m.castShadow=true;parent.add(m);return m;}
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.34,.57,8,16),shirt);body.position.y=1.13;body.castShadow=true;avatar.add(body);
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.18,12),skin);neck.position.y=1.55;avatar.add(neck);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.39,24,20),skin);head.position.y=1.94;head.castShadow=true;avatar.add(head);
+ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.405,22,16),hair);hairCap.position.set(0,2.14,-.025);hairCap.scale.set(1,.58,1);avatar.add(hairCap);
+ for(let i=0;i<7;i++){
+   const lock=new THREE.Mesh(new THREE.SphereGeometry(.14,12,10),hair);
+   lock.position.set(-.3+i*.1,2.03,.27);lock.scale.set(1,.8,.75);avatar.add(lock);
+ }
+ // Orejas, ojos y lentes visibles desde la cámara.
+ for(const side of [-1,1]){
+   const ear=new THREE.Mesh(new THREE.SphereGeometry(.085,12,10),skin);ear.position.set(side*.38,1.93,0);avatar.add(ear);
+   const frame=new THREE.Mesh(new THREE.TorusGeometry(.12,.024,8,22),glasses);frame.position.set(side*.15,1.97,.354);avatar.add(frame);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),mat(0x211b20));eye.position.set(side*.15,1.97,.374);avatar.add(eye);
+ }
+ const bridge=new THREE.Mesh(new THREE.BoxGeometry(.075,.025,.025),glasses);bridge.position.set(0,1.97,.37);avatar.add(bridge);
+ const armPivots=[],legPivots=[];
+ for(const side of [-1,1]){
+   const armPivot=new THREE.Group();armPivot.position.set(side*.39,1.38,0);avatar.add(armPivot);
+   capsule(armPivot,.105,.43,shirt,[0,-.23,0]);
+   const hand=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),skin);hand.position.set(0,-.51,.015);armPivot.add(hand);
+   armPivots.push(armPivot);
+   const legPivot=new THREE.Group();legPivot.position.set(side*.17,.64,0);avatar.add(legPivot);
+   capsule(legPivot,.135,.42,pants,[0,-.25,0]);
+   const shoe=new THREE.Mesh(new THREE.SphereGeometry(.17,14,10),shoes);shoe.scale.set(1,.58,1.4);shoe.position.set(0,-.51,.08);legPivot.add(shoe);
+   legPivots.push(legPivot);
+ }
+ const swordRig=new THREE.Group();swordRig.position.set(.49,1.28,.04);avatar.add(swordRig);
+ const blade=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.68,5,10),new THREE.MeshStandardMaterial({color:0xe3efff,metalness:.65,roughness:.22,emissive:0x25364a}));
+ blade.position.y=.43;swordRig.add(blade);
+ const guard=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.23,4,9),mat(0xd4ad68));guard.rotation.z=Math.PI/2;guard.position.y=.07;swordRig.add(guard);
+ const grip=new THREE.Mesh(new THREE.CapsuleGeometry(.05,.16,4,9),mat(0x684735));grip.position.y=-.07;swordRig.add(grip);
+ swordRig.rotation.z=-.35;
+
+ // Recuerdos convertidos en pequeñas luces cálidas.
+ const positions=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-21],[7,-25],[-7,-29],[2,-33],[9,-37],[-9,-39]];
+ const found=new Set(),orbs=[];
+ positions.forEach((p,i)=>{
+   const light=new THREE.PointLight(0xffd69a,2.1,6);light.position.set(p[0],1.25,p[1]);scene.add(light);
+   const orb=new THREE.Mesh(new THREE.SphereGeometry(.2,18,14),new THREE.MeshBasicMaterial({color:0xffe3a6}));orb.position.copy(light.position);scene.add(orb);
+   const halo=new THREE.Mesh(new THREE.SphereGeometry(.38,16,12),new THREE.MeshBasicMaterial({color:0xffd18a,transparent:true,opacity:.15,depthWrite:false}));halo.position.copy(light.position);scene.add(halo);
+   orbs.push({light,orb,halo,index:i,phase:Math.random()*6.28});
  });
- function rect(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.ceil(w),Math.ceil(h));}
- function line(x,y,w,h,c){rect(x,y,w,h,c);}
- function drawTree(x,y,s=1){
-  const q=tile*s;
-  // Tronco ancho y raíces, bajo una copa grande en varias capas.
-  rect(x-q*.18,y-q*.02,q*.36,q*.82,'#50382f');rect(x-q*.29,y+q*.48,q*.58,q*.18,'#76503a');
-  rect(x-q*1.18,y-q*1.05,q*2.36,q*1.28,'#173d35');
-  rect(x-q*.98,y-q*1.42,q*1.96,q*1.05,'#20513d');
-  rect(x-q*.67,y-q*1.72,q*1.34,q*.82,'#286347');
-  rect(x-q*1.42,y-q*.72,q*.82,q*.78,'#245941');rect(x+q*.60,y-q*.82,q*.82,q*.82,'#2c6848');
-  rect(x-q*.76,y-q*1.23,q*.58,q*.34,'#397952');rect(x+q*.20,y-q*1.48,q*.58,q*.34,'#43865a');
-  rect(x-q*.36,y-q*1.82,q*.40,q*.22,'#5b9662');rect(x+q*.72,y-q*.52,q*.24,q*.20,'#579064');
-  rect(x-q*.95,y-q*.30,q*.26,q*.18,'#102f2c');rect(x+q*.72,y-q*.18,q*.30,q*.20,'#163c32');
+
+ // Lobo estilizado, con cuatro patas articuladas y cola animada.
+ const wolf=new THREE.Group();scene.add(wolf);wolf.position.set(3,0,-18);
+ const fur=mat(0x788391),furLight=mat(0xa8b0bd),furDark=mat(0x485362),muzzle=mat(0xd8d6d2),noseMat=mat(0x242630);
+ const wolfBody=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),fur);wolfBody.scale.set(.55,.43,.88);wolfBody.position.set(0,.82,-.02);wolf.add(wolfBody);
+ const chest=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),furLight);chest.scale.set(.43,.48,.4);chest.position.set(0,.88,.55);wolf.add(chest);
+ const wolfHead=new THREE.Mesh(new THREE.SphereGeometry(.38,22,18),furLight);wolfHead.position.set(0,1.25,.9);wolf.add(wolfHead);
+ const snout=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),muzzle);snout.scale.set(.23,.17,.34);snout.position.set(0,1.12,1.2);wolf.add(snout);
+ const nose=new THREE.Mesh(new THREE.SphereGeometry(.09,14,10),noseMat);nose.position.set(0,1.14,1.5);wolf.add(nose);
+ const wolfLegs=[];
+ for(const side of [-1,1]){
+   const ear=new THREE.Mesh(new THREE.ConeGeometry(.14,.42,16),furDark);ear.position.set(side*.24,1.58,.78);ear.rotation.z=-side*.15;wolf.add(ear);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.045,12,10),mat(0xffd28a));eye.position.set(side*.23,1.3,1.2);wolf.add(eye);
+   for(const z of [-.48,.48]){
+     const pivot=new THREE.Group();pivot.position.set(side*.34,.53,z);wolf.add(pivot);
+     capsule(pivot,.105,.38,furDark,[0,-.22,0]);
+     const paw=new THREE.Mesh(new THREE.SphereGeometry(.14,12,10),furLight);paw.scale.set(1,.65,1.25);paw.position.set(0,-.44,.06);pivot.add(paw);
+     wolfLegs.push(pivot);
+   }
  }
- function drawBush(x,y,s=1){
-  const q=tile*s;rect(x-q*.48,y+q*.10,q*.96,q*.24,'#17372f');
-  rect(x-q*.46,y-q*.12,q*.42,q*.38,'#285b3e');rect(x-q*.16,y-q*.28,q*.48,q*.48,'#34724a');rect(x+q*.17,y-q*.10,q*.38,q*.36,'#24583d');
-  rect(x-q*.25,y-q*.24,q*.16,q*.10,'#65a36b');rect(x+q*.22,y-q*.05,q*.13,q*.08,'#579362');
+ const tailPivot=new THREE.Group();tailPivot.position.set(0,.94,-.78);wolf.add(tailPivot);
+ const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);
+
+ let wolfHP=3,wolfAlive=true,attackCooldown=0;
+ let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false;
+ const note=document.getElementById('gameNote');
+ const keys={};
+ function updateStats(){document.getElementById('energy').textContent=energy;document.getElementById('found').textContent=found.size;}
+ function showCombatText(message,miss=false){
+   const fx=document.getElementById('combatFx');if(!fx)return;
+   const pop=document.createElement('div');pop.className='hit-pop'+(miss?' miss':'');pop.textContent=message;fx.appendChild(pop);setTimeout(()=>pop.remove(),850);
  }
- function drawFlower(x,y,c){rect(x-2,y-2,4,4,c);rect(x-1,y+2,2,5,'#467747');}
- function drawHouse(x,y){
-  rect(x-47,y-27,94,59,'#70452f');rect(x-43,y-23,86,55,'#b47b4d');
-  for(let i=0;i<5;i++)rect(x-50+i*20,y-39,22,19,'#54332f');
-  rect(x-50,y-41,100,8,'#382b36');rect(x-50,y-34,100,6,'#70423a');
-  rect(x-10,y+2,20,30,'#49302b');rect(x-36,y-8,17,18,'#f8d77b');rect(x+20,y-8,15,18,'#f8d77b');
-  rect(x-2,y-47,4,12,'#9a6745');
+ addEventListener('keydown',e=>{
+   keys[e.key.toLowerCase()]=true;
+   if(e.key.toLowerCase()==='e'&&!gameOver)openNearest();
+   if(e.code==='Space'&&!gameOver){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
+   if(e.key.toLowerCase()==='r'&&gameOver){energy=100;gameOver=false;damageCooldown=1.2;avatar.position.set(0,0,5);note.textContent='Volviste al bosque. ¡Busca los recuerdos!';updateStats();}
+ });
+ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+ function openNearest(){
+   let best=null,dist=2.7;
+   orbs.forEach(o=>{if(found.has(o.index))return;const d=Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z);if(d<dist){dist=d;best=o;}});
+   if(best){found.add(best.index);best.orb.visible=false;best.halo.visible=false;best.light.intensity=0;window.showMemory(best.index);updateStats();
+     if(found.size===10&&!won){won=true;scene.fog.color.set(0x46364d);scene.background=new THREE.Color(0x46364d);moonLight.intensity=3;document.getElementById('gameReward').hidden=false;}
+   }
  }
- function drawPond(x,y){
-  rect(x-75,y-38,150,78,'#244f80');rect(x-68,y-32,136,66,'#326ba0');
-  for(let i=0;i<12;i++){let xx=x-60+rand(i,3)*120,yy=y-27+rand(i,9)*54;rect(xx,yy,rand(i,4)*15+5,2,'#6da1bd');}
-  rect(x-86,y-45,172,7,'#526344');rect(x-86,y+39,172,7,'#526344');
-  rect(x-22,y-4,44,28,'#795039');for(let i=0;i<4;i++)rect(x-22+i*12,y-4,3,28,'#ad8055');
+ window.showMemory=showMemory;
+
+ // Cámara orbital: arrastra el mouse o el dedo para girar 360 grados.
+ let yaw=0,pitch=.42,dragging=false,lastX=0,lastY=0,skyMode=false;
+ window.enterMemorySky=()=>{skyMode=true;};
+ window.exitMemorySky=()=>{skyMode=false;};
+ renderer.domElement.style.cursor='grab';renderer.domElement.style.touchAction='none';
+ renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);renderer.domElement.style.cursor='grabbing';});
+ renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;yaw-=dx*.008;pitch=THREE.MathUtils.clamp(pitch+dy*.006,.12,1.05);});
+ const stopDrag=()=>{dragging=false;renderer.domElement.style.cursor='grab';};
+ renderer.domElement.addEventListener('pointerup',stopDrag);renderer.domElement.addEventListener('pointercancel',stopDrag);
+ renderer.domElement.addEventListener('wheel',e=>{cameraDistance=THREE.MathUtils.clamp(cameraDistance+e.deltaY*.008,5.5,13);e.preventDefault();},{passive:false});
+ let cameraDistance=8.2;
+ function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);}
+ new ResizeObserver(resize).observe(host);
+
+ const clock=new THREE.Clock();let walkTime=0;
+ function animate(){
+   requestAnimationFrame(animate);
+   const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
+   let dx=0,dz=0;
+   if(!gameOver){
+     if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;
+     if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;
+     const len=Math.hypot(dx,dz);
+     if(len){
+       dx/=len;dz/=len;
+       const forwardX=-Math.sin(yaw),forwardZ=-Math.cos(yaw),rightX=Math.cos(yaw),rightZ=-Math.sin(yaw);
+       const mx=(rightX*dx+forwardX*(-dz)),mz=(rightZ*dx+forwardZ*(-dz));
+       avatar.position.x+=mx*3.1*dt;avatar.position.z+=mz*3.1*dt;
+       avatar.rotation.y=Math.atan2(mx,mz);
+       walkTime+=dt*10;
+     }
+   }
+   const moving=Math.hypot(dx,dz)>.01&&!gameOver;
+   const swing=moving?Math.sin(walkTime):0;
+   avatar.position.y=moving?Math.abs(Math.cos(walkTime*2))*.045:Math.sin(t*2)*.012;
+   legPivots[0].rotation.x=swing*.62;legPivots[1].rotation.x=-swing*.62;
+   armPivots[0].rotation.x=-swing*.42;armPivots[1].rotation.x=swing*.42;
+   armPivots[0].rotation.z=.08;armPivots[1].rotation.z=-.08;
+   const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
+   let wolfMoving=false;
+   if(wolfAlive&&dist>1.65&&!gameOver){
+     const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
+     wolf.position.x+=vx*1.35*dt;wolf.position.z+=vz*1.35*dt;
+     wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
+   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver){
+     energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
+     host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
+     if(energy<=0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';}
+   }
+   const wolfStride=wolfMoving?Math.sin(t*10):Math.sin(t*2)*.08;
+   wolfLegs.forEach((leg,i)=>leg.rotation.x=wolfStride*(i%2===0?1:-1)*.55);
+   tailPivot.rotation.x=Math.sin(t*3)*.18;tailPivot.rotation.z=Math.sin(t*2.2)*.22;
+   if(wolfAlive&&keys.shift)wolf.position.x+=(wolf.position.x-avatar.position.x)*.008;
+
+   if(attackFlash>0&&!gameOver){
+     attackFlash-=dt;const progress=1-Math.max(0,attackFlash)/.48;
+     swordRig.rotation.z=-.35-Math.sin(Math.min(1,progress)*Math.PI)*1.95;
+     swordRig.rotation.x=Math.sin(Math.min(1,progress)*Math.PI)*.35;
+     armPivots[1].rotation.x=-1.1+Math.sin(progress*Math.PI)*.4;
+     if(!attackHitDone&&progress>.32){
+       attackHitDone=true;
+       if(wolfAlive&&dist<3.2){
+         wolfHP--;showCombatText('¡LOBO -1! ✨');wolf.position.x+=(wolf.position.x-avatar.position.x)*.2;wolf.position.z+=(wolf.position.z-avatar.position.z)*.2;
+         wolf.scale.setScalar(.9);setTimeout(()=>{if(wolfAlive)wolf.scale.setScalar(1)},140);
+         if(wolfHP<=0){wolfAlive=false;scene.remove(wolf);note.textContent='🐺 ¡Lobo vencido! Puedes seguir buscando los recuerdos.';}
+       }else showCombatText('¡MÁS CERCA!',true);
+     }
+   }else{swordRig.rotation.z+=(-.35-swordRig.rotation.z)*.22;swordRig.rotation.x*=.75;}
+   attackCooldown=Math.max(0,attackCooldown-dt);damageCooldown=Math.max(0,damageCooldown-dt);
+
+   trees.forEach(tree=>{tree.crown.rotation.z=Math.sin(t*.45+tree.phase)*.018;});
+   fireflies.forEach(f=>{f.g.position.y=f.baseY+Math.sin(t*1.7+f.phase)*.22;f.g.position.x+=Math.sin(t*.7+f.phase)*.0008;});
+   orbs.forEach(o=>{o.orb.position.y=1.25+Math.sin(t*2+o.phase)*.12;o.halo.scale.setScalar(1+Math.sin(t*2+o.phase)*.09);o.light.intensity=1.7+Math.sin(t*2+o.phase)*.5;});
+   stars.rotation.y=Math.sin(t*.025)*.025;
+
+   if(skyMode){const skyTarget=new THREE.Vector3(avatar.position.x,13,avatar.position.z+5);camera.position.lerp(skyTarget,.035);camera.lookAt(avatar.position.x,34,avatar.position.z-18);}else{const target=new THREE.Vector3(avatar.position.x+Math.sin(yaw)*cameraDistance,avatar.position.y+2.1+pitch*2.1,avatar.position.z+Math.cos(yaw)*cameraDistance);camera.position.lerp(target,.12);camera.lookAt(avatar.position.x,1.05,avatar.position.z);}
+   renderer.render(scene,camera);
+   if(!gameOver&&wolfAlive){
+     const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
+     note.textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · E: recuerdo · Espacio: espada · Shift: defenderse · Arrastra para girar la cámara';
+   }else if(!gameOver&&wolfAlive===false&&found.size<10)note.textContent='🐺 Lobo vencido · Sigue explorando y encuentra los diez recuerdos.';
  }
- function drawWolf(x,y,t){
-  const flash=wolf.flash>0;const fur=flash?'#f3d9d0':'#687583',dark='#3e4a59';
-  rect(x-17,y-7,34,18,fur);rect(x-12,y-12,24,8,fur);rect(x+8,y-16,13,15,fur);
-  rect(x+9,y-23,6,10,dark);rect(x+18,y-22,6,9,dark);rect(x+18,y-10,5,3,'#ffcf78');
-  rect(x-14,y+8,6,10,dark);rect(x+8,y+8,6,10,dark);rect(x-20,y-4,8,4,dark);
-  rect(x+20,y-5,5,4,'#f0d8d2');rect(x+24,y-4,3,3,'#20232a');
-  if(Math.sin(t*9)>0)rect(x-5,y+17,5,3,'#b8c0c8');
-  if(wolf.flash>0)wolf.flash-=.016;
- }
- function drawPlayer(x,y,t){
-  const step=Math.sin(t*13),bob=Math.abs(step)*2;
-  rect(x-8,y+4-bob,7,11,'#56647a');rect(x+2,y+4-bob,7,11,'#56647a');
-  rect(x-10,y+13-bob,9,4,'#292b35');rect(x+1,y+13-bob,9,4,'#292b35');
-  rect(x-12,y-12-bob,24,20,'#277449');rect(x-14,y-9-bob,4,12,'#39865a');rect(x+10,y-9-bob,4,12,'#39865a');
-  rect(x-9,y-27-bob,18,17,'#dcae91');rect(x-11,y-30-bob,22,8,'#211d27');rect(x-12,y-25-bob,5,8,'#211d27');rect(x+7,y-25-bob,5,8,'#211d27');
-  rect(x-9,y-18-bob,7,5,'#1a2028');rect(x+2,y-18-bob,7,5,'#1a2028');rect(x-2,y-17-bob,4,2,'#1a2028');
-  rect(x-8,y-29-bob,16,3,'#342a31');rect(x-5,y-33-bob,7,4,'#211d27');
-  if(attack>0){ctx.save();ctx.translate(x+10,y-8);ctx.rotate(-.9+Math.sin((.28-attack)/.28*Math.PI)*1.5);rect(0,-25,4,26,'#dce8f3');rect(-4,-3,12,4,'#d4a75d');ctx.restore();}
-  if(defend>0)rect(x-18,y-35,36,42,'#b7e8e055');
- }
- function drawMemory(x,y,t,i){
-  const pulse=1+Math.sin(t*4+i)*.12;
-  ctx.save();ctx.translate(x,y);ctx.shadowColor='#ffd477';ctx.shadowBlur=15;
-  rect(-8*pulse,-9*pulse,16*pulse,18*pulse,'#ffdf9a');ctx.shadowBlur=0;
-  rect(-6,-7,12,14,'#fff0cf');rect(-4,-5,8,7,'#5a6482');rect(-4,3,8,3,'#d4b78b');rect(-2,-4,4,3,'#a6b1c6');
-  ctx.restore();
- }
- function drawSky(t){
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#10162f');g.addColorStop(1,'#263d59');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  for(let i=0;i<130;i++){const x=rand(i,1)*W,y=rand(i,2)*H*.8;rect(x,y,1.5,1.5,'#fff1c7');}
-  ctx.fillStyle='#fff3cf';ctx.font='bold 13px Georgia';ctx.textAlign='center';ctx.fillText('Nuestros recuerdos ♡',W/2,25);
-  photos.forEach((im,i)=>{const x=W/2+Math.cos(i/10*Math.PI*2+t*.12)*(W*.32),y=H*.48+Math.sin(i/10*Math.PI*2+t*.12)*(H*.25);
-   ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t+i)*.08);rect(-22,-27,44,54,'#f7e9ce');rect(-18,-23,36,38,'#fff9ec');
-   if(im.complete&&im.naturalWidth){ctx.imageSmoothingEnabled=false;ctx.drawImage(im,-16,-21,32,34);}else{rect(-13,-16,26,24,'#68728c');}
-   ctx.restore();
-  });
- }
- function render(t){
-  if(sky){skyTime+=.016;drawSky(skyTime);return;}
-  const camX=px*tile,camY=pz*tile,ox=W/2-camX,oy=H/2-camY;
-  ctx.save();ctx.translate(ox,oy);
-  rect(0,0,worldW*tile,worldH*tile,'#315b49');
-  for(let y=0;y<worldH;y++)for(let x=0;x<worldW;x++){
-   const v=rand(x,y);if(v>.30)rect(x*tile+v*15,y*tile+rand(y,x)*17,2,2,v>.8?'#83a978':'#456e57');
-   if(v>.952)drawFlower(x*tile+12,y*tile+12,['#e9b7ce','#f3d98f','#c5d5ff'][Math.floor(v*10)%3]);
-   if(v>.88)rect(x*tile+rand(y,x)*12,y*tile+rand(x,y)*13,2,2,'#a1b98a');
-  }
-  // Senderos de tierra que conectan la cabaña, el puente y el claro.
-  for(let y=12;y<31;y++){let x=19+Math.sin(y*.42)*2;rect(x*tile,y*tile,tile*3,tile,'#8b7652');rect(x*tile+4,y*tile,3,tile,'#a58a62');}
-  drawHouse(5.5*tile,9.5*tile);drawPond(32*tile,7*tile);
-  // Puente sobre el borde del estanque.
-  for(let i=0;i<6;i++){rect(29*tile+i*8,8.1*tile,8,48,'#80543a');rect(29*tile+i*8,8.1*tile,3,48,'#bd8b5c');}
-  // Rocas, flores y arbustos espesos para que se sienta como un bosque real.
-  for(let i=0;i<115;i++){
-   const x=rand(i+11,44)*worldW*tile,y=rand(i+17,45)*worldH*tile,v=rand(i+31,46);
-   if(v>.28)drawBush(x,y,.62+v*.72);
-   if(v>.72){rect(x+8,y+3,10,6,'#687b78');rect(x+10,y+1,6,3,'#a0aaa0');}
-  }
-  // Árboles grandes en grupos: un anillo frondoso y copas que se adentran en el claro.
-  for(let y=1;y<worldH-1;y++)for(let x=1;x<worldW-1;x++){
-   const v=rand(x+71,y+93),edge=x<5||x>34||y<5||y>28;
-   if(edge&&v>.16)drawTree(x*tile+12,y*tile+15,1.45+rand(x+4,y+8)*.9);
-   else if(v>.974&&Math.hypot(x-px,y-pz)>3)drawTree(x*tile+12,y*tile+15,1.15+v*.55);
-  }
-  // Luces de recuerdos.
-  spots.forEach((p,i)=>{if(!found.has(i))drawMemory(p[0]*tile+12,p[1]*tile+12,t,i);});
-  if(wolf.alive)drawWolf(wolf.x*tile+12,wolf.y*tile+12,t);
-  drawPlayer(px*tile+12,pz*tile+12,t);
-  // Luciérnagas animadas con halo cálido, repartidas por todo el bosque.
-  for(let i=0;i<42;i++){
-   const fx=rand(i+201,7)*worldW*tile+Math.sin(t*.75+i*2.1)*9;
-   const fy=rand(i+203,9)*worldH*tile+Math.cos(t*.62+i*1.7)*7;
-   const pulse=.45+.55*(.5+.5*Math.sin(t*3.2+i*2.7));
-   const sx=fx+ox,sy=fy+oy;
-   if(sx>-12&&sx<W+12&&sy>-12&&sy<H+12){ctx.save();ctx.globalAlpha=.35+pulse*.65;ctx.shadowColor='#b9ff91';ctx.shadowBlur=9+pulse*9;rect(sx,sy,3,3,'#eaff9a');rect(sx+1,sy-2,1,1,'#fff8c2');ctx.restore();}
-  }
-  ctx.restore();
-  // Luz ambiental azul de luna y un resplandor cálido alrededor del personaje.
-  const night=ctx.createLinearGradient(0,0,0,H);night.addColorStop(0,'rgba(8,20,39,.10)');night.addColorStop(1,'rgba(5,18,30,.24)');ctx.fillStyle=night;ctx.fillRect(0,0,W,H);
-  const glow=ctx.createRadialGradient(W/2,H/2,8,W/2,H/2,Math.max(W,H)*.48);glow.addColorStop(0,'rgba(255,224,151,.16)');glow.addColorStop(.38,'rgba(161,218,164,.07)');glow.addColorStop(1,'rgba(5,15,28,.20)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
-  // Marco HUD de pixel art.
-  rect(8,8,112,26,'#252437');rect(10,10,108,22,'#b28b69');rect(12,12,104,18,'#302d42');
-  ctx.fillStyle='#fff0d5';ctx.font='bold 10px monospace';ctx.textAlign='left';ctx.fillText('♥'.repeat(Math.ceil(energy/20))+'♡'.repeat(5-Math.ceil(energy/20)),18,25);
-  rect(W-106,8,98,26,'#252437');rect(W-104,10,94,22,'#b28b69');ctx.fillStyle='#fff0d5';ctx.textAlign='center';ctx.fillText('♡ '+found.size+' / 10',W-57,25);
-  if(wolf.alive){ctx.fillStyle='#fff0d5';ctx.textAlign='center';ctx.fillText('🐺',W-26,48);}
- }
- let last=0;
- function loop(ms){
-  const dt=Math.min((ms-last)/1000||.016,.04);last=ms;const t=ms/1000;
-  if(!gameOver&&!sky){
-   let dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0),len=Math.hypot(dx,dy);
-   if(len){dx/=len;dy/=len;px=clamp(px+dx*3.2*dt,5,35);pz=clamp(pz+dy*3.2*dt,5,29);face=Math.atan2(dy,dx);walk+=dt*12;}
-   if(wolf.alive){let wx=px-wolf.x,wy=pz-wolf.y,d=Math.hypot(wx,wy);if(d>1.05){wolf.x+=wx/d*1.15*dt;wolf.y+=wy/d*1.15*dt;}else if(damage<=0&&defend<=0){energy=Math.max(0,energy-20);damage=1.15;stats();pop('-20 VIDA',true);host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);if(energy===0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa ↻ REVIVIR para volver.';}}}
-   if(attack>0){attack-=dt;if(!attackDone&&attack<.13){attackDone=true;if(wolf.alive&&Math.hypot(px-wolf.x, pz-wolf.y)<2.1){wolf.hp--;wolf.flash=.25;wolf.x+=(wolf.x-px)*.35;wolf.y+=(wolf.y-pz)*.35;pop('¡LOBO -1! ✨');if(wolf.hp<=0){wolf.alive=false;note.textContent='🐺 ¡Lobo vencido! Sigue buscando los recuerdos.';}}else pop('¡MÁS CERCA!',true);}}
+ animate();
+}catch(err){
+ if(fallback)fallback.textContent='No se pudo cargar el bosque 3D. La página y las demás secciones siguen funcionando. Revisa tu conexión a internet.';
+ console.error(err);
+}
+</script><script>
+(function(){
+ const sky=document.getElementById('memorySky'),orbit=document.getElementById('memoryOrbit');
+ if(!sky||!orbit)return;
+ memories.forEach((memory,index)=>{
+   const angle=index*36,button=document.createElement('button');
+   button.type='button';button.className='memory-orbit-button';
+   button.style.setProperty('--angle',angle+'deg');button.style.setProperty('--counter-angle',(-angle)+'deg');
+   button.setAttribute('aria-label','Abrir recuerdo: '+memory.title);
+   const img=document.createElement('img');img.src=memory.image;img.alt=memory.title;
+   img.onerror=()=>{img.style.opacity='.25';img.alt='Fotografía no disponible';};
+   button.appendChild(img);button.addEventListener('click',()=>{if(window.showMemory)window.showMemory(index);});
+   orbit.appendChild(button);
+ });
+ document.getElementById('startMemorySky')?.addEventListener('click',()=>{
+   window.enterMemorySky?.();sky.hidden=false;document.getElementById('game')?.classList.add('memory-finale');
+ });
+ document.getElementById('backToForest')?.addEventListener('click',()=>{
+   sky.hidden=true;window.exitMemorySky?.();document.getElementById('game')?.classList.remove('memory-finale');
+ });
+ document.querySelectorAll('#mobileControls [data-game-key]').forEach(button=>{
+   const key=button.dataset.gameKey;
+   const press=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keydown',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+   const release=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keyup',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+   button.addEventListener('pointerdown',press);button.addEventListener('pointerup',release);
+   button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+ });
+})();
+</script>uscando los recuerdos.';}}else pop('¡MÁS CERCA!',true);}}
    attackCooldown=Math.max(0,attackCooldown-dt);damage=Math.max(0,damage-dt);defend=Math.max(0,defend-dt);
   }
   render(t);requestAnimationFrame(loop);
