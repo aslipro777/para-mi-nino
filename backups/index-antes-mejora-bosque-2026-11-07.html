@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para mi niño ♡</title>
+<style>
+:root{--ink:#29232b;--pink:#b85d79;--cream:#fff8f4;--soft:#f3e6e7}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+button{font:inherit;cursor:pointer}.hero{min-height:88vh;display:grid;place-items:center;text-align:center;padding:40px 20px;color:white;background:linear-gradient(#170e1c66,#170e1c88),url('foto-portada.jpg') center/cover,#795b68}
+.hero{position:relative;isolation:isolate;overflow:hidden}.hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(2px 2px at 12% 20%,#fff 45%,transparent 60%),radial-gradient(1.5px 1.5px at 28% 68%,#ffe9f2 45%,transparent 60%),radial-gradient(2px 2px at 72% 18%,#fff 45%,transparent 60%),radial-gradient(1.5px 1.5px at 86% 58%,#ffe9f2 45%,transparent 60%),radial-gradient(1px 1px at 55% 42%,#fff 45%,transparent 60%),radial-gradient(1.5px 1.5px at 42% 12%,#fff 45%,transparent 60%);background-size:310px 230px;animation:star-drift 22s linear infinite;opacity:.85}.hero:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 25%,#120b1880 100%)}@keyframes star-drift{from{background-position:0 0,0 0,0 0,0 0,0 0,0 0}to{background-position:70px -90px,-45px -70px,55px -110px,-60px -80px,30px -60px,-30px -90px}}.hero h1{font-size:clamp(3rem,9vw,6.5rem);font-weight:400;margin:0 0 12px;text-shadow:0 3px 20px #0008}.hero p{font:italic 1.15rem Arial,sans-serif}.hint{font:13px Arial,sans-serif;opacity:.9}.hero-enter{display:inline-block;margin-top:22px;padding:13px 25px;border:1px solid #fff9;border-radius:30px;background:#fff2;color:white;text-decoration:none;font:14px Arial,sans-serif;letter-spacing:.04em;backdrop-filter:blur(5px);transition:.2s}.hero-enter:hover{background:#fff3;transform:translateY(-3px)}
+nav{position:sticky;top:0;z-index:5;background:#fffaf2eF;backdrop-filter:blur(8px);display:flex;gap:18px;justify-content:center;flex-wrap:wrap;padding:14px}nav a{color:#754354;text-decoration:none;font:13px Arial,sans-serif}
+section{padding:70px 20px;max-width:1050px;margin:auto}h2{text-align:center;font-size:2.2rem;font-weight:400;color:#87485e;margin:0 0 30px}.letter{max-width:700px;margin:auto;background:white;padding:35px;border:1px solid #efdde1;box-shadow:0 10px 35px #5a24300d;line-height:1.8;white-space:pre-wrap;min-height:150px}.sub{text-align:center;font:14px Arial,sans-serif;color:#806c72}
+.albums{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.album{border:0;background:#fff;padding:12px 12px 20px;box-shadow:0 8px 25px #4b263014;color:#714354;transition:.2s}.album:hover{transform:translateY(-5px)}.album img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#eadde0;display:block;margin-bottom:12px}.album span{font-size:1.15rem}
+.counter{text-align:center;background:#f4e6e8;padding:35px 15px;border-radius:18px}.digits{font:clamp(1.4rem,4vw,2.5rem) Arial,sans-serif;color:#85465b;margin-top:12px}.timeline{max-width:700px;margin:auto}.event{border-left:2px solid #c9879b;padding:0 0 28px 25px;position:relative}.event:before{content:"";position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:#b85d79}.event small{font:12px Arial,sans-serif;color:#9b6577}.event h3{margin:5px 0}.event p{margin:0;color:#6e5b62}
+.panel{background:#fff;padding:24px;border-radius:16px;box-shadow:0 8px 30px #4b263010;margin:16px auto;max-width:760px}
+#videos .albums{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:22px}#videos .panel:first-child{grid-column:1/-1;width:100%;max-width:none;box-sizing:border-box}#videos .panel:first-child video{width:100%;height:clamp(260px,55vw,560px);aspect-ratio:16/9;object-fit:contain;background:#eadde0;display:block}#videos .panel:nth-child(2){grid-column:1}#videos .panel:nth-child(4){grid-column:3}#videos .green-heart{grid-column:2;grid-row:2;align-self:center;color:#268b55;font-size:clamp(2rem,5vw,4rem);text-shadow:0 3px 12px #268b5540;animation:heart-float 2.2s ease-in-out infinite;line-height:1}@keyframes heart-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.12)}}@media(max-width:620px){#videos .albums{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}#videos .green-heart{grid-column:1/-1;grid-row:3;text-align:center}#videos .panel:nth-child(4){grid-column:2}#videos .panel:nth-child(2){grid-column:1}#videos .panel:nth-child(4) video,#videos .panel:nth-child(2) video{width:100%}}.question{padding:14px 0;border-bottom:1px solid #eee}.question button,.primary{border:0;border-radius:30px;padding:11px 18px;background:#a95873;color:white}.answer{display:none;margin:10px 0 0;color:#6c4a57}.forest-wrap{background:#171b22;border-radius:16px;overflow:hidden;color:#fff}.forest-head{padding:22px;text-align:center}.forest-head p{font:14px Arial,sans-serif;color:#ddd}.game{height:440px;position:relative;background:radial-gradient(ellipse at 50% 35%,#334c58,#182b35 65%,#0c1722);overflow:hidden}.game canvas{width:100%;height:100%;display:block}.game canvas{image-rendering:pixelated}.game.pixel-game{background:#244733;image-rendering:pixelated}.mobile-controls{display:none;position:absolute;inset:auto 10px 10px;z-index:8;justify-content:space-between;align-items:end;gap:12px;pointer-events:none;user-select:none}.mobile-pad,.mobile-actions{display:flex;gap:6px;align-items:center;pointer-events:auto}.mobile-pad{flex-direction:column}.mobile-pad>div{display:flex;gap:5px}.mobile-controls button{width:43px;height:43px;border:1px solid #ffffff80;border-radius:13px;background:#183b30d9;color:#fff;font-size:18px;font-weight:700;touch-action:none;box-shadow:0 2px 8px #0006}.mobile-actions button{width:58px;height:54px;font-size:17px;line-height:1.05}.mobile-actions{flex-wrap:wrap;max-width:192px;justify-content:flex-end}.mobile-actions button[data-game-key="r"]{width:48px;height:44px}.mobile-controls small{font-size:9px;font-weight:500}@media(max-width:760px){#mobileControls{display:flex!important;position:absolute;left:8px;right:8px;bottom:8px;top:auto;z-index:20}.game{touch-action:none}}@media(hover:none),(pointer:coarse){#mobileControls{display:flex!important}}
+.combat-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.hit-pop{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);font:900 25px Arial,sans-serif;color:#ffe07a;text-shadow:2px 3px 0 #7b263c,0 0 12px #ffb347;white-space:nowrap;animation:hit-pop .8s ease-out forwards}
+.hit-pop.miss{color:#e6f2ff;text-shadow:2px 3px 0 #27384d}
+@keyframes hit-pop{0%{opacity:0;transform:translate(-50%,0) scale(.45) rotate(-8deg)}18%{opacity:1;transform:translate(-50%,-22px) scale(1.2) rotate(5deg)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-85px) scale(.9)}}
+.game.shake{animation:game-shake .22s linear}
+@keyframes game-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.game-note{font:13px Arial,sans-serif;text-align:center;padding:10px;color:#e8dce1}.gift{text-align:center}.gift button{font-size:1.1rem}.gift-text{display:none;line-height:1.8;margin:20px auto;max-width:600px}.edit-note{font:12px Arial,sans-serif;color:#8d777e;text-align:center;margin-top:18px}
+@media(max-width:650px){.albums{grid-template-columns:1fr}.album img{aspect-ratio:16/10}.hero{min-height:75vh}section{padding:52px 17px}.game{height:350px}}
+
+.game canvas{image-rendering:auto!important}
+.game.pixel-game{background:#101c2c;image-rendering:auto}
+.forest-head p{max-width:760px;margin:8px auto}
+.memory-sky{position:absolute;inset:0;z-index:25;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#263c61 0%,#101a35 56%,#080d20 100%);color:#fff;text-align:center}
+.memory-sky[hidden]{display:none}
+.memory-sky:before,.memory-sky:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 12% 18%,#fff 70%,transparent),radial-gradient(1px 1px at 75% 14%,#fff 70%,transparent),radial-gradient(2px 2px at 88% 66%,#dbe8ff 70%,transparent),radial-gradient(1px 1px at 34% 76%,#fff 70%,transparent),radial-gradient(1px 1px at 62% 48%,#fff 70%,transparent),radial-gradient(2px 2px at 20% 58%,#dbe8ff 70%,transparent)}
+.memory-sky:after{background:radial-gradient(circle at 50% 50%,#f4dba51b,transparent 48%);filter:blur(12px)}
+.memory-sky-heading{position:absolute;z-index:2;top:13px;left:10px;right:10px;display:grid;gap:4px;text-shadow:0 2px 9px #000}
+.memory-sky-heading strong{font:700 clamp(17px,4vw,23px) Georgia,serif;color:#fff0c9}
+.memory-sky-heading span{font:12px Arial,sans-serif;color:#dce6ff}
+.memory-orbit{position:absolute;width:min(82vw,330px);height:min(82vw,330px);max-height:330px;max-width:330px;left:50%;top:53%;transform:translate(-50%,-50%);border:1px solid #d9e6ff25;border-radius:50%;animation:memory-spin 44s linear infinite;box-shadow:0 0 45px #c2d6ff12,inset 0 0 35px #c2d6ff0c}
+.memory-orbit:before{content:"";position:absolute;inset:16%;border:1px dashed #d9e6ff20;border-radius:50%}
+.memory-orbit-button{position:absolute;left:50%;top:50%;width:clamp(49px,14vw,66px);height:clamp(65px,18vw,86px);padding:3px;border:1px solid #f7e8c9;border-radius:9px;background:#fff;box-shadow:0 5px 16px #0009;cursor:pointer;transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-132px) rotate(var(--counter-angle))}
+.memory-orbit-button img{display:block;width:100%;height:100%;object-fit:cover;border-radius:6px;animation:memory-counter-spin 44s linear infinite}
+.memory-orbit-button:focus-visible{outline:3px solid #ffe5a1;outline-offset:4px}
+@keyframes memory-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes memory-counter-spin{to{transform:rotate(-360deg)}}
+.memory-sky-back{position:absolute;z-index:3;bottom:10px;left:50%;transform:translateX(-50%);border:1px solid #fff8;border-radius:24px;padding:9px 18px;background:#243a55e8;color:#fff;font-weight:700}
+#game.memory-finale #mobileControls{display:none!important}
+@media(max-width:650px){.memory-orbit{top:54%;width:270px;height:270px}.memory-orbit-button{transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-108px) rotate(var(--counter-angle))}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div><h1>Para mi niño</h1><p>Un pequeño lugar para nuestros recuerdos ♡</p><a class="hero-enter" href="#carta">Abrir mi historia ♡</a><div class="hint" style="margin-top:15px">:3 + :v </div></div>
+</header>
+<nav><a href="#carta">CARTA</a><a href="#musica">NUESTRA CANCIÓN</a><a href="#albumes">ÁLBUMES</a><a href="#tiempo">TIEMPO JUNTOS</a><a href="#recuerdos">BOSQUE 3D</a><a href="#videos">MINI VIDEOS</a><a href="#preguntas">PREGUNTAS</a><a href="#regalo">ÚLTIMO REGALO</a></nav>
+<section id="musica" style="text-align:center;padding-top:28px;padding-bottom:10px">
+  <button class="primary" id="musicButton" type="button">♫ Activar nuestra canción</button>
+  <audio id="ourSong" src="Complice%20Eterno.mp3" preload="none" loop></audio>
+  <p class="sub"> Usted es mi complice eterno</p>
+</section>
+<section id="carta"><h2>Una cartita para ti</h2><div class="letter" contenteditable="true" spellcheck="true">Mi niño,
+
+Hola mi niño lindo quiero que sepa que lo amo demasiado, se que a veces no lo demuestro de la mejor manera, pero eso no quita el gran amor que le tengo, y me quiero esforzar todos los dias por demostrarlo, mejorar por usted espero le gusten los detalles, le quise hacer un dia especial, disculpe si no es suficiente pero prometo todos los dias de mi vida darle lo que se merece gracias por hacerme feliz y por amarme, gracias por cada abrazo, por cada "voy a estar para ti" por cada "porfa quiero estar bien" por cada "te amo mi niña" se que no hemos sido los mejores el uno con el otro pero las ganas por mejorar por nosotros siempre estan, te amo y lo hare toda mi vida, solo deseo cumplir ese futuro que tanto hablamos ya que solo lo veo a su lado, solo usted me dio motivos de todo, espero le gusten todos nuestros recuerods, se que vendran mejores momentos para nosotros, y le prometo siempre estar a su lado, aunque mi mundo se derumbe estare ahi para apoyarlo mi wawa,te amo mi amor, mi coranzoncito, mi niño bonito, mi compañero de vida, muak
+
+Con cariño ♡</div><p class="edit-note">te amo mi corazon.</p></section>
+<section id="albumes"><h2>Nuestros pequeños álbumes</h2><p class="sub">Pulsa cada álbum para abrir su fotografía.</p><div class="albums">
+<button class="album" onclick="openPhoto('foto1.jpg','dia que nos conocimos')"><img src="foto1.jpg" alt="lindo su ojito" onerror="this.alt='Agrega foto1.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum uno</span></button>
+<button class="album" onclick="openPhoto('foto2.jpg','fotito besito')"><img src="foto2.jpg" alt="muak" onerror="this.alt='Agrega foto2.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum dos</span></button>
+<button class="album" onclick="openPhoto('foto3.jpg','dia de la peña')"><img src="foto3.jpg" alt="soi la manzanita jeje" onerror="this.alt='Agrega foto3.jpg en la carpeta';this.style.padding='35px'"><span>♡ Álbum tres</span></button>
+</div></section>
+<section id="tiempo"><h2>Desde que nos conocimos</h2><div class="counter"><div>Desde el 02 de febrero de 2026 ♡</div><div class="digits" id="counter">Calculando...</div><div class="sub">días · horas · minutos · segundos</div></div></section>
+<section id="recuerdos"><h2>Nuestra línea del tiempo</h2><p class="sub">Camina por nuestros recuerdos y encuentra cada lucecita.</p><div class="forest-wrap"><div class="forest-head"><h3>🌲 Camina por nuestros recuerdos 🌙</h3><p>Un bosque nocturno visto desde arriba. Muévete con WASD o las flechas y pulsa E cerca de una lucecita.</p></div><div class="game" id="game"><div class="combat-fx" id="combatFx"></div><div class="mobile-controls" id="mobileControls" aria-label="Controles táctiles del juego"><div class="mobile-pad"><button type="button" data-game-key="ArrowUp" aria-label="Avanzar">▲</button><div><button type="button" data-game-key="ArrowLeft" aria-label="Izquierda">◀</button><button type="button" data-game-key="ArrowDown" aria-label="Retroceder">▼</button><button type="button" data-game-key="ArrowRight" aria-label="Derecha">▶</button></div></div><div class="mobile-actions"><button type="button" data-game-key="e">E<br><small>Recuerdo</small></button><button type="button" data-game-key=" " >⚔<br><small>Atacar</small></button><button type="button" data-game-key="Shift">◇<br><small>Defender</small></button><button type="button" data-game-key="r" aria-label="Revivir">↻<br><small>Revivir</small></button></div></div><div id="fallback" style="padding:30px;text-align:center;font:14px Arial,sans-serif">Cargando el bosque 3D… Si no aparece, revisa tu conexión a internet.</div>
+</div></div><div class="game-note" id="gameNote">WASD o flechas: caminar · Arrastra para girar la cámara · E: recuerdo · Espacio: espada · Shift: defenderse · R: revivir</div>
+<div class="game-note" id="gameStats">♡ Vida: <span id="energy">100</span>/100 · Recuerdos: <span id="found">0</span>/10</div>
+<div id="gameReward" class="game-note" hidden><strong>¡Felicidades! Has encontrado los 10 recuerdos. 💚</strong><br><button class="primary" id="startMemorySky" type="button" style="margin-top:12px">Continuar ♡</button></div></div></section>
+<section id="videos"><h2>Pequeños momentos en movimiento</h2><p class="sub">mis videos favoritos.</p>
+<div class="albums">
+  <div class="panel"><video controls playsinline style="width:100%;height:clamp(260px,55vw,560px);display:block;object-fit:contain;background:#eadde0" preload="metadata" poster="video1.jpg.webp"><source src="video1.mp4.mp4" type="video/mp4"></video><p class="sub">BEEESIIITOOOSSS MUAAAK</p></div>
+  <div class="panel"><video controls playsinline style="width:100%" preload="metadata" poster="video2.jpg.webp"><source src="video2.mp4.mp4" type="video/mp4"></video><p class="sub">USTED SIENDO MI NIÑITO</p></div>
+  <div class="green-heart" aria-hidden="true">♥</div>
+  <div class="panel"><video controls playsinline style="width:100%" preload="metadata" poster="video3.jpg.webp"><source src="video3.mp4.mp4.mp4" type="video/mp4"></video><p class="sub">US JUGANDO</p></div>
+</div></section>
+<section id="preguntas"><h2>Trivia: ¿cuánto sabemos de nosotros? ♡</h2><p class="sub">Responde estas preguntitas y descubre tu resultado.</p><div class="panel" id="questions"></div></section>
+<section id="regalo" class="gift"><h2>Un último regalo</h2><p class="sub">Hay muchas razones por las que te quiero. Abre tu regalo y descubre una cada vez. ♡</p><button class="primary" id="openGiftButton" type="button">Abrir mi regalo ♡</button><div class="gift-text" id="giftText"><div style="font-size:1.15rem;color:#a95873;margin-bottom:12px">Una razón por la que te quiero…</div><div class="reason-burst" id="reasonBurst"><span class="burst-heart">♥</span><span class="burst-heart">♡</span><span class="burst-heart">♥</span><span class="burst-heart">✦</span><p id="loveReason" aria-live="polite" style="font-size:1.25rem;min-height:3em">Cada pequeño detalle tuyo tiene un lugar especial en mi corazón. ♡</p></div><button class="primary" id="anotherReason" type="button">Dame otra razón ♡</button><p class="edit-note">Cada vez aparecerá una razón distinta.</p></div></section>
+<footer class="sub" style="padding:30px">Hecho con cariño ♡</footer>
+<dialog id="photoDialog" style="border:0;border-radius:14px;max-width:min(90vw,650px);padding:15px"><button onclick="this.closest('dialog').close()" style="float:right">Cerrar ✕</button><h3 id="photoTitle"></h3><img id="photoLarge" style="max-width:100%;max-height:70vh;object-fit:contain"></dialog>
+<dialog id="memoryDialog" style="border:0;border-radius:14px;max-width:min(90vw,550px);padding:25px"><button onclick="this.closest('dialog').close()" style="float:right">Cerrar ✕</button><h2 id="memoryTitle"></h2><img id="memoryImage" alt="Fotografía del recuerdo" style="display:none;width:100%;max-height:45vh;object-fit:contain;border-radius:10px;margin:10px 0"><p id="memoryText"></p><small id="memoryDate"></small></dialog>
+<script>
+const song=document.getElementById('ourSong'),musicButton=document.getElementById('musicButton');
+song.addEventListener('error',()=>{musicButton.textContent='Error al cargar canción (código '+(song.error?.code||'?')+')'}); musicButton.addEventListener('click',async()=>{try{if(song.paused){await song.play();musicButton.textContent='♫ Pausar nuestra canción'}else{song.pause();musicButton.textContent='♫ Activar nuestra canción'}}catch(e){musicButton.textContent='No se pudo reproducir: '+e.name}});
+function openPhoto(src,title){document.getElementById('photoTitle').textContent=title;document.getElementById('photoLarge').src=src;document.getElementById('photoDialog').showModal()}
+const start=new Date(2026,1,2,0,0,0);
+function tick(){let s=Math.max(0,Math.floor((Date.now()-start)/1000)),d=Math.floor(s/86400);s%=86400;let h=Math.floor(s/3600);s%=3600;let m=Math.floor(s/60);s%=60;document.getElementById('counter').textContent=`${d} días · ${h} horas · ${m} minutos · ${s} segundos`}
+tick();setInterval(tick,1000);
+const memories=[
+{date:'febrero',title:'primera pedida de pololeo',text:'ame tanto este ramo, aun mas el de lirios',image:'recuerdo1.jpg'},
+{date:'Agosto',title:'Me llevo a comer',text:'amo ese dia por la linda sorpresa y lo lindo de todo',image:'recuerdo2.jpg'},
+{date:'octubre',title:'una tarde mas en mi casa',text:'amo las tardes en mi casa, los momentos de regaloneo a su lado, y jeje',image:'recuerdo3.jpg'},
+{date:'julio',title:'comidita ricolini',text:'otro dia mas usted comprando cosas ricas para comer',image:'recuerdo4.jpg'},
+{date:'agosto',title:'dia de cine',text:'amo ve peliculas con usted',image:'recuerdo5.jpg'},
+{date:'junio',title:'volvimos a hablar',text:'bueeno dia raro e inesperado pero lindo',image:'recuerdo6.jpg'},
+{date:'nose',title:'besito',text:'fotitos de besitos, te amo',image:'recuerdo7.jpg'},
+{date:'marzo',title:'yendo juntos al colegio',text:'amaba irme con usted, gracias a sus papas y usted por todo',image:'recuerdo8.jpg'},
+{date:'mua',title:'todos.',text:'cada momento feliz a su lado es mi fav',image:'recuero9.jpg'},
+{date:'noviembre',title:'Hasta aquí, nuestra aventura',text:'pocos momentos que hemos vivido, y se que vamos por mas',image:'reuerdo10.jpg'}
+];
+const quiz=[
+ {q:'¿En qué fecha empezamos oficialmente?',a:['15 de julio','17 de febrero','7 de junio'],correct:1,why:'El 17 de febrero quedó guardado como una fecha especial. ♡'},
+ {q:'¿Qué flor fue parte de uno de nuestros recuerdos?',a:['Lirios','Girasoles','Tulipanes'],correct:0,why:'¡Los lirios! Un recuerdo que merece su propio rinconcito.'},
+ {q:'¿Qué color representan la relacion?',a:['morado y verde','rojo y verde','azul y rosa'],correct:1,why:'rojo y verde, por supuesto. 💚'},
+ {q:'¿Qué sería perfecto para una tarde juntos?',a:['pintar cuadritos','hacer galletas','ver tele'],correct:0,why:'Cualquier plan puede ser bonito si lo compartimos.'},
+ {q:'Animal que tendríamos',a:['perro','gato','conejo'],correct:0,why:'¡Un perrito! 🐶'},
+ {q:'¿Cuándo empezamos a hablar?',a:['2 de julio','2 de febrero','10 de febrero'],correct:1,why:'¡El 2 de febrero empezamos a hablar! ♡'},
+ {q:'¿Cuándo nos vimos por primera vez?',a:['10 de febrero','5 de febrero','8 de febrero'],correct:0,why:'¡El 10 de febrero! Ese fue nuestro primer encuentro.'},
+ {q:'¿Quién dio el primer beso?',a:['asli','tomi'],correct:0,why:'¡Asli dio el primer beso! 💚'},
+ {q:'¿Qué cosa nos representa más?',a:['snoopy y su novia','pucca y garu','la manzana verde y roja'],correct:2,why:'¡La manzana verde y roja! 🍏❤️'},
+ {q:'¿Quién dijo te amo primero?',a:['asli','tomi','nose'],correct:2,why:'nose, pero capaz asli 💚'}
+];
+const qbox=document.getElementById('questions');let quizIndex=0,quizScore=0;
+function renderQuiz(){const item=quiz[quizIndex];qbox.innerHTML=`<div class="quiz-progress">Pregunta ${quizIndex+1} de ${quiz.length}</div><h3>${item.q}</h3><div class="quiz-options">${item.a.map((a,i)=>`<button type="button" class="quiz-option" data-choice="${i}">${a}</button>`).join('')}</div><p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p><button type="button" class="primary" id="quizNext" disabled>${quizIndex===quiz.length-1?'Ver resultado':'Siguiente ♡'}</button>`;
+qbox.querySelectorAll('.quiz-option').forEach(btn=>btn.addEventListener('click',()=>{if(qbox.dataset.answered==='1')return;qbox.dataset.answered='1';const chosen=Number(btn.dataset.choice),correct=chosen===item.correct;if(correct)quizScore++;qbox.querySelectorAll('.quiz-option').forEach((b,i)=>{b.disabled=true;if(i===item.correct)b.classList.add('correct');else if(i===chosen)b.classList.add('incorrect')});qbox.querySelector('#quizFeedback').textContent=(correct?'¡Correcto! ':'Casi, la respuesta era '+item.a[item.correct]+'. ')+item.why;qbox.querySelector('#quizNext').disabled=false}));
+qbox.querySelector('#quizNext').addEventListener('click',()=>{if(quizIndex<quiz.length-1){quizIndex++;qbox.dataset.answered='0';renderQuiz()}else{qbox.innerHTML=`<div class="quiz-result"><div class="quiz-trophy">♡</div><h3>¡Terminaste la trivia!</h3><p>Tu resultado: <strong>${quizScore} de ${quiz.length}</strong></p><p>${quizScore===quiz.length?'¡Memoria de pareja nivel experto!':'Lo bonito es seguir creando recuerdos para aprenderse cada día.'}</p><button type="button" class="primary" id="quizAgain">Jugar otra vez ♡</button></div>`;qbox.querySelector('#quizAgain').addEventListener('click',()=>{quizIndex=0;quizScore=0;qbox.dataset.answered='0';renderQuiz()})}})}
+qbox.dataset.answered='0';renderQuiz();
+function showMemory(i){const m=memories[i];if(!m)return;document.getElementById('memoryTitle').textContent=m.title;document.getElementById('memoryText').textContent=m.text;document.getElementById('memoryDate').textContent=m.date;const photo=document.getElementById('memoryImage');photo.src=m.image;photo.style.display='block';photo.onerror=()=>{photo.style.display='none'};document.getElementById('memoryDialog').showModal()}
+const loveReasons=[
+'Porque contigo hasta los momentos más simples se vuelven especiales.',
+'Porque me encanta la forma en que me hace sonreír.',
+'Porque tiene una manera única de hacer que un día normal sea bonito.',
+'con su manera unica de hacerme sentir.',
+'Porque su compañía significa muchísimo para mí.',
+'Porque me gusta descubrir cosas nuevas de usted.',
+'Porque tus abrazos se sienten como un lugar seguro.',
+'Porque me haces reír cuando menos me lo espero.',
+'Porque tienes detalles que quizás ni notas, pero yo sí.',
+'Porque me encanta compartir canciones contigo.',
+'Porque contigo puedo crear recuerdos que quiero guardar siempre.',
+'Porque admiro muchas de las cosas que te hacen ser tú.',
+'Porque me gusta cómo se ilumina un momento cuando estás cerca.',
+'Porque incluso un mensaje tuyo puede alegrarme el día.',
+'Porque me encanta tu forma de mirar el mundo.',
+'Porque eres parte de muchas de mis memorias favoritas.',
+'Porque me gusta apoyarte en tus sueños y tus proyectos.',
+'Porque siempre encuentro algo nuevo que me gusta de ti.',
+'Porque haces que las pequeñas aventuras valgan la pena.',
+'Porque me encanta cuando compartimos una risa que solo nosotros entendemos.',
+'Porque tu forma de ser no se parece a la de nadie más.',
+'Porque me gusta imaginar todos los momentos bonitos que aún nos quedan.',
+'Porque contigo aprendí que los detalles pequeños también pueden ser enormes.',
+'Porque me encanta tener a alguien con quien compartir mis tonterías.',
+'Porque eres tú, y eso ya es una razón enorme. ♡'
+];
+let lastReason=-1;
+function showLoveReason(){
+ let n;
+ do{n=Math.floor(Math.random()*loveReasons.length)}while(n===lastReason&&loveReasons.length>1);
+ lastReason=n;
+ const burst=document.getElementById('reasonBurst');
+ const p=document.getElementById('loveReason');
+ p.textContent=loveReasons[n];
+ burst.classList.remove('pop');
+ void burst.offsetWidth;
+ burst.classList.add('pop');
+}
+document.getElementById('openGiftButton').addEventListener('click',()=>{
+ document.getElementById('giftText').style.display='block';
+ document.getElementById('openGiftButton').style.display='none';
+ showLoveReason();
+});
+document.getElementById('anotherReason').addEventListener('click',showLoveReason);
+</script><script type="module">
+const host=document.getElementById('game'),fallback=document.getElementById('fallback');
+try{
+ const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+
+
+ // Bosque 3D de cuento: formas suaves, colores ricos y luz nocturna.
+ const scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x111b35);
+ scene.fog=new THREE.FogExp2(0x172747,.019);
+ const camera=new THREE.PerspectiveCamera(43,host.clientWidth/host.clientHeight,.1,150);
+ const renderer=new THREE.WebGLRenderer({antialias:false,alpha:false,powerPreference:"low-power"});
+ renderer.setSize(host.clientWidth,host.clientHeight);
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.35));
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.25;
+ renderer.shadowMap.enabled=false;
+ renderer.shadowMap.type=THREE.BasicShadowMap;
+ host.appendChild(renderer.domElement);
+ camera.position.set(0,17,13);camera.lookAt(0,0,5);
+ fallback?.remove();
+
+ scene.add(new THREE.HemisphereLight(0xcbdcff,0x263d37,2.0));
+ const moonLight=new THREE.DirectionalLight(0xb8d2ff,2.1);
+ moonLight.position.set(-10,18,8);moonLight.castShadow=true;
+ moonLight.shadow.mapSize.set(1024,1024);scene.add(moonLight);
+ const fill=new THREE.AmbientLight(0x8296d8,.35);scene.add(fill);
+
+ const moon=new THREE.Mesh(new THREE.SphereGeometry(1.7,32,24),new THREE.MeshBasicMaterial({color:0xfff1ce}));
+ moon.position.set(-13,15,-38);scene.add(moon);
+ const moonHalo=new THREE.Mesh(new THREE.SphereGeometry(2.8,24,18),new THREE.MeshBasicMaterial({color:0xc4d8ff,transparent:true,opacity:.09,depthWrite:false}));
+ moonHalo.position.copy(moon.position);scene.add(moonHalo);
+ const moonGlow=new THREE.PointLight(0xaacaff,1.8,65);moonGlow.position.copy(moon.position);scene.add(moonGlow);
+
+ const mat=(color,roughness=1)=>new THREE.MeshStandardMaterial({color,roughness});
+ const groundMat=mat(0x315b43);
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(110,130),groundMat);
+ ground.rotation.x=-Math.PI/2;ground.position.set(0,-.16,-23);ground.receiveShadow=true;scene.add(ground);
+
+ // Sendero sinuoso y pequeñas zonas de hierba.
+ const pathMat=mat(0x6c7350);
+ for(let i=0;i<54;i++){const z=8-i*1.95,x=Math.sin(i*.15)*1.15,seg=new THREE.Mesh(new THREE.PlaneGeometry(5.2,2.25),pathMat);seg.rotation.x=-Math.PI/2;seg.rotation.z=Math.cos(i*.15)*.08;seg.position.set(x,-.115,z);seg.receiveShadow=true;scene.add(seg);}
+ const pathEdge=mat(0x78806a);
+ for(let i=0;i<78;i++){const z=7-i*.98,x=Math.sin(i*.15)*1.15+(i%2?2.8:-2.8)+(Math.random()-.5)*.8,p=new THREE.Mesh(new THREE.DodecahedronGeometry(.13+(i%4)*.035,0),pathEdge);p.scale.set(1,.42,1.45);p.rotation.y=Math.random()*3;p.position.set(x,-.035,z);scene.add(p);}
+ const starPositions=[];
+ for(let i=0;i<260;i++)starPositions.push((Math.random()-.5)*95,10+Math.random()*28,-55+Math.random()*65);
+ const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+ const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xe5edff,size:.13,transparent:true,opacity:.9}));
+ scene.add(stars);
+
+  // Pinos estilizados de copa escalonada, con silueta clara desde arriba.
+  const trunkMat=mat(0x68452f),pineMats=[mat(0x174b3b),mat(0x216348),mat(0x2d7651),mat(0x3b8158)];
+  const bushMats=[mat(0x245b3d),mat(0x34764b),mat(0x47885a),mat(0x5b9865)];
+  const flowerMats=[mat(0xe7b8cb),mat(0xf0dca0),mat(0xb9c9f2)];
+  const trees=[];
+  function makePine(x,z,s=1){
+    const tree=new THREE.Group();
+    const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.2*s,.9*s,8),trunkMat);trunk.position.y=.43*s;tree.add(trunk);
+    const tiers=[{y:.78,r:1.28,h:1.48,c:0},{y:1.42,r:1.02,h:1.34,c:1},{y:2.02,r:.74,h:1.18,c:2},{y:2.56,r:.48,h:.96,c:3}];
+    tiers.forEach((tier,k)=>{
+      const crown=new THREE.Mesh(new THREE.ConeGeometry(tier.r*s,tier.h*s,11,1),pineMats[tier.c]);
+      crown.position.y=tier.y*s;crown.rotation.y=(k%2)*.22;crown.castShadow=true;tree.add(crown);
+      const rim=new THREE.Mesh(new THREE.ConeGeometry(tier.r*.86*s,tier.h*.72*s,11,1),pineMats[Math.min(3,tier.c+1)]);
+      rim.position.set(0,(tier.y-.08)*s,.035*s);rim.rotation.y=.16;tree.add(rim);
+      if(k<3){
+       const branchMat=pineMats[Math.min(3,tier.c+1)];
+       for(let side=0;side<3;side++){
+        const angle=side*Math.PI*2/3+k*.38;
+        const bough=new THREE.Mesh(new THREE.SphereGeometry(.28*s*(1-k*.12),9,7),branchMat);
+        bough.position.set(Math.cos(angle)*tier.r*.52*s,(tier.y-.22)*s,Math.sin(angle)*tier.r*.52*s);
+        bough.scale.set(1,.58,1.18);bough.castShadow=true;tree.add(bough);
+       }
+      }
+    });
+    tree.position.set(x,0,z);tree.scale.setScalar(s);scene.add(tree);trees.push({crown:tree,phase:Math.random()*6.28});
+  }
+  for(let i=0;i<42;i++){
+    const side=i%2===0?-1:1,x=side*(5.1+Math.random()*13.5),z=9-Math.random()*61;
+    makePine(x,z,.72+Math.random()*.55);
+  }
+  // Arbustos redonditos, con hojas en capas y pequeños brotes claros.
+  for(let i=0;i<54;i++){
+    let x=(Math.random()-.5)*34,z=7-Math.random()*60;
+    if(Math.abs(x)<3.7)x+=(x<0?-1:1)*(4+Math.random()*2);
+    const bush=new THREE.Group(),size=.72+Math.random()*.5;
+    for(let j=0;j<5;j++){
+      const leaf=new THREE.Mesh(new THREE.SphereGeometry(.34+Math.random()*.12,12,10),bushMats[(i+j)%bushMats.length]);
+      leaf.position.set((j-2)*.23,.24+Math.random()*.13,(Math.random()-.5)*.38);leaf.scale.set(1,.82,.92);leaf.castShadow=true;bush.add(leaf);
+    }
+    const highlight=new THREE.Mesh(new THREE.SphereGeometry(.1,8,7),mat(0x8dbb79));highlight.position.set(-.18,.48,.16);bush.add(highlight);
+    bush.position.set(x,0,z);bush.scale.setScalar(size);scene.add(bush);
+    if(i%5===0){const flower=new THREE.Mesh(new THREE.SphereGeometry(.095,10,8),flowerMats[i%3]);flower.position.set(x+.12,.48,z+.18);scene.add(flower);}
+  }
+  const fireflies=[];
+  for(let i=0;i<42;i++){
+    const g=new THREE.Group();
+    const glow=new THREE.Mesh(new THREE.SphereGeometry(.2,8,6),new THREE.MeshBasicMaterial({color:0xcaff91,transparent:true,opacity:.18,depthWrite:false}));glow.scale.set(1,1,.65);g.add(glow);
+    const dot=new THREE.Mesh(new THREE.SphereGeometry(.065,10,8),new THREE.MeshBasicMaterial({color:0xfff4b0}));g.add(dot);
+    g.position.set((Math.random()-.5)*30,.65+Math.random()*1.7,5-Math.random()*58);scene.add(g);
+    fireflies.push({g,glow,dot,phase:Math.random()*6.28,baseY:g.position.y});
+  }
+
+
+ // Suelo vivo: hierba, rocas, helechos, troncos caídos y honguitos.
+ const grassGeo=new THREE.ConeGeometry(.055,.42,5),grassMat=mat(0x47734c),grass=new THREE.InstancedMesh(grassGeo,grassMat,260),dummy=new THREE.Object3D();
+ for(let i=0;i<260;i++){const x=(Math.random()-.5)*36,z=8-Math.random()*68;dummy.position.set(x,.16,z);dummy.rotation.set((Math.random()-.5)*.18,Math.random()*Math.PI*2,(Math.random()-.5)*.35);const h=.55+Math.random()*.9;dummy.scale.set(.7+Math.random()*.6,h,.7+Math.random()*.6);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);}scene.add(grass);
+ const rockGeo=new THREE.DodecahedronGeometry(.28,0),rockMat=mat(0x66716c),rocks=new THREE.InstancedMesh(rockGeo,rockMat,55);
+ for(let i=0;i<55;i++){const x=(Math.random()-.5)*34,z=7-Math.random()*66;dummy.position.set(x,.12,z);dummy.rotation.set(Math.random(),Math.random()*3,Math.random());dummy.scale.set(.55+Math.random(),.35+Math.random()*.6,.6+Math.random());dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);}scene.add(rocks);
+ const fernLeafMat=mat(0x3d7955),fernStemMat=mat(0x77915d);
+ for(let i=0;i<10;i++){const fern=new THREE.Group(),x=(Math.random()-.5)*28,z=7-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.62,6),fernStemMat);stem.position.y=.31;fern.add(stem);for(let f=0;f<6;f++){const leaf=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8),fernLeafMat);leaf.scale.set(1.65,.28,.55);leaf.position.set((f%2?1:-1)*(.13+f*.025),.12+f*.075,(f-2.5)*.12);leaf.rotation.z=f%2?-.42:.42;fern.add(leaf);}fern.position.set(x,0,z);fern.rotation.y=Math.random()*Math.PI*2;fern.scale.setScalar(.65+Math.random()*.65);scene.add(fern);}
+ const mushroomStem=mat(0xe0d4b8),mushroomCaps=[mat(0xc56b70),mat(0xd6a65f),mat(0xb7a5d8)];
+ for(let i=0;i<14;i++){const x=(Math.random()-.5)*25,z=6-Math.random()*60,stem=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,.2,7),mushroomStem);stem.position.set(x,.1,z);scene.add(stem);const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),mushroomCaps[i%3]);cap.scale.y=.48;cap.position.set(x,.22,z);scene.add(cap);}
+ // Personaje rediseñado con articulaciones para animar brazos y piernas.
+ const avatar=new THREE.Group();scene.add(avatar);avatar.position.set(0,0,5);
+ const skin=mat(0xe6b99d),shirt=mat(0x39845b),shirtLight=mat(0x5ba477),pants=mat(0x697b91),shoes=mat(0x343746),hair=mat(0x241d25),glasses=mat(0x18202a,.35);
+ function capsule(parent,r,len,material,pos){const m=new THREE.Mesh(new THREE.CapsuleGeometry(r,len,6,12),material);m.position.set(...pos);m.castShadow=true;parent.add(m);return m;}
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.34,.57,8,16),shirt);body.position.y=1.13;body.castShadow=true;avatar.add(body);
+ const backpackMat=mat(0x245b42),backpack=new THREE.Mesh(new THREE.BoxGeometry(.48,.54,.22),backpackMat);
+ backpack.position.set(0,1.18,-.31);backpack.castShadow=true;avatar.add(backpack);
+ const packPocket=new THREE.Mesh(new THREE.BoxGeometry(.32,.19,.055),shirtLight);
+ packPocket.position.set(0,1.04,-.45);avatar.add(packPocket);
+ for(const side of [-1,1]){
+  const strap=new THREE.Mesh(new THREE.BoxGeometry(.075,.48,.08),shirtLight);
+  strap.position.set(side*.25,1.2,-.19);avatar.add(strap);
+ }
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.12,.14,.18,12),skin);neck.position.y=1.55;avatar.add(neck);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.39,24,20),skin);head.position.y=1.94;head.castShadow=true;avatar.add(head);
+ const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.405,22,16),hair);hairCap.position.set(0,2.14,-.025);hairCap.scale.set(1,.58,1);avatar.add(hairCap);
+ for(let i=0;i<7;i++){
+   const lock=new THREE.Mesh(new THREE.SphereGeometry(.14,12,10),hair);
+   lock.position.set(-.3+i*.1,2.03,.27);lock.scale.set(1,.8,.75);avatar.add(lock);
+ }
+ // Orejas, ojos y lentes visibles desde la cámara.
+ for(const side of [-1,1]){
+   const ear=new THREE.Mesh(new THREE.SphereGeometry(.085,12,10),skin);ear.position.set(side*.38,1.93,0);avatar.add(ear);
+   const frame=new THREE.Mesh(new THREE.TorusGeometry(.12,.024,8,22),glasses);frame.position.set(side*.15,1.97,.354);avatar.add(frame);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),mat(0x211b20));eye.position.set(side*.15,1.97,.374);avatar.add(eye);
+ }
+ const bridge=new THREE.Mesh(new THREE.BoxGeometry(.075,.025,.025),glasses);bridge.position.set(0,1.97,.37);avatar.add(bridge);
+ const armPivots=[],legPivots=[];
+ for(const side of [-1,1]){
+   const armPivot=new THREE.Group();armPivot.position.set(side*.39,1.38,0);avatar.add(armPivot);
+   capsule(armPivot,.105,.43,shirt,[0,-.23,0]);
+   const hand=new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),skin);hand.position.set(0,-.51,.015);armPivot.add(hand);
+   armPivots.push(armPivot);
+   const legPivot=new THREE.Group();legPivot.position.set(side*.17,.64,0);avatar.add(legPivot);
+   capsule(legPivot,.135,.42,pants,[0,-.25,0]);
+   const shoe=new THREE.Mesh(new THREE.SphereGeometry(.17,14,10),shoes);shoe.scale.set(1,.58,1.4);shoe.position.set(0,-.51,.08);legPivot.add(shoe);
+   legPivots.push(legPivot);
+ }
+ const swordRig=new THREE.Group();swordRig.position.set(.49,1.28,.04);avatar.add(swordRig);
+ const blade=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.68,5,10),new THREE.MeshStandardMaterial({color:0xe3efff,metalness:.65,roughness:.22,emissive:0x25364a}));
+ blade.position.y=.43;swordRig.add(blade);
+ const guard=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.23,4,9),mat(0xd4ad68));guard.rotation.z=Math.PI/2;guard.position.y=.07;swordRig.add(guard);
+ const grip=new THREE.Mesh(new THREE.CapsuleGeometry(.05,.16,4,9),mat(0x684735));grip.position.y=-.07;swordRig.add(grip);
+ swordRig.rotation.z=-.35;
+
+ // Recuerdos convertidos en pequeñas luces cálidas.
+ const positions=[[-4,-5],[4,-9],[-5,-13],[5,-17],[-2,-21],[7,-25],[-7,-29],[2,-33],[9,-37],[-9,-39]];
+ const found=new Set(),orbs=[];
+ positions.forEach((p,i)=>{
+   const light=new THREE.PointLight(0xffd69a,2.1,6);light.position.set(p[0],1.25,p[1]);scene.add(light);
+   const orb=new THREE.Mesh(new THREE.SphereGeometry(.2,18,14),new THREE.MeshBasicMaterial({color:0xffe3a6}));orb.position.copy(light.position);scene.add(orb);
+   const halo=new THREE.Mesh(new THREE.SphereGeometry(.38,16,12),new THREE.MeshBasicMaterial({color:0xffd18a,transparent:true,opacity:.15,depthWrite:false}));halo.position.copy(light.position);scene.add(halo);
+   orbs.push({light,orb,halo,index:i,phase:Math.random()*6.28});
+ });
+
+ // Lobo estilizado, con cuatro patas articuladas y cola animada.
+ const wolf=new THREE.Group();scene.add(wolf);wolf.position.set(3,0,-18);
+ const fur=mat(0x788391),furLight=mat(0xa8b0bd),furDark=mat(0x485362),muzzle=mat(0xd8d6d2),noseMat=mat(0x242630);
+ const wolfBody=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),fur);wolfBody.scale.set(.55,.43,.88);wolfBody.position.set(0,.82,-.02);wolf.add(wolfBody);
+ const chest=new THREE.Mesh(new THREE.SphereGeometry(1,20,16),furLight);chest.scale.set(.43,.48,.4);chest.position.set(0,.88,.55);wolf.add(chest);
+ const wolfHead=new THREE.Mesh(new THREE.SphereGeometry(.38,22,18),furLight);wolfHead.position.set(0,1.25,.9);wolf.add(wolfHead);
+ const snout=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),muzzle);snout.scale.set(.23,.17,.34);snout.position.set(0,1.12,1.2);wolf.add(snout);
+ const nose=new THREE.Mesh(new THREE.SphereGeometry(.09,14,10),noseMat);nose.position.set(0,1.14,1.5);wolf.add(nose);
+ const wolfLegs=[];
+ for(const side of [-1,1]){
+   const ear=new THREE.Mesh(new THREE.ConeGeometry(.14,.42,16),furDark);ear.position.set(side*.24,1.58,.78);ear.rotation.z=-side*.15;wolf.add(ear);
+   const eye=new THREE.Mesh(new THREE.SphereGeometry(.045,12,10),mat(0xffd28a));eye.position.set(side*.23,1.3,1.2);wolf.add(eye);
+   for(const z of [-.48,.48]){
+     const pivot=new THREE.Group();pivot.position.set(side*.34,.53,z);wolf.add(pivot);
+     capsule(pivot,.105,.38,furDark,[0,-.22,0]);
+     const paw=new THREE.Mesh(new THREE.SphereGeometry(.14,12,10),furLight);paw.scale.set(1,.65,1.25);paw.position.set(0,-.44,.06);pivot.add(paw);
+     wolfLegs.push(pivot);
+   }
+ }
+ const tailPivot=new THREE.Group();tailPivot.position.set(0,.94,-.78);wolf.add(tailPivot);
+ const tail=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.48,5,10),furDark);tail.position.set(0,.05,-.3);tail.rotation.x=-.85;tailPivot.add(tail);
+
+ let wolfHP=3,wolfAlive=true,attackCooldown=0;
+ let energy=100,damageCooldown=0,attackFlash=0,attackHitDone=false,won=false,gameOver=false,skyEnding=false,skyEndingProgress=0;
+ const skyPhotoSprites=[];
+ const note=document.getElementById('gameNote');
+ const keys={};
+ function updateStats(){document.getElementById('energy').textContent=energy;document.getElementById('found').textContent=found.size;}
+ function showCombatText(message,miss=false){
+   const fx=document.getElementById('combatFx');if(!fx)return;
+   const pop=document.createElement('div');pop.className='hit-pop'+(miss?' miss':'');pop.textContent=message;fx.appendChild(pop);setTimeout(()=>pop.remove(),850);
+ }
+ addEventListener('keydown',e=>{
+   keys[e.key.toLowerCase()]=true;
+   if(e.key.toLowerCase()==='e'&&!gameOver&&!skyEnding)openNearest();
+   if(e.code==='Space'&&!gameOver&&!skyEnding){e.preventDefault();if(attackCooldown<=0){attackFlash=.48;attackHitDone=false;attackCooldown=.68;}}
+   if(e.key.toLowerCase()==='r'&&gameOver){energy=100;gameOver=false;damageCooldown=1.2;avatar.position.set(0,0,5);note.textContent='Volviste al bosque. ¡Busca los recuerdos!';updateStats();}
+ });
+ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+ function openNearest(){
+   let best=null,dist=2.7;
+   orbs.forEach(o=>{if(found.has(o.index))return;const d=Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z);if(d<dist){dist=d;best=o;}});
+   if(best){found.add(best.index);best.orb.visible=false;best.halo.visible=false;best.light.intensity=0;window.showMemory(best.index);updateStats();
+     if(found.size===10&&!won){won=true;scene.fog.color.set(0x46364d);scene.background=new THREE.Color(0x46364d);moonLight.intensity=3;document.getElementById('gameReward').hidden=false;}
+   }
+ }
+ window.showMemory=showMemory;
+
+  // Cámara fija desde arriba, con inclinación suave de aventura clásica.
+ let yaw=0,viewTilt=0.98,draggingCamera=false,lastPointerX=0,lastPointerY=0;
+ renderer.domElement.style.touchAction='none';
+ renderer.domElement.addEventListener('pointerdown',e=>{if(skyEnding)return;draggingCamera=true;lastPointerX=e.clientX;lastPointerY=e.clientY;renderer.domElement.setPointerCapture?.(e.pointerId);});
+ renderer.domElement.addEventListener('pointermove',e=>{if(!draggingCamera||skyEnding)return;const mx=e.clientX-lastPointerX,my=e.clientY-lastPointerY;lastPointerX=e.clientX;lastPointerY=e.clientY;yaw-=mx*.008;viewTilt=THREE.MathUtils.clamp(viewTilt+my*.004,.72,1.22);});
+ const stopCameraDrag=()=>{draggingCamera=false;};
+ renderer.domElement.addEventListener('pointerup',stopCameraDrag);renderer.domElement.addEventListener('pointercancel',stopCameraDrag);renderer.domElement.addEventListener('lostpointercapture',stopCameraDrag);
+ renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+ let skyPhotosStarted=false,skyStars=null;
+ function layoutSkyPhotos(){
+  if(!skyPhotoSprites.length)return;
+  const portrait=camera.aspect<1.05,columns=portrait?2:5,rows=portrait?5:2;
+  const spacingX=portrait?2.05:2.55,spacingY=portrait?1.58:2.05;
+  skyPhotoSprites.forEach(photo=>{if(!photo)return;const i=photo.userData.index,col=i%columns,row=Math.floor(i/columns),aspect=photo.userData.aspect;const maxW=portrait?1.9:2.35,maxH=portrait?1.38:1.72;let w=maxH*aspect,h=maxH;if(w>maxW){w=maxW;h=w/aspect;}photo.scale.set(w,h,1);photo.position.set((col-(columns-1)/2)*spacingX,((rows-1)/2-row)*spacingY,-10);photo.userData.baseX=w;photo.userData.baseY=h;photo.userData.baseYPosition=photo.position.y;});
+ }
+ function createSkyPhotos(){
+  if(skyPhotosStarted)return;skyPhotosStarted=true;
+  const files=['recuerdo1.jpg','recuerdo2.jpg','recuerdo3.jpg','recuerdo4.jpg','recuerdo5.jpg','recuerdo6.jpg','recuerdo7.jpg','recuerdo8.jpg','recuero9.jpg','reuerdo10.jpg'];
+  const starPositions=[],starDepth=23,halfH=starDepth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),halfW=halfH*camera.aspect;
+  for(let i=0;i<520;i++)starPositions.push((Math.random()*2-1)*halfW*1.12,(Math.random()*2-1)*halfH*1.12,-starDepth);
+  const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+  skyStars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xf0f4ff,size:2.2,transparent:true,opacity:.98,depthTest:false,sizeAttenuation:false}));skyStars.renderOrder=2;camera.add(skyStars);
+  const loader=new THREE.TextureLoader();
+  files.forEach((file,i)=>loader.load(file,texture=>{texture.colorSpace=THREE.SRGBColorSpace;const photo=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,opacity:0,depthTest:false}));photo.renderOrder=10;photo.userData={index:i,aspect:texture.image.width/texture.image.height,phase:i*.73,baseYPosition:0,baseX:1,baseY:1};camera.add(photo);skyPhotoSprites[i]=photo;layoutSkyPhotos();},undefined,()=>{}));
+ }
+ document.getElementById('startMemorySky')?.addEventListener('click',()=>{document.getElementById('gameReward').hidden=true;skyEnding=true;skyEndingProgress=0;createSkyPhotos();note.textContent='Nuestros diez recuerdos… 💚';});
+ const skyRaycaster=new THREE.Raycaster(),skyPointer=new THREE.Vector2();
+ renderer.domElement.addEventListener('click',e=>{if(!skyEnding||!skyPhotoSprites.length)return;const rect=renderer.domElement.getBoundingClientRect();skyPointer.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);skyRaycaster.setFromCamera(skyPointer,camera);const hit=skyRaycaster.intersectObjects(skyPhotoSprites.filter(Boolean))[0]?.object;if(hit)window.showMemory?.(hit.userData.index);});
+ function resize(){camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);if(skyEnding&&skyStars){const p=skyStars.geometry.attributes.position,depth=23,hh=depth*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),hw=hh*camera.aspect;for(let i=0;i<p.count;i++){p.setX(i,(Math.random()*2-1)*hw*1.12);p.setY(i,(Math.random()*2-1)*hh*1.12);}p.needsUpdate=true;layoutSkyPhotos();}}
+ new ResizeObserver(resize).observe(host);
+ const clock=new THREE.Clock();let walkTime=0;
+ function animate(){
+   requestAnimationFrame(animate);
+   const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
+   let dx=0,dz=0;
+   if(!gameOver&&!skyEnding){
+     if(keys.arrowleft||keys.a)dx-=1;if(keys.arrowright||keys.d)dx+=1;
+     if(keys.arrowup||keys.w)dz-=1;if(keys.arrowdown||keys.s)dz+=1;
+     const len=Math.hypot(dx,dz);
+     if(len){
+       dx/=len;dz/=len;
+       const forwardX=-Math.sin(yaw),forwardZ=-Math.cos(yaw),rightX=Math.cos(yaw),rightZ=-Math.sin(yaw);
+       const mx=(rightX*dx+forwardX*(-dz)),mz=(rightZ*dx+forwardZ*(-dz));
+       avatar.position.x+=mx*3.1*dt;avatar.position.z+=mz*3.1*dt;
+       avatar.rotation.y=Math.atan2(mx,mz);
+       walkTime+=dt*10;
+     }
+   }
+   const moving=Math.hypot(dx,dz)>.01&&!gameOver&&!skyEnding;
+   const swing=moving?Math.sin(walkTime):0;
+   avatar.position.y=moving?Math.abs(Math.cos(walkTime*2))*.045:Math.sin(t*2)*.012;
+   legPivots[0].rotation.x=swing*.62;legPivots[1].rotation.x=-swing*.62;
+   armPivots[0].rotation.x=-swing*.42;armPivots[1].rotation.x=swing*.42;
+   armPivots[0].rotation.z=.08;armPivots[1].rotation.z=-.08;
+   const dist=wolfAlive?Math.hypot(avatar.position.x-wolf.position.x,avatar.position.z-wolf.position.z):999;
+   let wolfMoving=false;
+   if(wolfAlive&&dist>1.65&&!gameOver&&!skyEnding){
+     const vx=(avatar.position.x-wolf.position.x)/dist,vz=(avatar.position.z-wolf.position.z)/dist;
+     wolf.position.x+=vx*1.35*dt;wolf.position.z+=vz*1.35*dt;
+     wolf.rotation.y=Math.atan2(vx,vz);wolfMoving=true;
+   }else if(wolfAlive&&dist<=1.65&&damageCooldown<=0&&!keys.shift&&!gameOver&&!skyEnding){
+     energy=Math.max(0,energy-20);damageCooldown=1.35;updateStats();showCombatText('-20 VIDA',true);
+     host.classList.add('shake');setTimeout(()=>host.classList.remove('shake'),230);
+     if(energy<=0){gameOver=true;note.textContent='Te quedaste sin vida. Pulsa R para volver al bosque.';}
+   }
+   const wolfStride=wolfMoving?Math.sin(t*10):Math.sin(t*2)*.08;
+   wolfLegs.forEach((leg,i)=>leg.rotation.x=wolfStride*(i%2===0?1:-1)*.55);
+   tailPivot.rotation.x=Math.sin(t*3)*.18;tailPivot.rotation.z=Math.sin(t*2.2)*.22;
+   if(wolfAlive&&keys.shift)wolf.position.x+=(wolf.position.x-avatar.position.x)*.008;
+
+   if(attackFlash>0&&!gameOver){
+     attackFlash-=dt;const progress=1-Math.max(0,attackFlash)/.48;
+     swordRig.rotation.z=-.35-Math.sin(Math.min(1,progress)*Math.PI)*1.95;
+     swordRig.rotation.x=Math.sin(Math.min(1,progress)*Math.PI)*.35;
+     armPivots[1].rotation.x=-1.1+Math.sin(progress*Math.PI)*.4;
+     if(!attackHitDone&&progress>.32){
+       attackHitDone=true;
+       if(wolfAlive&&dist<3.2){
+         wolfHP--;showCombatText('¡LOBO -1! ✨');wolf.position.x+=(wolf.position.x-avatar.position.x)*.2;wolf.position.z+=(wolf.position.z-avatar.position.z)*.2;
+         wolf.scale.setScalar(.9);setTimeout(()=>{if(wolfAlive)wolf.scale.setScalar(1)},140);
+         if(wolfHP<=0){wolfAlive=false;scene.remove(wolf);note.textContent='🐺 ¡Lobo vencido! Puedes seguir buscando los recuerdos.';}
+       }else showCombatText('¡MÁS CERCA!',true);
+     }
+   }else{swordRig.rotation.z+=(-.35-swordRig.rotation.z)*.22;swordRig.rotation.x*=.75;}
+   attackCooldown=Math.max(0,attackCooldown-dt);damageCooldown=Math.max(0,damageCooldown-dt);
+
+   trees.forEach(tree=>{tree.crown.rotation.z=Math.sin(t*.45+tree.phase)*.018;});
+   fireflies.forEach(f=>{f.g.position.y=f.baseY+Math.sin(t*1.7+f.phase)*.22;f.g.position.x+=Math.sin(t*.7+f.phase)*.0008;if(f.glow)f.glow.scale.setScalar(.85+.35*(.5+.5*Math.sin(t*3+f.phase)));});
+   orbs.forEach(o=>{o.orb.position.y=1.25+Math.sin(t*2+o.phase)*.12;o.halo.scale.setScalar(1+Math.sin(t*2+o.phase)*.09);o.light.intensity=1.7+Math.sin(t*2+o.phase)*.5;});
+   stars.rotation.y=Math.sin(t*.025)*.025;
+
+   if(skyEnding){
+   skyEndingProgress=Math.min(1,skyEndingProgress+dt*.32);
+   const ease=skyEndingProgress*skyEndingProgress*(3-2*skyEndingProgress);
+   const skyCamera=new THREE.Vector3(avatar.position.x,avatar.position.y+1.8,avatar.position.z+5.2);
+   camera.position.lerp(skyCamera,.055);
+   camera.lookAt(avatar.position.x,avatar.position.y+2.2+17*ease,avatar.position.z-5.5*ease);
+   skyPhotoSprites.forEach(photo=>{photo.position.y=photo.userData.baseYPosition+Math.sin(t*.8+photo.userData.phase)*.13;photo.material.opacity=Math.min(1,Math.max(0,(skyEndingProgress-photo.userData.index*.045)*3.2));});
+  }else{
+   const distance=19.2,horizontal=distance*Math.cos(viewTilt);
+   const target=new THREE.Vector3(avatar.position.x+Math.sin(yaw)*horizontal,distance*Math.sin(viewTilt),avatar.position.z+Math.cos(yaw)*horizontal);
+   camera.position.lerp(target,.16);camera.lookAt(avatar.position.x,.55,avatar.position.z);
+  }
+   renderer.render(scene,camera);
+   if(!gameOver&&wolfAlive){
+     const near=orbs.some(o=>!found.has(o.index)&&Math.hypot(avatar.position.x-o.orb.position.x,avatar.position.z-o.orb.position.z)<2.7);
+     note.textContent=near?'✨ Estás cerca de un recuerdo. Pulsa E para abrirlo.':'WASD/flechas: caminar · Arrastra para girar cámara · E: recuerdo · Espacio: espada · Shift: defenderse';
+   }else if(!gameOver&&wolfAlive===false&&found.size<10)note.textContent='🐺 Lobo vencido · Sigue explorando y encuentra los diez recuerdos.';
+ }
+ animate();
+}catch(err){
+ if(fallback){fallback.style.display='block';fallback.textContent='No se pudo iniciar el bosque 3D: '+(err?.message||'error desconocido')+'. La página sigue disponible. Recarga e inténtalo otra vez.';}
+ console.error('Error al iniciar el bosque 3D:',err);
+}
+</script><script>
+(function(){
+ document.querySelectorAll('#mobileControls [data-game-key]').forEach(button=>{
+  const key=button.dataset.gameKey;
+  const press=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keydown',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+  const release=e=>{e.preventDefault();window.dispatchEvent(new KeyboardEvent('keyup',{key:key===' '?' ':key,code:key===' '?'Space':key,bubbles:true}));};
+  button.addEventListener('pointerdown',press);button.addEventListener('pointerup',release);
+  button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+ });
+})();
+</script>
+<style>
+/* Parejita de perritos en la esquina inferior */
+.snoopy-corner{position:fixed;right:14px;bottom:10px;z-index:30;width:154px;height:112px;pointer-events:none;filter:drop-shadow(0 3px 5px #4a263044)}
+.snoopy-corner svg{width:100%;height:100%;overflow:visible}
+.snoopy-heart{position:absolute;color:#e85b83;font:20px Georgia,serif;animation:heart-float 2.2s ease-in-out infinite;opacity:0}
+.snoopy-heart.h1{left:48%;top:0;animation-delay:0s}.snoopy-heart.h2{left:72%;top:15px;font-size:15px;animation-delay:.7s}.snoopy-heart.h3{left:28%;top:12px;font-size:13px;animation-delay:1.3s}
+@keyframes heart-float{0%{transform:translateY(12px) scale(.65);opacity:0}25%{opacity:1}100%{transform:translateY(-25px) scale(1.15);opacity:0}}
+@media(max-width:600px){.snoopy-corner{width:112px;height:82px;right:5px;bottom:5px}}
+@media(prefers-reduced-motion:reduce){.snoopy-heart{animation:none;opacity:1}}
+</style>
+<div class="snoopy-corner" aria-hidden="true" title="Un besito lleno de corazones">
+ <span class="snoopy-heart h1">♥</span><span class="snoopy-heart h2">♥</span><span class="snoopy-heart h3">♡</span>
+ <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Perrito de la izquierda -->
+  <g stroke="#29252a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+   <ellipse cx="78" cy="111" rx="30" ry="19" fill="#fffdf8"/><path d="M57 119l-2 17m34-16 4 16" fill="none" stroke-width="7"/>
+   <ellipse cx="78" cy="69" rx="29" ry="28" fill="#fffdf8"/>
+   <path d="M56 57Q35 45 43 82Q49 101 62 88" fill="#252329"/>
+   <ellipse cx="91" cy="80" rx="19" ry="12" fill="#fffdf8"/>
+   <circle cx="88" cy="68" r="3.2" fill="#29252a" stroke="none"/><ellipse cx="106" cy="81" rx="5" ry="4" fill="#29252a" stroke="none"/>
+   <path d="M99 88q-6 8-13 1" fill="none" stroke-width="2"/>
+   <path d="M58 96q20 12 39 1" fill="none" stroke="#3d8a57" stroke-width="5"/>
+  </g>
+  <!-- Perrita de la derecha -->
+  <g stroke="#29252a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+   <ellipse cx="145" cy="111" rx="29" ry="19" fill="#fffdf8"/><path d="M128 119l-2 17m33-16 4 16" fill="none" stroke-width="7"/>
+   <ellipse cx="145" cy="69" rx="28" ry="28" fill="#fffdf8"/>
+   <path d="M165 55Q190 43 183 81Q178 99 163 88" fill="#252329"/>
+   <ellipse cx="131" cy="80" rx="18" ry="12" fill="#fffdf8"/>
+   <circle cx="135" cy="68" r="3.2" fill="#29252a" stroke="none"/><ellipse cx="116" cy="81" rx="5" ry="4" fill="#29252a" stroke="none"/>
+   <path d="M122 88q6 8 13 1" fill="none" stroke-width="2"/>
+   <path d="M126 48l-8-10 12 2 7-10 5 12 12 2-11 7" fill="#e85b83"/>
+   <circle cx="137" cy="47" r="4" fill="#f6a4bb" stroke="none"/>
+  </g>
+  <!-- Besito y corazoncito entre los hocicos -->
+  <path d="M108 72q-5-8-10 0q-3 7 10 14q13-7 10-14q-5-8-10 0" fill="#e85b83" stroke="none"/>
+ </svg>
+</div>
+
+
+<style>
+/* Trivia interactiva y estallido de razones */
+.reason-burst{position:relative;isolation:isolate;padding:12px 8px;border-radius:18px}
+.reason-burst.pop{animation:reason-pop .55s cubic-bezier(.2,.8,.25,1)}
+.burst-heart{position:absolute;left:50%;top:50%;z-index:-1;color:#d85b86;font-size:23px;opacity:0;pointer-events:none}
+.reason-burst.pop .burst-heart:nth-child(1){animation:burst-one .7s ease-out}
+.reason-burst.pop .burst-heart:nth-child(2){animation:burst-two .7s ease-out}
+.reason-burst.pop .burst-heart:nth-child(3){animation:burst-three .7s ease-out}
+.reason-burst.pop .burst-heart:nth-child(4){animation:burst-four .7s ease-out}
+@keyframes reason-pop{0%{transform:scale(.75);opacity:.5}55%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes burst-one{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(-95px,-65px) scale(1.3)}}
+@keyframes burst-two{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(65px,-75px) scale(1.2)}}
+@keyframes burst-three{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(-85px,35px) scale(1.25)}}
+@keyframes burst-four{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(80px,35px) scale(1.1)}}
+.quiz-progress{font-size:.85rem;opacity:.7;margin-bottom:12px}.quiz-options{display:grid;gap:9px;margin:18px 0}.quiz-option{padding:12px 15px;border:1px solid #d8b8c5;border-radius:12px;background:#fff9fc;color:#49333e;text-align:left;cursor:pointer;font:inherit}.quiz-option:disabled{cursor:default;opacity:1}.quiz-option.correct{background:#e8f5e9;border-color:#78ae80}.quiz-option.incorrect{background:#fce8ed;border-color:#d78b9e}.quiz-feedback{min-height:2.5em;line-height:1.5}.quiz-option:focus-visible,#quizNext:focus-visible{outline:3px solid #b65d80;outline-offset:3px}.quiz-result{text-align:center;padding:15px}.quiz-trophy{font-size:3rem;color:#bd6486}
+@media(prefers-reduced-motion:reduce){.reason-burst.pop,.reason-burst.pop .burst-heart{animation:none}.reason-burst.pop .burst-heart{opacity:0}}
+</style>
+
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/5njFCHCaUvHQSqNFluZ36A?utm_source=generator&si=eaf2d7ce85924c16" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</body></html>
