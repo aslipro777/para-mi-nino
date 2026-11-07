@@ -315,9 +315,7 @@ try{
  }
  const fringe=solidPart(avatar,makeFringe(),hair);fringe.material.side=THREE.DoubleSide;
  // Laterales del peinado son extensiones anchas y pegadas al casquete, no mechones flotantes.
- for(const side of [-1,1]){
-   const lock=solidPart(avatar,new THREE.SphereGeometry(1,24,18),hairLight,[side*.285,2.015,.015]);lock.scale.set(.075,.245,.105);
- }
+ // El casquete envuelve también los laterales: sin piezas sueltas añadidas.
  // Rasgos con profundidad moderada y simetría facial.
  const eyeWhite=mat(0xf5e8dc),eyeDark=mat(0x30242a),browMat=mat(0x30252a);
  for(const side of [-1,1]){
